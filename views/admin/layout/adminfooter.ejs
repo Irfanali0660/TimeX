@@ -1,0 +1,64 @@
+<footer class="position-absolute bottom-0 bg-dash-dark-2 text-white text-center py-3 w-100 text-xs" id="footer">
+    <div class="container-fluid text-center">
+        <p class="mb-0 text-dash-gray">© 2022 All rights reserved<a href="#"></a>.</p>
+    </div>
+</footer>
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/fontawesome.min.css"
+integrity="sha512-giQeaPns4lQTBMRpOOHsYnGw1tGVzbAIHUyHRgn7+6FmiEgGGjaG0T2LZJmAPMzRCl+Cug0ItQ2xDZpTmEc+CQ=="
+crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<!-- ================ -->
+<!-- JavaScript files -->
+<!-- ================-->
+
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- <script src="vendor/just-validate/js/just-validate.min.js"></script> -->
+<!-- <script src="vendor/chart.js/Chart.min.js"></script> -->
+<script src="vendor/choices.js/public/assets/scripts/choices.min.js"></script>
+<script src="js/charts-home.js"></script>
+<script src="../js/front copy.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#myTable').dataTable();
+    });
+</script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+<script>
+// ======= //
+// BUTTONS //
+// ======= //
+
+// ------------------------------------------------------- //
+//   Inject SVG Sprite - 
+//   see more here 
+//   https://css-tricks.com/ajaxing-svg-sprite/
+// ------------------------------------------------------ //
+function injectSvgSprite(path) {
+
+var ajax = new XMLHttpRequest();
+ajax.open("GET", path, true);
+ajax.send();
+ajax.onload = function(e) {
+var div = document.createElement("div");
+div.className = 'd-none';
+div.innerHTML = ajax.responseText;
+document.body.insertBefore(div, document.body.childNodes[0]);
+}
+}
+// this is set to BootstrapTemple website as you cannot 
+// inject local SVG sprite (using only 'icons/orion-svg-sprite.svg' path)
+// while using file:// protocol
+// pls don't forget to change to your domain :)
+injectSvgSprite('https://bootstraptemple.com/files/icons/orion-svg-sprite.svg'); 
+</script>
+<style>
+body{
+color: white !important;
+}
+</style>
+
+</body>
+</html>

@@ -1,0 +1,24 @@
+select{
+    color: white !important;
+}
+option{
+    color: black !important;
+}
+input{
+    color: white !important;
+}
+label{
+    color: white !important;
+}
+.table{
+    color: white !important
+}
+.admincard label{
+    color: black !important;
+}
+.admincard select{
+    color: rgb(59, 59, 59) !important;
+}
+.admincard input{
+    color: black !important;
+}
