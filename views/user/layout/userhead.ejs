@@ -29,14 +29,14 @@
     <!-- bootstrap icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <!-- Favicon -->
-    <link rel="shortcut icon" href="img/favicon.png">
+    <!-- <link rel="shortcut icon" href="img/favicon.png"> -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
 
@@ -64,15 +64,16 @@
             </li> -->
           </ul>
           <ul class="navbar-nav ms-auto">               
-            <li class="nav-item"><a class="nav-link" href="#"> <i class="bi bi-cart"></i> Cart<small class="text-gray fw-normal"></small></a></li>
-            <li class="nav-item"><a class="nav-link" href="#"> <i class="far fa-heart me-1"></i><small class="text-gray fw-normal"></small>Wishlist</a></li>
+            <li class="nav-item "><a class="nav-link <% if(page=='cart'){ %> active <% } %>" href="/cart"> <i class="bi bi-cart"></i> Cart<small class="text-gray fw-normal"></small></a></li>
+            <li class="nav-item"><a class="nav-link <% if(page=='wishlist'){ %> active <% } %>" href="wishlist"> <i class="far fa-heart me-1"></i><small class="text-gray fw-normal"></small>Wishlist</a></li>
             <!-- <li class="nav-item"><a class="nav-link" href="#"> <i class="fas fa-user me-1 text-gray fw-normal"></i>Login</a></li> -->
-            <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="pagesDropdown" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="bi bi-person"></i> Account</a>
+            <li class="nav-item dropdown"><a class="nav-link dropdown-toggle <% if(page=='Account'){ %> active <% } %>" id="pagesDropdown" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="bi bi-person"></i> Account</a>
               <div class="dropdown-menu mt-3 shadow-sm" aria-labelledby="pagesDropdown">
-                <a class="dropdown-item border-0 transition-link" href="">Details</a>
+                <a class="dropdown-item border-0 transition-link" href="/account">Details</a>
                 <a class="dropdown-item border-0 transition-link" href="/userlogout">Login</a>
               </div>
             </li>
+            
           </ul>
         </div>
       </nav>

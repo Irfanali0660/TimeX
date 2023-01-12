@@ -7,7 +7,6 @@ module.exports = {
          if (req.session.userlogged) {
             console.log("INSIDE NEXT");
             res.locals.userdata=await userModel.findOne({email: req.session.useremail})
-            console.log( res.locals.userdata);
             if( res.locals.userdata.status=="banned"){
                 console.log("INSIDE BAnned");
                 return res.render('user/login',{userSts: res.locals.userdata.status,userName:"correct"});

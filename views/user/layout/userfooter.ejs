@@ -56,12 +56,50 @@
       $('#name').html(data.name)
       $('#price').html(data.price)
       $('#description').html(data.description)
+      $('#addtocart2').attr('onclick','addtocart("'+data._id+'") ') 
+    });
+    }
+  </script>
+  <script>
+    function addtocart(id) {
+      $.ajax({
+      type: "POST",
+      url: "/addtocart",
+     data: {id},
+     dataType: "json",
+    encode: true,
+    }).done(function (data) {
+      
+      if(data=="LOGIN FIRST"){
+        console.log("SWEET");
+                Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Login first!',
+      footer: '<a href="/login">Go to login</a>'
+      })
+      }
+      else if(data=="alreadyexit"){
+        Swal.fire({
+      icon: 'warning',
+      title: 'Already added',
+      footer: '<a href="/cart">Check cart</a>'
+      })
+      }
+      else if (data=="added"){
+        Swal.fire({
+      icon: 'success',
+      title: 'Successfully added',
+      text: 'Good job!',
+      footer: '<a href="/cart">GO TO CART</a>'
+      })
+      }
     });
     }
   </script>
    </section>
    <!-- JavaScript files-->
-   <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+   <script src="/public/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
    <script src="/vendor/glightbox/js/glightbox.min.js"></script>
    <script src="/vendor/nouislider/nouislider.min.js"></script>
    <script src="/vendor/swiper/swiper-bundle.min.js"></script>

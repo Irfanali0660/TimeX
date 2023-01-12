@@ -127,9 +127,10 @@
                                             <div class="col-md-8">
                                                 <select class="form-control form-custom" name="brand"
                                                     fdprocessedid="snbdje" >
-                                                    <option ><%= products.brand.categoryName %></option>
-                                                    <% category.forEach((cate)=>{ %>
-                                                    <option > <%= cate.categoryName %></option>
+                                                    <option value="<%= products.brand._id %>"><%= products.brand.categoryName %></option>
+                                                    <% category.forEach((cate)=>{ %>+
+
+                                                    <option value="<%= cate._id %>" > <%= cate.categoryName %></option>
                                                     <% }) %>
                                                     <!-- <option >G-shock</option>
                                                     <option >Apple</option>
