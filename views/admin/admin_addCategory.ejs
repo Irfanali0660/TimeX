@@ -12,13 +12,13 @@
           <div class="row ">
             <% if(ustatus=="true" ) { %>
               <div class="alert alert-success alert-dismissible fade show" role="alert">
-                  <strong>Success!</strong> Category are added successfully!
+                  <strong>Success!</strong>&nbsp; Category are added successfully!
                   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
               </div>
               <% } %>
               <% if(ustatus=="false" ) { %>
                 <div id="mesage" class="alert alert-warning alert-dismissible fade show" role="alert">
-                  <strong>alert! </strong> add category
+                  <strong>alert! </strong>already exit this category
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 <% } %>
@@ -64,7 +64,7 @@
                             <label class="col-md-4">Category Name:</label>
                             <div class="col-md-8">
                                 <input class="form-control" name="category" type="text"
-                                    fdprocessedid="ql246j">
+                                    fdprocessedid="ql246j" required>
                             </div>
                         </div>
                     </div>
@@ -73,7 +73,7 @@
                             <label class="col-md-4">Date :</label>
                             <div class="col-md-8">
                                 <input class="form-control" name="Date" type="date"
-                                    fdprocessedid="f8vluf">
+                                    fdprocessedid="f8vluf" required>
                             </div>
                         </div>
                     </div>
@@ -83,7 +83,7 @@
                             <label class="col-md-4">Status :</label>
                             <div class="col-md-8">
                                 <select class="form-control form-custom" name="status"
-                                    fdprocessedid="vhuc4m">
+                                    fdprocessedid="vhuc4m" required>
                                     <option value="">Please Select</option>
                                     <option>Show</option>
                                     <option>Hide</option>

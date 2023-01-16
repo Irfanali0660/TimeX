@@ -23,6 +23,27 @@ const userSchema =new mongoose.Schema({
         type:String,
         default:'unbanned'
     },
+    address:[
+        {
+            name:{type:String},
+            house:{type:String},
+            post:{type:String},
+            city:{type:String},
+            district:{type:String},
+            state:{type:String},
+            pin:{type:Number}
+        }
+    ],
+    cart:[
+        {
+            product_id:{type:mongoose.Schema.Types.ObjectId,ref:"productdata",required:true},
+            quantity:{type:Number,required:true}     
+        }
+        
+    ],
+    wishlist:[
+        mongoose.Schema.Types.ObjectId
+    ]
 })
 
 module.exports = userModel = mongoose.model('userData',userSchema);

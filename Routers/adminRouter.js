@@ -75,7 +75,8 @@ router.post('/deletebanner/:id/:val',auth.adminSession, controller.deletebanner)
 router.post('/addcoupon',auth.adminSession, controller.addcoupon)
 router.post('/deleteCoupon/:id',auth.adminSession, controller.deleteCoupon)
 router.post('/updateCoupon/:id',auth.adminSession, controller.updatecoupon)
-router.post('/editcoupon/:id',auth.adminSession, controller.coupon)
+router.post('/editcoupon', controller.ajaxcoupon)
+
 
 
 

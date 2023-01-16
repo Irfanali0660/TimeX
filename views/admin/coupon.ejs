@@ -1,7 +1,7 @@
 <%- include('../admin/layout/adminhead.ejs') -%>
 
 
-  <!-- Modal -->
+  <!--add Modal -->
   <div class="modal fade " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" >
       <div class="modal-content bg-dark" >
@@ -13,27 +13,33 @@
           <form action="/addcoupon" method="post">
             <div class="form-outline mb-4">
               <label class="form-label" for="form3Example3" >Name</label>
-              <input type="text" id="form3Example3" class="form-control bg-dark" name="couponName"/>
+              <input type="text" id="form3Example3" class="form-control bg-dark"  name="couponName"  required/>
 
             </div>
 
             <div class="form-outline mb-4">
               <label class="form-label" for="form3Example3">Coupon code</label>
-              <input type="text" id="form3Example3" class="form-control bg-dark" name="couponCode"/>
+              <input type="text" id="form3Example3" class="form-control bg-dark" name="couponCode" required/>
 
             </div>
 
             <!-- amount input -->
             <div class="form-outline mb-4">
-              <label class="form-label" for="form3Example3">Amount</label>
-              <input type="text" id="form3Example3" class="form-control  bg-dark" name="Amount"/>
+              <label class="form-label" for="form3Example3">percentage</label>
+              <input type="text"  class="form-control  bg-dark"  name="percentage" required/>
+            </div>
+
+             <!-- amount input -->
+             <div class="form-outline mb-4">
+              <label class="form-label" for="form3Example3">minimumAmount</label>
+              <input type="number"  class="form-control  bg-dark"  name="minimumAmount" required/>
 
             </div>
 
             <!-- date input -->
             <div class="form-outline mb-4">
               <label class="form-label" for="form3Example4">Exp Date</label>
-              <input type="date" id="form3Example4" class="form-control  bg-dark" name="expDate"/>
+              <input type="date"  id="form3Example3" class="form-control  bg-dark"  name="expDate" required/>
             </div>
 
             <!-- Submit button -->
@@ -51,47 +57,43 @@
       </div>
     </div>
   </div>
-  <script>
-    function onclick(id) {
-      
-    }
-  </script>
-    <!-- Modal -->
+
+    <!-- editModal -->
     <div class="modal fade " id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" >
         <div class="modal-content bg-dark" >
           <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Coupon</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body" >
-            <form action="/updateCoupon/<% singlecoupon._id %>" method="post">
+            <form id="actionmodel" method="post">
               <div class="form-outline mb-4">
                 <label class="form-label" for="form3Example3" >Coupon Name</label>
-                <input type="text" id="form3Example3" class="form-control bg-dark" name="couponName" value="<%= singlecoupon.couponName %>"/>
+                <input type="text" class="form-control bg-dark" name="couponName" id="couponName" />
   
               </div>
   
               <div class="form-outline mb-4">
                 <label class="form-label" for="form3Example3">Coupon code</label>
-                <input type="text" id="form3Example3" class="form-control bg-dark" name="couponCode" value="<%= singlecoupon.couponCode %>"/>
+                <input type="text"  class="form-control bg-dark" id="couponCode" name="couponCode" />
   
               </div>
   
-              <!-- amount input -->
+              <!-- amount edit input -->
               <div class="form-outline mb-4">
-                <label class="form-label" for="form3Example3">Amount</label>
-                <input type="text" id="form3Example3" class="form-control  bg-dark" name="Amount" value="<%= singlecoupon.amount %>"/>
+                <label class="form-label" for="form3Example3">percentage</label>
+                <input type="text"  class="form-control  bg-dark" id="Amount" name="percentage" />
   
               </div>
   
-              <!-- date input -->
+              <!-- date edit input -->
               <div class="form-outline mb-4">
                 <label class="form-label" for="form3Example4">Exp Date</label>
-                <input type="date" id="form3Example4" class="form-control  bg-dark" name="expDate" value="<%= singlecoupon.expiryDate %>"/>
+                <input type="datetime"  class="form-control  bg-dark" id="expDate" name="expDate" />
               </div>
   
-              <!-- Submit button -->
+              <!-- Submit edit button -->
               <div class="d-flex justify-content-center mt-5">
                 <button type="submit" class="btn btn-primary btn-block mb-4">Submit</button>
               </div>
@@ -125,6 +127,7 @@
             <th scope="col">COUPON NAME</th>
             <th scope="col">COUPON CODE</th>
             <th scope="col">PERCENTAGE</th>
+            <th scope="col">MINIMUM AMOUNT</th>
             <th scope="col">EXP DATE</th>
             <th scope="col">ACTION</th>
           </tr>
@@ -143,7 +146,10 @@
                 <%= coup.couponCode %>
               </td>
               <td>
-                <%= coup.amount %>
+                <%= coup.percentage %>
+              </td>
+              <td>
+                <%= coup.minimumAmount %>
               </td>
               <td>
                 <%= coup.expiryDate %>
@@ -152,8 +158,8 @@
 
                 <div class="d-flex flex-lg-row justify-content-center">
                 
-                  <form action="/editCoupon/<% coup._id %>" method="post">
-                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#editModal" onclick="editmodal('<% coup._id %>')">
+                  <form  method="post">
+                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#editModal" onclick="coupon('<%= coup._id %>')">
                       Edit
                      </button></a>
                   </form>
@@ -173,7 +179,26 @@
 
 
   </div>
-  
+  <script>
+       function coupon(id) {
+      $.ajax({
+      type: "POST",
+      url: "/editcoupon",
+     data: {id},
+     dataType: "json",
+    encode: true,
+    }).done(function (data) {
+      console.log(data.expiryDate); 
+      // $('#prodImg').attr('src','/productimages/'+data.image[0])
+      $('#actionmodel').attr('action','/updateCoupon/'+data._id)
+      $('#couponName').val(data.couponName)
+      $('#couponCode').val(data.couponCode)
+      $('#Amount').val(data.amount)
+      $('#expDate').val(data.expiryDate)
+      // $('#addtocart2').attr('onclick','addtocart("'+data._id+'") ') 
+    });
+    }
+  </script>
 
 
 <%-include('../admin/layout/adminfooter.ejs') -%>

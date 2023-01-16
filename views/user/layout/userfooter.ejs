@@ -1,9 +1,9 @@
-<footer class="bg-dark text-white">
+<footer class="bg-dark text-white ">
     <div class="container py-4">
       <div class="row py-5">
         <div class="col-md-4 mb-3 mb-md-0">
           <h6 class="text-uppercase mb-3">Customer services</h6>
-          <ul class="list-unstyled mb-0">
+          <ul class="list-unstyled mb-0 ">
             <li><a class="footer-link" href="#!">Help &amp; Contact Us</a></li>
             <li><a class="footer-link" href="#!">Returns &amp; Refunds</a></li>
             <li><a class="footer-link" href="#!">Online Stores</a></li>
@@ -34,10 +34,10 @@
           <div class="col-md-6 text-center text-md-start">
             <p class="small text-muted mb-0">&copy; 2023 All rights reserved.</p>
           </div>
-          <div class="col-md-6 text-center text-md-end">
-            <p class="small text-muted mb-0">Template designed by <a class="text-white reset-anchor" href="https://bootstrapious.com/p/boutique-bootstrap-e-commerce-template">Bootstrapious</a></p>
+          <!-- <div class="col-md-6 text-center text-md-end"> -->
+            <!-- <p class="small text-muted mb-0">Template designed by <a class="text-white reset-anchor" href="https://bootstrapious.com/p/boutique-bootstrap-e-commerce-template">Bootstrapious</a></p> -->
             <!-- If you want to remove the backlink, please purchase the Attribution-Free License. See details in readme.txt or license.txt. Thanks!-->
-          </div>
+          <!-- </div> -->
         </div>
       </div>
     </div>
@@ -68,8 +68,10 @@
      data: {id},
      dataType: "json",
     encode: true,
-    }).done(function (data) {
+    }).done(function (data) { 
       
+      // total += data.price
+      // console.log(total+"TOTAL")
       if(data=="LOGIN FIRST"){
         console.log("SWEET");
                 Swal.fire({
@@ -86,17 +88,160 @@
       footer: '<a href="/cart">Check cart</a>'
       })
       }
-      else if (data=="added"){
+      else if (data.key=="added"){
+      // $('#subtotal').html(total) 
         Swal.fire({
       icon: 'success',
       title: 'Successfully added',
       text: 'Good job!',
       footer: '<a href="/cart">GO TO CART</a>'
       })
+   
       }
     });
     }
   </script>
+    <script>
+      function deletecart(id) {
+
+        Swal.fire({
+  title: 'Are you sure?',
+  text: "You won't be able to revert this!",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'Yes, delete it!'
+}).then((result) => {
+  if (result.isConfirmed) {
+    let price = Number($('#'+id+'Price').html())
+    let Qnty = Number($('#'+id+'Qnty').val())
+    let currentTotal = Number($('#cartSubTotal').html())
+    $('#cartSubTotal').html(currentTotal-(price*Qnty))
+    $.ajax({
+        type: "POST",
+        url: "/deletecart",
+       data: {id},
+       dataType: "json",
+      encode: true,
+      }).done(function (data) { 
+        Swal.fire(
+      'removed!',
+      'This product has been removed.',
+      'success'
+    )
+        $('#'+id+'item').remove()
+      });
+    }
+    })
+    }
+    </script>
+
+<script>
+  // subTotal=currentTotal;
+  function quantity(id) {
+    let Qnty = Number($('#'+id+'Qnty').val())
+
+    if(Number($('#'+id+'Qnty').attr('max')) > Qnty){
+
+        $.ajax({
+        type: "POST",
+        url: "/quantity",
+      data: {id},
+      dataType: "json",
+      encode: true,
+      }).done(function (data) {
+        let price = Number($('#'+id+'Price').html())
+        let currentTotal = Number($('#cartSubTotal').html())
+        $('#'+id+'Qnty').val(Qnty+1)
+        $('#'+id+'TotalPrice').html(price*Qnty)
+        $('#cartSubTotal').html(currentTotal+price)
+        $('#Total').html(currentTotal+price)
+
+        // console.log(data+"datd");
+        // console.log(Qnty+"quantity");
+        // console.log(price+"price");
+        // if(data.key=="over"){
+        //   $('#'+id+'Qnty').attr('max',data.price) 
+        //   Swal.fire('Any fool can use a computer')
+        // }
+      });
+    }else{
+      Swal.fire({text:'Sorry! Limited stock'})
+    }
+  }
+</script>
+   <script>
+    // subTotal=currentTotal
+    function quantitydec(id) {
+      $.ajax({
+      type: "POST",
+      url: "/quantitydec",
+     data: {id},
+     dataType: "json",
+    encode: true,
+    }).done(function (data) {
+      let price = Number($('#'+id+'Price').html())
+    let Qnty = Number($('#'+id+'Qnty').val())
+    $('#'+id+'TotalPrice').html(price*Qnty)
+    let currentTotal = Number($('#cartSubTotal').html())
+    console.log('TOTAL: ' +currentTotal);
+    $('#cartSubTotal').html(currentTotal-price)
+    $('#Total').html(currentTotal-price)
+  
+
+      if(data=="deleted"){
+        Swal.fire(
+      'removed!',
+      'Your product has been removed.',
+      'success'
+    )
+    $('#'+id+'item').remove()
+      }
+    });
+    }
+  </script>
+  <script>
+    function wishlist(id) {
+      $.ajax({
+      type: "POST",
+      url: "/addwishlist",
+     data: {id},
+     dataType: "json",
+    encode: true,
+    }).done(function (data) { 
+      
+      // total += data.price
+      // console.log(total+"TOTAL")
+      if(data=="LOGIN FIRST"){
+                Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Login first!',
+      footer: '<a href="/login">Go to login</a>'
+      })
+      }
+      else if(data=="alreadyexit"){
+        Swal.fire({
+      icon: 'warning',
+      title: 'Already added',
+      footer: '<a href="/cart">Check cart</a>'
+      })
+      }
+      else if (data.key=="added"){
+      // $('#subtotal').html(total) 
+        Swal.fire({
+      icon: 'success',
+      title: 'Successfully added',
+      text: 'Good job!',
+      footer: '<a href="/wishlist">GO TO Wishlist</a>'
+      })
+   
+      }
+    });
+    }
+  </script>
+
    </section>
    <!-- JavaScript files-->
    <script src="/public/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

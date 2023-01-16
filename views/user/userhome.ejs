@@ -13,18 +13,18 @@
                 <div class="col-lg-6 p-lg-0 d-flex justify-content-center align-items-center "><img src="" alt="" style="width: 80%;" id="prodImg"></div>
                 <div class="col-lg-6">
                   <div class="p-4 my-md-4">
-                    <ul class="list-inline mb-2">
+                    <!-- <ul class="list-inline mb-2">
                       <li class="list-inline-item m-0"><i class="fas fa-star small text-warning"></i></li>
                       <li class="list-inline-item m-0 1"><i class="fas fa-star small text-warning"></i></li>
                       <li class="list-inline-item m-0 2"><i class="fas fa-star small text-warning"></i></li>
                       <li class="list-inline-item m-0 3"><i class="fas fa-star small text-warning"></i></li>
                       <li class="list-inline-item m-0 4"><i class="fas fa-star small text-warning"></i></li>
-                    </ul>
+                    </ul> -->
                     <h2 id="name" class="h4"></h2>
                     <p class="text-muted">$<span id="price" ></span></p>
                     <p class="text-sm mb-4" id="description"></p>
                     <div class="row align-items-stretch mb-4 gx-0">
-                      <div class="col-sm-7">
+                      <!-- <div class="col-sm-7">
                         <div class="border d-flex align-items-center justify-content-between py-1 px-3"><span class="small text-uppercase text-gray mr-4 no-select">Quantity</span>
                           <div class="quantity">
                             <button class="dec-btn p-0"><i class="fas fa-caret-left"></i></button>
@@ -32,7 +32,7 @@
                             <button class="inc-btn p-0"><i class="fas fa-caret-right"></i></button>
                           </div>
                         </div>
-                      </div>
+                      </div> -->
                       <div class="col-sm-5"><a class="btn btn-dark btn-sm w-100 h-100 d-flex align-items-center justify-content-center px-0" id="addtocart2">Add to cart</a></div>
                     </div><a class="btn btn-link text-dark text-decoration-none p-0" href="#!"><i class="far fa-heart me-2"></i>Add to wish list</a>
                   </div>
@@ -101,7 +101,7 @@
                   <div class="badge text-white "></div><a class="d-block p-5" href="/productdetials/<%= product._id %>/<%= product.brand._id %>"><img class="img-fluid w-100" src="productimages/<%= product.image[0] %>" alt="..."  ></a>
                   <div class="product-overlay">
                     <ul class="mb-0 list-inline">
-                      <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href=""><i class="bi bi-heart"></i></a></li>
+                      <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#" onclick="wishlist('<%= product._id %>')"><i class="bi bi-heart"></i></a></li>
                       <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" onclick="addtocart('<%= product._id %>')" >Add to cart</a></li>
                       <li class="list-inline-item me-0"><a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal" onclick="getModal('<%= product._id %>')"><i class="bi bi-fullscreen"></i></a></li>
                     </ul>

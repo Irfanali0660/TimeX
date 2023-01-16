@@ -13,9 +13,7 @@ module.exports = {
             }
             else{
                 next()
-            }
-            
-           
+            }  
         }
         else {
             res.redirect('/login')
