@@ -21,7 +21,8 @@ router.post('/getModal',controller.getModal);
 router.get('/cart',auth.userSession,controller.cart);
 router.get('/wishlist',auth.userSession,controller.wishlist);
 router.get('/account',auth.userSession,controller.account);
-router.get('/checkout',auth.userSession,controller.checkout);
+router.get('/checkout/:id',auth.userSession,controller.checkout)
+
 
 
 
@@ -42,6 +43,8 @@ router.post('/addwishlist',ajax.userSession,controller.addwishlist)
 router.post('/deleteitem',ajax.userSession,controller.deleteitem)
 router.post('/couponcheck',ajax.userSession,controller.couponcheck)
 router.post('/selectaddress',ajax.userSession,controller.selectaddress)
+router.post('/couponcheck',ajax.userSession,controller.couponcheck)
+router.post('/orderid',auth.userSession,controller.orderid);
 
 
 

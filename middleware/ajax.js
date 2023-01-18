@@ -6,6 +6,7 @@ module.exports = {
     userSession: async(req, res, next) => {
       
          if (req.session.userlogged) {
+            res.locals.userdata=await userModel.findOne({email: req.session.useremail})
             console.log("Inside AJAX");
             res.locals.userdata=await userModel.findOne({email: req.session.useremail})
             next()

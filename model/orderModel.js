@@ -4,13 +4,13 @@ const orderSchema =new mongoose.Schema({
     
     userid: { type: mongoose.Schema.Types.ObjectId, required:true , ref:'userData'},
     address: {
-        name:  {type:String, required:true },
-        house:  {type:String, required:true }, 
-        post:  {type:String, required:true }, 
-        city:  {type:String, required:true }, 
-        district:  {type:String, required:true }, 
-        state:  {type:String, required:true }, 
-        pin:  {type:Number, required:true }
+        name:  {type:String},
+        house:  {type:String}, 
+        post:  {type:String}, 
+        city:  {type:String}, 
+        district:  {type:String}, 
+        state:  {type:String}, 
+        pin:  {type:Number}
     },
     bill_amount: {type:Number, required:true},
     order_status:{type:String, default:'pending'},
@@ -20,9 +20,9 @@ const orderSchema =new mongoose.Schema({
         payment_order_id:{type:String},
         payment_status:{type:String, default:'pending'},
     },
-    products: [
+    products:[
         {
-            product_id:{type:String, required:true, ref:'products'},
+            product_id:{type:String, required:true, ref:'productdata'},
             name:{type:String, required:true},
             qnty:{type:Number, required:true},
             price:{type:Number, required:true},
@@ -46,10 +46,10 @@ const orderSchema =new mongoose.Schema({
             date:{type:Date},
         },
     },
-    coupen:{
+    coupon:{
         name:{type:String},
         code:{type:String},
-        discount:{type:Number},
+        discount:{type:Number}
     },
     ordered_date: {type:Date, default: Date.now(), index:true},
 

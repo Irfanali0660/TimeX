@@ -83,7 +83,7 @@
               <!-- amount edit input -->
               <div class="form-outline mb-4">
                 <label class="form-label" for="form3Example3">percentage</label>
-                <input type="text"  class="form-control  bg-dark" id="Amount" name="percentage" />
+                <input type="text"  class="form-control  bg-dark" id="percentage" name="percentage" />
   
               </div>
   
@@ -193,6 +193,7 @@
       $('#actionmodel').attr('action','/updateCoupon/'+data._id)
       $('#couponName').val(data.couponName)
       $('#couponCode').val(data.couponCode)
+      $('#percentage').val(data.percentage)
       $('#Amount').val(data.amount)
       $('#expDate').val(data.expiryDate)
       // $('#addtocart2').attr('onclick','addtocart("'+data._id+'") ') 

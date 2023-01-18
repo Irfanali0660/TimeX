@@ -6,6 +6,8 @@ const { products, category } = require("./admincontrol");
 const ProductModel = require("../model/ProductModel");
 const bannerModel = require("../model/bannerModel");
 const { json } = require("express");
+const couponModel = require("../model/couponModel");
+const orderModel = require("../model/orderModel");
 
 
 let transporter = nodemailer.createTransport({
@@ -185,6 +187,8 @@ module.exports={
                     password:req.session.Password})
 
                 newUser.save().then(()=>{
+                    req.session.useremail = req.body.email;
+                    req.session.userlogged=true;
                     res.redirect("/")
                 })     
             }
@@ -283,24 +287,24 @@ module.exports={
         try {
         const id=res.locals.userdata;
         const cdid=req.body.id;
+       console.log("REACHED");
+        let productcheck=await userModel.findOne({_id:id,'cart._id':cdid})
+        productcheck.cart.forEach(async(val,i)=>{
+            if(val._id.toString() == cdid.toString()){
+             console.log(val.quantity+"successs");
+             productquantity=await ProductModel.findOne({_id:val.product_id})
+                console.log(productquantity.stock +"TEST CHECK");
+                if(productquantity.stock<=val.quantity){
+                    console.log("INSIDE IF");
+                    res.json({key:"over",price:productquantity.stock})
+                }
+                else{
+                    await userModel.updateOne({_id:id,'cart._id':cdid},{$inc:{'cart.$.quantity':1}})
+                    res.json("added")
+                }
+            }
+        })
        
-        // let productcheck=await userModel.findOne({_id:id,'cart._id':cdid})
-        // productcheck.cart.forEach(async(val,i)=>{
-        //     if(val._id.toString() == cdid.toString()){
-        //      console.log(val.quantity+"successs");
-        //      productquantity=await ProductModel.findOne({_id:val.product_id})
-        //         console.log(productquantity.stock +"TEST CHECK");
-        //         if(productquantity.stock<=val.quantity){
-        //             console.log("INSIDE IF");
-        //             res.json({key:"over",price:productquantity.stock})
-        //         }
-        //         else{
-                    
-        //         }
-        //     }
-        // })
-        await userModel.updateOne({_id:id,'cart._id':cdid},{$inc:{'cart.$.quantity':1}})
-        res.json("added")
         } catch (error) {
             next(error)
         }
@@ -497,22 +501,110 @@ module.exports={
             next(error)
         }
     },
-    checkout:async(req,res,next)=>{
+    orderid:async(req,res,next)=>{
         try {
             const id=res.locals.userdata._id;
             console.log(id);
+            let total=0;
+            let cartproducts=[];
+
             let cartbill=await userModel.findOne({_id:id}).populate('cart.product_id')
-            res.render('user/checkout',{page:'none',cartbill})
+            if(cartbill){
+                cartbill.cart.forEach( _id => {
+                    total=total+_id.quantity*_id.product_id.price
+                    let product={
+                        product_id:_id.product_id._id,
+                        name:_id.product_id.name,
+                        qnty:_id.quantity,
+                        price:_id.product_id.price
+                    }
+                    cartproducts.push(product);
+                })
+               let product= {
+                    userid:res.locals.userdata._id,
+                    bill_amount:total,
+                    products:cartproducts,
+                    coupon:{discount:0}
+                }
+                let neworder=new orderModel(product)
+                neworder.save().then((data)=>{
+                    console.log(data._id+"ID");
+                    res.json(data)
+
+                })
+                
+            }
+
+            
+
+        } catch (error) {
+            next(error)
+        }
+    },
+   
+
+    checkout:async(req,res,next)=>{
+        try {
+            console.log(req.params.id);
+            let orderData=await orderModel.findOne({_id:req.params.id})
+            let cartbill=await userModel.findOne({_id:res.locals.userdata._id})
+            
+             res.render('user/checkout',{page:'none',cartbill,orderData})
         } catch (error) {
             next(error)
         }
     },
     couponcheck:(req,res,next)=>{
         try {
-            console.log(req.body.coupon)
-            console.log("INSIDE COUPONCHECK");
-            res.json("success")
+            let apiRes = {};
+            console.log(req.body.key)
+            console.log(req.body.id);
+            if(req.body.key){
+                 couponModel.findOne({couponCode:req.body.key,couponUser:{$nin:[res.locals.userdata._id]}}).then((data)=>{
+                    if(data){
+                        if(data.expiryDate>=new Date()){
+                            console.log("INSIDE");
+                            orderModel.findOne({_id:req.body.id,userid:res.locals.userdata._id,order_status:'pending'}).then((orderdetials)=>{
+                                if(orderdetials.bill_amount>data.minimumAmount){
+                                    orderModel.updateOne({_id:req.body.id,userid:res.locals.userdata._id,order_status:'pending'},{$set:{coupon:{
+                                        name:data.couponName,
+                                        code:data.couponCode,
+                                        discount:data.percentage
+                                    }}}).then(async()=>{
+                                        await couponModel.updateOne({_id:data._id},{$addToSet:{couponUser:res.locals.userdata._id}})
+                                        apiRes.message='Applied coupon'
+                                        apiRes.success=true;
+                                        res.json(apiRes) 
+                                    })
+                                 
+                                }
+                                else{
+                                    apiRes.message='This coupon in not used for this bill amount'
+                                    res.json(apiRes) 
+                                }
+                            })
+ 
+                        }
+                        else{
+                            console.log('coupon expired');
+                           apiRes.message='coupon expired' 
+                           res.json(apiRes)
+                        }
+                    }
+                    else{
+                        console.log("Invalid coupon ");
+                        apiRes.message = 'Invalid coupon || This coupon already used'
+                        res.json(apiRes)
+                    }
+                 })
+
+            }
+            else{
+                apiRes.message = 'enter coupon code'
+                res.json(apiRes)
+            }
         } catch (error) {
+            console.log(error);
             next(error)
         }
     },
@@ -522,7 +614,7 @@ module.exports={
             const addid=req.body.id;
             let useraddress=await userModel.findOne({_id:id})
             useraddress.address.forEach((val)=>{
-                if(val.id.toString()==addid.toString()){
+                if(val._id.toString()==addid.toString()){
                     res.json(val)
                 }
             })

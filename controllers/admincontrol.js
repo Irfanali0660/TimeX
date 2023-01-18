@@ -67,7 +67,6 @@ module.exports = {
                     status: req.body.status,
                     image: filenames
                 })
-
                 product.save().then(() => {
                     res.render('admin/admin_addProduct', { page: 'Products', admin: res.locals.admindata.name, field: "field", userstatus: "true" ,category})
                 })

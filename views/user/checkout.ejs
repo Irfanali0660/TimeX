@@ -1,7 +1,7 @@
 <%-include('../user/layout/userhead.ejs') -%>
 
 
-<div class="page-holder">
+  <div class="page-holder">
     <div class="container">
       <!-- HERO SECTION-->
       <section class="py-5 bg-light">
@@ -21,19 +21,22 @@
             </div>
           </div>
         </div>
-
       </section>
-      <section class="py-5">
+      <div id="response">
+       
+      </div>
+
+      <section class="py-4">
         <!-- BILLING ADDRESS-->
         <h2 class="h5 text-uppercase mb-4">Billing details</h2>
         <div class="row">
           <div class="col-lg-8">
-            <form action="#" id="form">
+            <form action="/placeorder" id="form">
               <div class="row gy-3">
                 <div class="col-lg-12">
                   <label class="form-label text-sm text-uppercase" for="firstName">Full name </label>
                   <input class="form-control form-control-lg" type="text" id="firstName" required>
-                </div>  
+                </div>
                 <div class="col-lg-12">
                   <label class="form-label text-sm text-uppercase" for="address">Address </label>
                   <input class="form-control form-control-lg" type="text" id="address" required>
@@ -59,49 +62,57 @@
                   <input class="form-control form-control-lg" type="text" id="state" required>
                 </div>
                 <div class="col-lg-6">
-                  <button class="btn btn-link text-dark p-0 shadow-0" type="button" data-bs-toggle="collapse" data-bs-target="#alternateAddress">
+                  <button class="btn btn-link text-dark p-0 shadow-0" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#alternateAddress">
                     <div class="form-check">
                       <input class="form-check-input" id="alternateAddressCheckbox" type="checkbox">
                       <label class="form-check-label" for="alternateAddressCheckbox">Alternate billing address</label>
                     </div>
                   </button>
                 </div>
-                <div class="collapse " id="alternateAddress">
+                <div class="collapse" id="alternateAddress">
                   <div class="row gy-3 border-bottom border-secondary">
                     <div class="col-12 mt-4">
                       <h2 class="h4 text-uppercase mb-4">Alternative billing details</h2>
                     </div>
-                    
+
                     <div id="addressList" class="">
-                
+
                       <h5 class="text-secondary border-bottom py-2 mb-2">Saved Addresses</h5>
                       <div class="d-flex justify-content-center">
-                        <button class="btn btn-dark mt-3 mb-3" onclick="addnewaddress()" type="submit">add new address</button>
+                        <button class="btn btn-dark mt-3 mb-3" onclick="addnewaddress()" type="submit">add new
+                          address</button>
                       </div>
                       <% if(cartbill.address.length==0){ %>
-                          <h3 class="text-dark text-center">No Address Avaliable</h3>
-                          <p class="text-muted text-center"> Add new address</p>
-                          <% }else{ %>
-                             <% cartbill.address.forEach((val,i)=>{ %>
-                                  <a href="#" class="text-decoration-none text-dark "  data-bs-toggle="modal" data-bs-target="#accountCreationModal" >
-                                      <div class="card p-3 bg-light my-2" id="addrschdd">
-                                          <h6>Address <%= i+1 %> </h6>
-                                          <div class="col-md-6">
-                                              <p id="p"><b><%= val.name%></b>,&nbsp;<%= val.house +', '+ val.post +', ' +val.pin+','+ val.city +',' +val.district+', '+val.state   %></p>
+                        <h3 class="text-dark text-center">No Address Avaliable</h3>
+                        <p class="text-muted text-center"> Add new address</p>
+                        <% }else{ %>
+                          <% cartbill.address.forEach((val,i)=>{ %>
+                            <a href="#" class="text-decoration-none text-dark ">
+                              <div class="card p-3 bg-light my-2" id="addrschdd">
+                                <h6>Address <%= i+1 %>
+                                </h6>
+                                <div class="col-md-6">
+                                  <p id="p"><b>
+                                      <%= val.name%>
+                                    </b>,&nbsp;<%= val.house +', '+ val.post +' , ' +val.pin+' ,'+ val.city +','
+                                      +val.district+', '+val.state   %></p>
                                           </div>
-                                         <small class="text-success text-lg-end" onclick="selectaddress('<%= val._id %>')"><span id="<%= val._id %>change"></span></small>
-                                      </div>
-                                  </a>
-                          <% }) %>
-                          <% } %>
-                         
-                  </div>
+                                         <small  onclick="selectaddress('<%=val._id %>')"><span
+                                        class="addchange text-primary text-lg-end"
+                                        id="<%= val._id %>change">select</span></small>
+                                </div>
+                            </a>
+                            <% }) %>
+                              <% } %>
+
+                    </div>
 
 
                   </div>
                 </div>
                 <div class="col-lg-12 form-group">
-                  <button class="btn btn-dark" type="submit">Place order</button>
+                  <button class="btn btn-dark mb-3" type="submit">Place order</button>
                 </div>
               </div>
             </form>
@@ -113,25 +124,39 @@
                 <h5 class="text-uppercase mb-4">Your order</h5>
                 <ul class="list-unstyled mb-0">
                   
-                  <% let Total=0; cartbill.cart.forEach((val)=>{ %>
-                    
-                  <li class="d-flex align-items-center justify-content-between"><strong class="small fw-normal "><%= val.product_id.name %></strong><span class="text-muted small"><%= val.product_id.price*val.quantity  %></span></li>
-                  <li class="border-bottom my-2"></li>
-                  <% Total = Total + (val.product_id.price*val.quantity)}) %>
-                  <li class="d-flex align-items-center justify-content-between mt-2 mb-2"><strong class="small text-muted  fw-bolder ">Subtotal</strong><span class="text-muted small"><span>$</span><%= Total %></span></li>
-                  <li class="d-flex align-items-center justify-content-between mb-3"><strong class="small text-muted  fw-bold ">Discount</strong><span class="text-muted small"><span>0</span>%</span></li>
-                  <li class="d-flex align-items-center justify-content-between mt-3 mb-4"><strong class="text-uppercase large fw-bold ">Total</strong><span class="text-danger  fw-bold">$<span><%= Total %></span></span></li>
-                  <li>
-                     <form  onsubmit="couponcheck()">
+                  <% let Total=0; orderData.products.forEach((val)=>{ %>
+
+                    <li class="d-flex align-items-center justify-content-between"><strong class="small fw-normal ">
+                        <%= val.name %>
+                      </strong><span class="text-muted small">
+                        <%= val.price*val.qnty %>
+                      </span></li>
+                    <li class="border-bottom my-2"></li>
+                    <% Total=Total + (val.price*val.qnty) }) %>
+                      <li class="d-flex align-items-center justify-content-between mt-2 mb-2"><strong
+                          class="small text-muted  fw-bolder ">Subtotal</strong><span
+                          class="text-muted small"><span>$</span>
+                          <%= Total %>
+                        </span></li>
+                      <li class="d-flex align-items-center justify-content-between mb-3"><strong
+                          class="small text-muted  fw-bold ">Discount</strong><span
+                          class="text-muted small"><span>0</span>%</span></li>
+                      <li class="d-flex align-items-center justify-content-between mt-3 mb-4"><strong
+                          class="text-uppercase large fw-bold ">Total</strong><span class="text-danger  fw-bold">$<span>
+                            <%= Total %>
+                          </span></span></li>
+                      <li>
                         <div class="input-group mb-0">
-                            <input class="form-control" type="text" name="coupon" placeholder="Enter your coupon">
-                            <button class="btn btn-dark btn-sm w-100"  type="submit" ><i  class="fas fa-gift me-2"></i>Apply coupon</button>
+                          <input id="value" class="form-control" type="text" name="coupon"
+                            placeholder="Enter your coupon">
+                          <input type="hidden" value="<%= orderData._id %>" id="orderid">
+                          <button class="btn btn-dark btn-sm w-100" onclick="couponcheck()"><i
+                              class="fas fa-gift me-2"></i>Apply coupon</button>
                         </div>
-                        </form>
                       </li>
                 </ul>
               </div>
-              
+
             </div>
           </div>
         </div>
@@ -140,58 +165,87 @@
 
 
     <script>
-      function couponcheck(id) {
+      function couponcheck() {
         $.ajax({
-        type: "POST",
-        url: "/couponcheck",
-       data: {id},
-       dataType: "json",
-      encode: true,
-      }).done(function (data) {
-        console.log(data);
-       
-      });
+          type: "POST",
+          url: "/couponcheck",
+          data: { key: $('#value').val(),id:$('#orderid').val() },
+          dataType: "json",
+          encode: true,
+        }).done(function (data) {
+          console.log(data.message);
+
+          if (data == "LOGIN FIRST") {
+            console.log("SWEET");
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Login first!',
+              footer: '<a href="/login">Go to login</a>'
+            })
+          }
+          else if(data.success==true){
+            resHTML = '<div class="alert alert-success alert-dismissible"> '+
+            '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>'+
+            '<strong>Error!</strong> '+data.message+
+            '</div>';
+            $("#response").html(resHTML)
+          }
+          else{
+            resHTML = '<div class="alert alert-danger alert-dismissible"> '+
+            '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>'+
+            '<strong>Error!</strong> '+data.message+
+            '</div>';
+            $("#response").html(resHTML)
+          }
+        });
       }
     </script>
 
-<script>
-  function addnewaddress(){
-      document.getElementById("form").reset();
-      document.getElementById("form").setAttribute('action','/placeorder')
-      document.getElementById("alternateAddress").setAttribute('class','collapse')
+    <script>
+      function addnewaddress() {
+        document.getElementById("form").reset();
+        // document.getElementById("form").setAttribute('action','/placeorder')
+        document.getElementById("alternateAddress").setAttribute('class', 'collapse')
+        $(".addchange").attr('class', 'addchange text-primary text-lg-end')
+        $(".addchange").html('select');
+      }
+      function selectaddress(id) {
+        $(".addchange").attr('class', 'addchange text-primary text-lg-end')
+        $(".addchange").html('select');
+        $.ajax({
+          type: "POST",
+          url: "/selectaddress",
+          data: { id },
+          dataType: "json",
+          encode: true,
+        }).done(function (data) {
 
-  }
-function selectaddress(id) {
-$.ajax({
-type: "POST",
-url: "/selectaddress",
-data: {id},
-dataType: "json",
-encode: true,
-}).done(function (data) {
+          if (data == "LOGIN FIRST") {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Login first!',
+              footer: '<a href="/login">Go to login</a>'
+            })
+          }
 
-if(data=="LOGIN FIRST"){
-console.log("SWEET");
-          Swal.fire({
-icon: 'error',
-title: 'Oops...',
-text: 'Login first!',
-footer: '<a href="/login">Go to login</a>'
-})
-}
+          console.log(data);
 
-console.log(data); 
-// $('#actionmodel').attr('action','/updateaddress/'+data._id)
-$('#firstName').val(data.name)
-$('#address').val(data.house)
-$('#Post').val(data.post)
-$('#city').val(data.city)
-$('#district').val(data.district)
-$('#state').val(data.state)
-$('#pin').val(data.pin)
-});
-document.getElementById("change").innerHTML
-}
-</script>
+          $('#firstName').val(data.name)
+          $('#address').val(data.house)
+          $('#Post').val(data.post)
+          $('#city').val(data.city)
+          $('#district').val(data.district)
+          $('#state').val(data.state)
+          $('#pin').val(data.pin)
+        });
+        document.getElementById(id + "change").setAttribute('class', 'addchange text-success text-lg-end')
+        document.getElementById(id + "change").innerHTML = '<i class="bi bi-check2-circle"></i>' + 'selected';
+        setTimeout(() => {
+          document.getElementById("alternateAddress").setAttribute('class', 'collapse')
+        }, 2000);
+      }
+    </script>
 
     <%-include('../user/layout/userfooter.ejs') -%>
