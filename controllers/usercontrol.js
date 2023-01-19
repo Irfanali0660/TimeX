@@ -416,18 +416,7 @@ module.exports={
             console.log(id);
             let isExist=await userModel.findOne({_id:id})
             console.log(isExist+"INSIDE");
-            // // console.log(req.body);
-            // let newaddresss=userModel({
-
-            //     'address.$.name':req.body.Name, 
-            //     'address.$.house':req.body.House,
-            //     'address.$.post':req.body.post,
-            //     'address.$.city':req.body.city,
-            //     'address.$.district':req.body.district,
-            //     'address.$.state':req.body.state,
-            //     'adderss.$.pin':req.body.pin
-            // })
-            
+           
             let newaddresss={
 
                 'name':req.body.Name, 
@@ -572,6 +561,8 @@ module.exports={
                                         discount:data.percentage
                                     }}}).then(async()=>{
                                         await couponModel.updateOne({_id:data._id},{$addToSet:{couponUser:res.locals.userdata._id}})
+                                        console.log(data+"ORDER DETAILS");
+                                        apiRes.coupon=data
                                         apiRes.message='Applied coupon'
                                         apiRes.success=true;
                                         res.json(apiRes) 
