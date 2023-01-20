@@ -207,7 +207,7 @@
 <script>
   function wishlist(id) {
     $.ajax({
-      type: "POST",
+      type: "PUT",
       url: "/addwishlist",
       data: { id },
       dataType: "json",

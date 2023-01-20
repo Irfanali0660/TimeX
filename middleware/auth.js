@@ -28,5 +28,14 @@ module.exports = {
         else {
             res.redirect('/adminlogin')
         }
-    }
+    },
+    homesession:async(req,res,next)=>{
+        if (req.session.userlogged) {
+            console.log("INSIDE NEXT");
+            res.locals.userdata=await userModel.findOne({email: req.session.useremail})
+            next()
+        }else{
+           res.redirect('/')
+        }
+    },
 };

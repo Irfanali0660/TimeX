@@ -8,6 +8,7 @@ const bannerModel = require("../model/bannerModel");
 const { json } = require("express");
 const couponModel = require("../model/couponModel");
 const orderModel = require("../model/orderModel");
+const { name } = require("ejs");
 
 
 let transporter = nodemailer.createTransport({
@@ -29,15 +30,13 @@ module.exports={
 
     home:async(req,res,next)=>{
       try {
-        
-        
-        
+         console.log(res.locals.userdata);
         let banner=await bannerModel.findOne({status:true}).limit(1)
         let category= await categoryModel.find().limit(1)
         let row=  await categoryModel.find().skip(1).limit(2)
         let col= await categoryModel.find().skip(3).limit(1)
         let products=await ProductModel.find().limit(8).populate('brand')
-        res.render('user/userhome',{ page: 'Home',category,row,col,products,banner})
+        res.render('user/userhome',{ page: 'Home',category,row,col,products,banner,user:res.locals.userdata})
 
       } catch (error) {
         next(error)
@@ -53,22 +52,29 @@ module.exports={
         res.render('user/Otppage')
     },
     shop:async(req,res,next)=>{
-       try {
-        
+       try {  
         let category=await categoryModel.find({status:'Show'})
         let allcount=await ProductModel.find().countDocuments()
+        let searResult=[]
+        if(req.query.search){
+            let products=await ProductModel.find({name:{$regex:req.query.search}})
+            let count=await ProductModel.find({name:{$regex:req.query.search}}).countDocuments()
+            console.log(count);
+            console.log(products);
+            res.render('user/products',{ page: 'Shop',products,category,count,allcount})
+        }
         if(req.query.cate){
-            console.log("IF");
+            console.log(req.query.cate+"CATEGORY");
             let products=await ProductModel.find({brand:req.query.cate})
             let count=await ProductModel.find({brand:req.query.cate}).countDocuments()
             res.render('user/products',{ page: 'Shop',products,category,count,allcount})
-        }else{
+        }else {
             console.log("ELSE");
             let products=await ProductModel.find().limit(12)
             let count=await ProductModel.find().limit(12).count()
             res.render('user/products',{ page: 'Shop',products,category,count,allcount})
-        }
-            
+        }    
+        
        } catch (error) {
         next(error)
        }
@@ -601,8 +607,11 @@ module.exports={
     },
     selectaddress:async(req,res,next)=>{
         try {
+            console.log("REACHED");
             const id=res.locals.userdata._id
             const addid=req.body.id;
+            console.log(addid+"ADDRESS ID");
+            console.log(id+"ID");
             let useraddress=await userModel.findOne({_id:id})
             useraddress.address.forEach((val)=>{
                 if(val._id.toString()==addid.toString()){
@@ -612,6 +621,43 @@ module.exports={
         } catch (error) {
             next(error)
         }
+    },
+    searchFun:async(req,res,next)=>{
+        try {
+            console.log("success searchfun");
+            let apiRes = {};
+            const searResult=[]
+            if(req.body.value){
+                let usersearch= new RegExp('^'+req.body.value+'.*','i');
+                let categorysearch=await categoryModel.aggregate([{$match:{$or:[{categoryName:usersearch}]}}])
+                categorysearch.forEach((field) => {
+                    searResult.push({titile:field.categoryName,type:'category',id:field._id})
+                })
+                let productsearch= await ProductModel.aggregate([{$match:{$or:[{name:usersearch},{description:usersearch},{price:usersearch}]}}])
+                                productsearch.forEach((field) => {
+                    searResult.push({titile:field.name,type:'product',id:field._id,cate:field.brand})
+                })
+               
+                console.log(searResult)
+                apiRes.search=searResult
+                res.json(apiRes)
+            }
+            else{
+                res.json('noresult')
+            }
+            
+        } catch (error) {
+            console.log(error);
+            next(error)
+        }
+    },
+    addaddresscheck:(req,res,next)=>{
+       try {
+        console.log(req.body,name);
+        res.json()
+       } catch (error) {
+        next(error)
+       }
     },
     logout:(req,res)=>{
         req.session.destroy();

@@ -22,14 +22,14 @@
           </div>
         </div>
       </section>
-   
+
 
       <section class="py-4">
         <!-- BILLING ADDRESS-->
         <h2 class="h5 text-uppercase mb-4">Billing details</h2>
         <div class="row">
           <div class="col-lg-8">
-            <form action="/placeorder" id="form">
+            <form  id="form">
               <div class="row gy-3">
                 <div class="col-lg-12">
                   <label class="form-label text-sm text-uppercase" for="firstName">Full name </label>
@@ -75,9 +75,9 @@
 
                   <input type="radio" class="btn-check" name="options-outlined" id="success-outlined" autocomplete="off" checked>
                   <label class="btn btn-outline-secondary" for="success-outlined">Cash on delivary</label> -->
-                  
-                 
-                 </div>
+
+
+                </div>
                 <div class="collapse" id="alternateAddress">
                   <div class="row gy-3 border-bottom border-secondary">
                     <div class="col-12 mt-4">
@@ -112,19 +112,35 @@
                                 </div>
                             </a>
                             <% }) %>
-                            <% } %>
+                              <% } %>
                     </div>
 
 
                   </div>
                 </div>
-                <div class="col-lg-12 form-group">
-                  <button class="btn btn-dark mb-3" type="submit">Place order</button>
+                <div class="d-flex justify-content-evenly border border-secondary py-3">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="COD" required>
+                    <label class="form-check-label" for="flexRadioDefault1">
+                      COD
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="onlinepayment" required>
+                    <label class="form-check-label" for="flexRadioDefault2">
+                      ONLINE PAYMENT
+                    </label>
+                  </div>
+
+                </div>
+
+                <div class="col-lg-11 form-group text-center ">
+                  <button class="btn btn-dark mb-3" onsubmit="placeorder()" type="submit">Place order</button>
                 </div>
               </div>
-            
+
             </form>
-           
+
           </div>
           <!-- ORDER SUMMARY-->
           <div class="col-lg-4">
@@ -132,7 +148,7 @@
               <div class="card-body">
                 <h5 class="text-uppercase mb-4">Your order</h5>
                 <ul class="list-unstyled mb-0">
-                  
+
                   <% let Total=0; orderData.products.forEach((val)=>{ %>
 
                     <li class="d-flex align-items-center justify-content-between"><strong class="small fw-normal ">
@@ -148,15 +164,18 @@
                           <%= Total %>
                         </span></li>
                       <li class="d-flex align-items-center justify-content-between mb-3"><strong
-                          class="small text-muted  fw-bold">Discount</strong><span
-                          class="text-muted small"><span id="discount"><%= orderData.coupon.discount %></span>%</span></li>
+                          class="small text-muted  fw-bold">Discount</strong><span class="text-muted small"><span
+                            id="discount">
+                            <%= orderData.coupon.discount %>
+                          </span>%</span></li>
                       <li class="d-flex align-items-center justify-content-between mt-3 mb-4"><strong
-                          class="text-uppercase large fw-bold ">Total</strong><span class="text-danger  fw-bold" >$<span id="total">
+                          class="text-uppercase large fw-bold ">Total</strong><span class="text-danger  fw-bold">$<span
+                            id="total">
                             <%= Total %>
                           </span></span></li>
                       <li>
                         <div id="response">
-       
+
                         </div>
                         <div class="input-group mb-0">
                           <input id="value" class="form-control" type="text" name="coupon"
@@ -168,7 +187,6 @@
                       </li>
                 </ul>
               </div>
-
             </div>
           </div>
         </div>
@@ -177,17 +195,17 @@
 
 
     <script>
-    
-            const total = Number($('#total').html())
-            const percentage = Number($('#discount').html())
-            console.log(percentage+"PERCENTAGE");
-            const finalAmount=total-((total*percentage)/100)
-            $("#total").html(Math.round(finalAmount))
+
+      const total = Number($('#total').html())
+      const percentage = Number($('#discount').html())
+      console.log(percentage + "PERCENTAGE");
+      const finalAmount = total - ((total * percentage) / 100)
+      $("#total").html(Math.round(finalAmount))
       function couponcheck() {
         $.ajax({
           type: "POST",
           url: "/couponcheck",
-          data: { key: $('#value').val(),id:$('#orderid').val() },
+          data: { key: $('#value').val(), id: $('#orderid').val() },
           dataType: "json",
           encode: true,
         }).done(function (data) {
@@ -203,25 +221,24 @@
               footer: '<a href="/login">Go to login</a>'
             })
           }
-          else if(data.success==true){
-            resHTML = '<div class="alert alert-success alert-dismissible"> '+
-            '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>'+
-            '<strong>Success  </strong> '+data.message+
-            '</div>';
+          else if (data.success == true) {
+            resHTML = '<div class="alert alert-success alert-dismissible"> ' +
+              '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>' +
+              '<strong>Success  </strong> ' + data.message +
+              '</div>';
             $("#response").html(resHTML)
             const total = Number($('#total').html())
-            const percentage = Number($('#discount').html())
-            console.log(percentage+"PERCENTAGE");
-            const finalAmount=total-((total*percentage)/100)
-            // $("#discount").html(data.coupon.percentage)
+            const percentage = data.coupon.percentage
+            const finalAmount = total - ((total * percentage) / 100)
+            $("#discount").html(data.coupon.percentage)
 
             $("#total").html(Math.round(finalAmount))
           }
-          else{
-            resHTML = '<div class="alert alert-danger alert-dismissible"> '+
-            '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>'+
-            '<strong>Error!</strong> '+data.message+
-            '</div>';
+          else {
+            resHTML = '<div class="alert alert-danger alert-dismissible"> ' +
+              '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>' +
+              '<strong>Error!</strong> ' + data.message +
+              '</div>';
             $("#response").html(resHTML)
           }
         });
@@ -273,5 +290,47 @@
         }, 2000);
       }
     </script>
-    
+
+
+    <script>
+      function addaddress() {
+        $.ajax({
+          type: "POST",
+          url: "/addaddresscheck",
+          data: {
+            name: $('#firstName').val(),
+            address: $('#address').val(),
+            post: $('#Post').val(),
+            pin: $('#pin').val(),
+            city: $('#city').val(),
+            district: $('#district').val(),
+            state: $('#state').val()
+          },
+          dataType: "json",
+          encode: true,
+        }).done(function (data) {
+
+          if (data == "LOGIN FIRST") {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Login first!',
+              footer: '<a href="/login">Go to login</a>'
+            })
+          }
+          console.log(data);
+        });
+
+      }
+    </script>
+
+
+     <script>
+      function placeorder(){
+        console.log("INSIDE");
+        
+        console.log(pytype);
+      }
+     </script>
+
     <%-include('../user/layout/userfooter.ejs') -%>

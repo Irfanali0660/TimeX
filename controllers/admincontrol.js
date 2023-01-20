@@ -411,6 +411,16 @@ module.exports = {
             next(error)
         }
     },
+    ordermanagement:(req,res,next)=>{
+          try {
+            console.log("SUCCESS");
+            res.render('admin/orderManagement', { page: 'order', admin: res.locals.admindata.name, ustatus: "false" })
+        } catch (error) {
+            console.log(error);
+            next(error)
+          }
+    },
+
     logout: (req, res) => {
         req.session.adminlogin = false;
         req.session.destroy();

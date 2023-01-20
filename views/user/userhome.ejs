@@ -66,18 +66,18 @@
           </header>
           <div class="row">
           <% category.forEach((cate)=>{ %>
-            <div class="col-md-4"><a class="category-item" href="#"><img class="img-fluid" src="productimages/<%= cate.image %>" alt=""/><strong class="category-item-title"><%= cate.categoryName %></strong></a>
+            <div class="col-md-4"><a class="category-item" href="/shop?cate=<%= cate._id %>"><img class="img-fluid" src="productimages/<%= cate.image %>" alt=""/><strong class="category-item-title"><%= cate.categoryName %></strong></a>
             </div>
             <% }) %>
            
             <div class="col-md-4">
               <% row.forEach((ro)=>{ %>
-              <a class="category-item mb-4 mt-2" href="#"><img class="img-fluid" src="productimages/<%= ro.image %>" alt=""/><strong class="category-item-title"><%= ro.categoryName %></strong></a>
+              <a class="category-item mb-4 mt-2" href="/shop?cate=<%= ro._id %>"><img class="img-fluid" src="productimages/<%= ro.image %>" alt=""/><strong class="category-item-title"><%= ro.categoryName %></strong></a>
               <% }) %>
             </div>
             
             <% col.forEach((co)=>{ %>
-            <div class="col-md-4"><a class="category-item" href="#"><img class="img-fluid" src="productimages/<%= co.image %>" alt=""/><strong class="category-item-title"><%= co.categoryName %></strong></a>
+            <div class="col-md-4"><a class="category-item" href="/shop?cate=<%= co._id %>"><img class="img-fluid" src="productimages/<%= co.image %>" alt=""/><strong class="category-item-title"><%= co.categoryName %></strong></a>
             </div>
             <% }) %>
           </div>
