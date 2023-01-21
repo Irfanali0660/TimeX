@@ -8,6 +8,7 @@ const path = require('path');
 const categoryModel = require("../model/categoryModel");
 const bannerModel = require("../model/bannerModel");
 const couponModel = require("../model/couponModel");
+const orderModel = require("../model/orderModel");
 // const bcrypt = require('bcrypt');
 // const collection = require('../module/collection');
 
@@ -411,16 +412,27 @@ module.exports = {
             next(error)
         }
     },
-    ordermanagement:(req,res,next)=>{
+    ordermanagement:async(req,res,next)=>{
           try {
-            console.log("SUCCESS");
-            res.render('admin/orderManagement', { page: 'order', admin: res.locals.admindata.name, ustatus: "false" })
+            orderModel.find({order_status:{$ne:'pending'}}).populate('userid').then((orders)=>{
+                res.render('admin/orderManagement', { page: 'order', admin: res.locals.admindata.name, ustatus: "false" ,orders})
+            })
         } catch (error) {
             console.log(error);
             next(error)
           }
     },
-
+    orderlist:(req,res,next)=>{
+        try {
+           
+        orderModel.findOne({_id:req.params.id}).populate(['products.product_id','userid']).then((singleorder)=>{
+            console.log(singleorder);
+            res.render('admin/orderdetials',{ page: 'order', admin: res.locals.admindata.name, ustatus: "false",singleorder})
+        })
+        } catch (error) {
+            next(error)
+        }
+    },
     logout: (req, res) => {
         req.session.adminlogin = false;
         req.session.destroy();

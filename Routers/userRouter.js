@@ -11,7 +11,7 @@ const ajax = require("../middleware/ajax");
 //     next()
 //  })
 
-router.get("/",controller.home);
+router.get("/", controller.home);
 router.get("/login", controller.loginget);
 router.get("/signup", controller.signup);
 router.get("/userlogout", controller.logout);
@@ -41,17 +41,14 @@ router.post("/selectaddress", ajax.userSession, controller.selectaddress);
 router.post("/couponcheck", ajax.userSession, controller.couponcheck);
 router.post("/orderid", auth.userSession, controller.orderid);
 router.post("/searchFun", controller.searchFun);
-router.post('/addaddresscheck',auth.userSession, controller.addaddresscheck)
+// router.post('/addaddresscheck',auth.userSession, controller.addaddresscheck)
+router.post("/checkoutform/:id",auth.userSession, controller.checkoutform);
 
 
 
 
 router.put("/addwishlist", ajax.userSession, controller.addwishlist);
 router.put("/deleteitem", ajax.userSession, controller.deleteitem);
-
-
-
-
-
+// router.put('/editbill', controller.editbill)
 
 module.exports = router;

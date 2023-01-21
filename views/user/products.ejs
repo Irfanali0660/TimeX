@@ -242,10 +242,10 @@
                             resHTML = ''
                             data.search.forEach(function (val) {
                                 if (val.type == 'product') {
-                                    resHTML += '<a href="/productdetials/' + val.id + '/' + val.cate + '" class="text-decoration-none"><h6 class="text-secondary ">' + val.titile + '</h6></a>'
+                                    resHTML += '<a href="/productdetials/' + val.id + '/' + val.cate + '" class="text-decoration-none"><h6 class="text-dark ms-2 ">' + val.titile + '</h6></a>'
                                 } else {
                                     console.log(val);
-                                    resHTML += '<a href="/shop?cate=' + val.id + '"class="text-decoration-none"><h6 class="text-secondary ">' + val.titile + '</h6></a>'
+                                    resHTML += '<a href="/shop?cate=' + val.id + '"class="text-decoration-none"><h6 class="text-black ms-2">' + val.titile + '</h6></a>'
                                 }
                             });
                             $("#searchResult").append(resHTML)

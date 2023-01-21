@@ -53,6 +53,7 @@ const uploadOptions = multer({ storage:storage})
  router.get('/Addbanner',auth.adminSession,controller.addbanner)
  router.get('/coupon',auth.adminSession,controller.coupon)
  router.get('/order',auth.adminSession,controller.ordermanagement)
+ router.get('/orderlist/:id',auth.adminSession,controller.orderlist)
 
  
  

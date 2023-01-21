@@ -11556,9 +11556,9 @@ a.bg-dash-dark-2:hover, a.bg-dash-dark-2:focus {
   background: rgba(0, 0, 0, 0.03);
 }
 
-p {
+/* p {
   line-height: 1.7;
-}
+} */
 
 button {
   cursor: pointer;

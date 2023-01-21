@@ -29,35 +29,35 @@
         <h2 class="h5 text-uppercase mb-4">Billing details</h2>
         <div class="row">
           <div class="col-lg-8">
-            <form  id="form">
+            <form action="/checkoutform/<%= orderData._id %>" id="form" method="post">
               <div class="row gy-3">
                 <div class="col-lg-12">
                   <label class="form-label text-sm text-uppercase" for="firstName">Full name </label>
-                  <input class="form-control form-control-lg" type="text" id="firstName" required>
+                  <input class="form-control form-control-lg" type="text" name="firstName" id="firstName" required>
                 </div>
                 <div class="col-lg-12">
-                  <label class="form-label text-sm text-uppercase" for="address">Address </label>
-                  <input class="form-control form-control-lg" type="text" id="address" required>
+                  <label class="form-label text-sm text-uppercase" for="address">House </label>
+                  <input class="form-control form-control-lg" type="text" name="House" id="address" required>
                 </div>
                 <div class="col-lg-6">
                   <label class="form-label text-sm text-uppercase" for="email">Post </label>
-                  <input class="form-control form-control-lg" type="text" id="Post" required>
+                  <input class="form-control form-control-lg" type="text" name="Post" id="Post" required>
                 </div>
                 <div class="col-lg-6">
                   <label class="form-label text-sm text-uppercase" for="phone">Pin Number </label>
-                  <input class="form-control form-control-lg" type="tel" id="pin" required>
+                  <input class="form-control form-control-lg" type="tel" name="pin" id="pin" required>
                 </div>
                 <div class="col-lg-6">
                   <label class="form-label text-sm text-uppercase" for="city">Town/City </label>
-                  <input class="form-control form-control-lg" type="text" id="city" required>
+                  <input class="form-control form-control-lg" type="text" name="city" id="city" required>
                 </div>
                 <div class="col-lg-6">
                   <label class="form-label text-sm text-uppercase" for="state">District</label>
-                  <input class="form-control form-control-lg" type="text" id="district" required>
+                  <input class="form-control form-control-lg" type="text" name="district" id="district" required>
                 </div>
                 <div class="col-lg-12">
                   <label class="form-label text-sm text-uppercase" for="addressalt">State </label>
-                  <input class="form-control form-control-lg" type="text" id="state" required>
+                  <input class="form-control form-control-lg" type="text" name="state" id="state" required>
                 </div>
                 <div class="col-lg-6">
                   <button class="btn btn-link text-dark p-0 shadow-0" type="button" data-bs-toggle="collapse"
@@ -120,13 +120,14 @@
                 </div>
                 <div class="d-flex justify-content-evenly border border-secondary py-3">
                   <div class="form-check">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="COD" required>
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="COD" value="COD" required>
                     <label class="form-check-label" for="flexRadioDefault1">
                       COD
                     </label>
                   </div>
                   <div class="form-check">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="onlinepayment" required>
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="onlinepayment"
+                      value="onlinepayment" required>
                     <label class="form-check-label" for="flexRadioDefault2">
                       ONLINE PAYMENT
                     </label>
@@ -135,7 +136,7 @@
                 </div>
 
                 <div class="col-lg-11 form-group text-center ">
-                  <button class="btn btn-dark mb-3" onsubmit="placeorder()" type="submit">Place order</button>
+                  <button class="btn btn-dark mb-3" type="submit">Place order</button>
                 </div>
               </div>
 
@@ -231,8 +232,8 @@
             const percentage = data.coupon.percentage
             const finalAmount = total - ((total * percentage) / 100)
             $("#discount").html(data.coupon.percentage)
-
             $("#total").html(Math.round(finalAmount))
+            // billamount(Math.round(finalAmount));
           }
           else {
             resHTML = '<div class="alert alert-danger alert-dismissible"> ' +
@@ -244,6 +245,23 @@
         });
       }
     </script>
+
+    <!-- <script>
+      function billamount(finalAmount){
+        
+        $.ajax({
+          type: "put",
+          url: "/editbill",
+          data: { bill:finalAmount,id:$('#orderid').val() },
+          dataType: "json",
+          encode: true,
+        }).done(function (data) {
+
+         
+        })
+    
+      }
+    </script> -->
 
     <script>
       function addnewaddress() {
@@ -292,7 +310,7 @@
     </script>
 
 
-    <script>
+    <!-- <script>
       function addaddress() {
         $.ajax({
           type: "POST",
@@ -331,6 +349,6 @@
         
         console.log(pytype);
       }
-     </script>
+     </script> -->
 
     <%-include('../user/layout/userfooter.ejs') -%>
