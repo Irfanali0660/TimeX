@@ -1,15 +1,11 @@
 const express = require("express");
 const router = express.Router();
-
 const controller = require("../controllers/usercontrol");
 const auth = require("../middleware/auth");
 const adminsession = require("../middleware/auth");
 const ajax = require("../middleware/ajax");
 
-// router.use((req,res,next)=>{
-//     req.app.set('layout',path.join(__dirname,'../views/layout/userlayout'))
-//     next()
-//  })
+
 
 router.get("/", controller.home);
 router.get("/login", controller.loginget);
@@ -22,8 +18,15 @@ router.get("/cart", auth.userSession, controller.cart);
 router.get("/wishlist", auth.userSession, controller.wishlist);
 router.get("/account", auth.userSession, controller.account);
 router.get("/checkout/:id", auth.userSession, controller.checkout);
+router.get('/orderDetails', auth.userSession, controller.orderDetails)
+
+
+
+
 
 router.post("/login", controller.login);
+
+
 
 router.post("/otp", controller.otp);
 router.post("/verifyotp", controller.verifyotp);
@@ -43,6 +46,7 @@ router.post("/orderid", auth.userSession, controller.orderid);
 router.post("/searchFun", controller.searchFun);
 // router.post('/addaddresscheck',auth.userSession, controller.addaddresscheck)
 router.post("/checkoutform/:id",auth.userSession, controller.checkoutform);
+
 
 
 

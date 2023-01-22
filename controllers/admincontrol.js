@@ -426,16 +426,67 @@ module.exports = {
         try {
            
         orderModel.findOne({_id:req.params.id}).populate(['products.product_id','userid']).then((singleorder)=>{
-            console.log(singleorder);
-            res.render('admin/orderdetials',{ page: 'order', admin: res.locals.admindata.name, ustatus: "false",singleorder})
+            // console.log(singleorder);
+            res.render('admin/orderdetials',{ page: 'order', admin: res.locals.admindata    .name, ustatus: "false",singleorder})
         })
         } catch (error) {
             next(error)
         }
     },
-    logout: (req, res) => {
+    delivarystatus:(req,res,next)=>{
+        try {
+            console.log(req.body.Status);
+            console.log(req.body.id);
+            if(req.body.Status=='shipped'){
+            orderModel.updateOne({_id:req.body.id},{$set:{'delivery_status.shipped.state':true,'delivery_status.shipped.date':Date.now()}}).then((data)=>{
+                res.redirect('/orderlist/'+req.body.id)
+            })
+            }
+            else if(req.body.Status=='out_for_delivery'){
+                orderModel.updateOne({_id:req.body.id},{$set:{'delivery_status.out_for_delivery.state':true,'delivery_status.out_for_delivery.date':Date.now()}}).then((data)=>{
+                    res.redirect('/orderlist/'+req.body.id)
+                })
+            }
+            else if(req.body.Status=='delivered'){
+                orderModel.updateOne({_id:req.body.id},{$set:{'delivery_status.delivered.state':true,'delivery_status.delivered.date':Date.now()}}).then((data)=>{
+                    res.redirect('/orderlist/'+req.body.id)
+                })
+            }
+            else{
+                res.redirect('/orderlist/'+req.body.id)
+            }
+            
+        } catch (error) {
+            next(error)
+        }
+    },
+    paymentpending:(req,res,next)=>{
+        try {
+            console.log("reached");
+            console.log(req.body.id);
+            orderModel.updateOne({_id:req.body.id},{$set:{'payment.payment_status':"completed"}}).then(()=>{
+                res.json('completed')
+            })
+        } catch (error) {
+            next(error)
+        }
+    },
+    invoice:(req,res,next)=>{
+        try {
+            orderModel.findOne({_id:req.params.id}).populate(['products.product_id','userid']).then((invoice)=>{           
+                res.render('admin/orderinvoice',{ page: 'order', admin: res.locals.admindata.name, ustatus:"false",invoice})
+            })
+        } catch (error) {
+            next(error)
+        }
+    },
+    logout: (req,res,next) => {
+      try {
         req.session.adminlogin = false;
         req.session.destroy();
         res.redirect('/adminlogin');
+      } catch (error) {
+        next(error)
+      }
     }
 }

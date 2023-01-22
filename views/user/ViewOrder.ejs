@@ -1,0 +1,93 @@
+<%-include('../user/layout/userhead.ejs') -%>
+
+    <div class="page-holder">
+        <div class="container">
+            <!-- HERO SECTION-->
+            <section class="py-5 bg-light">
+                <div class="container">
+                    <div class="row px-4 px-lg-5 py-lg-4 align-items-center">
+                        <div class="col-lg-6">
+                            <h1 class="h2 text-uppercase mb-0">Order history</h1>
+                        </div>
+                        <div class="col-lg-6 text-lg-end">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb justify-content-lg-end mb-0 px-0 bg-light">
+                                    <li class="breadcrumb-item"><a class="text-dark" href="/">Home</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Wishlist</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="py-5">
+                <div class="row">
+                    <div class="col-lg-12 mb-4 mb-lg-0">
+                        <!-- CART TABLE-->
+                        <div class="table-responsive mb-4">
+                            <table class="table text-nowrap">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th class="border-0 p-3 ps-5" scope="col"> <strong
+                                                class="text-sm text-uppercase">Product</strong></th>
+                                        <th class="border-0 p-3" scope="col"> <strong
+                                                class="text-sm text-uppercase">Name</strong></th>
+                                        <th class="border-0 p-3" scope="col"> <strong
+                                                class="text-sm text-uppercase">Quantity</strong></th>
+                                        <th class="border-0 p-3" scope="col"> <strong
+                                                class="text-sm text-uppercase">Price</strong></th>
+                                        <th class="border-0 p-3 text-center" scope="col"> <strong
+                                                class="text-sm text-uppercase">Total</strong></th>
+
+                                    </tr>
+                                </thead>
+                                <tbody class="border-0">
+
+                                    <% orderDetails.products.forEach((val)=>{ %>
+                                        <tr id="<%= val._id %>item">
+                                            <th class="ps-0 py-3 border-light ps-5" scope="row">
+                                                <div class="d-flex align-items-center "><a
+                                                        class="reset-anchor d-block animsition-link "
+                                                        href="/productdetials/<%= val.product_id._id %>/<%= val.product_id.brand %>"><img
+                                                            src="/productimages/<%= val.product_id.image[0] %>"
+                                                            alt="ProductDetials" width="70" /></a>
+                                                </div>
+                                            </th>
+                                            <th class="ps-0 py-3 border-light align-middle" scope="row">
+                                                <div class="ms-3"><strong class="h6"><a
+                                                            class="reset-anchor animsition-link"
+                                                            href="/productdetials/<%= val.product_id._id %>/<%= val.product_id.brand %>">
+                                                            <%= val.name %>
+                                                        </a></strong></div>
+                                            </th>
+                                            <td class="p-3 align-middle border-light">
+                                                <p class="mb-0 small"><span>
+                                                        <%= val.qnty %>
+                                                    </span></p>
+                                            </td>
+                                            <td class="p-3 align-middle border-light">
+                                                <p class="mb-0 small">$<span>
+                                                        <%= val.price %>
+                                                    </span></p>
+                                            </td>
+                                            <td class="p-3 align-middle border-light ps-5">
+
+                                                <p class="mb-0 small">$<span>
+                                                        <%= val.price*val.qnty %>
+                                                    </span></p>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <%-include('../user/layout/userfooter.ejs') -%>

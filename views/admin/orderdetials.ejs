@@ -1,10 +1,12 @@
 <%- include('../admin/layout/adminhead.ejs') -%>
 
-   <style>
-    td {
-     color: black !important;
-    }
-   </style>
+    <style>
+        td,
+        label,
+        input {
+            color: black !important;
+        }
+    </style>
 
     <div class="page-content">
         <div class="bg-dash-dark-2 py-4">
@@ -17,6 +19,9 @@
 
                 <div class="card-heading text-center">
                     <h2 class="card-title mb-3"><span>Order Details</span></h2>
+                </div>
+                <div id="message">
+
                 </div>
 
                 <div class="card  p-0 my-2 text-black">
@@ -33,8 +38,8 @@
                                             <td>
                                                 Payment Status
                                             </td>
-                                            <td>
-                                                <%= singleorder.payment.payment_status %> 
+                                            <td id="status">
+                                                <%= singleorder.payment.payment_status %>
                                             </td>
                                         </tr>
                                         <tr>
@@ -66,19 +71,23 @@
                                                 Coupon
                                             </td>
                                             <td>
-
-                                                <%= singleorder.coupon.name %> <small>(<%= singleorder.coupon.code %>)</small>
-
+                                                <% if(singleorder.coupon.name){ %>
+                                                    <%= singleorder.coupon.name %> <small>(<%= singleorder.coupon.code
+                                                                %>
+                                                                )</small>
+                                                        <% }else{ %>
+                                                            No_coupon
+                                                            <% } %>
                                             </td>
                                         </tr>
 
                                     </tbody>
                                 </table>
-                               
+
                             </div>
                             <div class="col-12 col-lg-6">
 
-                                
+
 
                                 <table class="table table-striped ">
                                     <tbody>
@@ -87,7 +96,7 @@
                                                 Sub-total
                                             </td>
                                             <td>
-                                               $<%= singleorder.bill_amount %>
+                                                $<%= singleorder.bill_amount %>
                                             </td>
                                         </tr>
                                         <tr>
@@ -111,7 +120,8 @@
                                                 Discount amount
                                             </td>
                                             <td>
-                                                <%= (Math.round((singleorder.bill_amount*singleorder.coupon.discount)/100)) %>
+                                                <%= (Math.round((singleorder.bill_amount*singleorder.coupon.discount)/100))
+                                                    %>
                                             </td>
                                         </tr>
                                         <tr>
@@ -119,7 +129,9 @@
                                                 Total
                                             </td>
                                             <td>
-                                                <b class="text-danger fw-bold">$<%= (Math.round(singleorder.bill_amount-(singleorder.bill_amount*singleorder.coupon.discount)/100)) %>
+                                                <b class="text-danger fw-bold">$<%=
+                                                        (Math.round(singleorder.bill_amount-(singleorder.bill_amount*singleorder.coupon.discount)/100))
+                                                        %>
                                                 </b>
                                             </td>
                                         </tr>
@@ -138,25 +150,69 @@
                         <div class="card border-0 ad-box-shadow p-0 ">
                             <div class="card-header ">
                                 <div class="card p-3 bg-light border-primary col-12 ">
-                                    <p>Name: &nbsp;<span class="fw-bold"> <%= singleorder.address.name %></span> 
+                                    <p>Name: &nbsp;<span class="fw-bold">
+                                            <%= singleorder.address.name %>
+                                        </span>
                                     </p>
-                                    <p>House : &nbsp;<span class="fw-bold"><%= singleorder.address.house %> </span>
+                                    <p>House : &nbsp;<span class="fw-bold">
+                                            <%= singleorder.address.house %>
+                                        </span>
                                     </p>
-                                    <p>Phone :&nbsp;<span class="fw-bold"><%= singleorder.userid.phone %> </span>
+                                    <p>Phone :&nbsp;<span class="fw-bold">
+                                            <%= singleorder.userid.phone %>
+                                        </span>
                                     </p>
-                                    <p>Pin :&nbsp;<span class="fw-bold"><%= singleorder.address.pin %> </span>
+                                    <p>Pin :&nbsp;<span class="fw-bold">
+                                            <%= singleorder.address.pin %>
+                                        </span>
                                     </p>
-                                    <p>City :&nbsp;<span class="fw-bold"> <%= singleorder.address.city %></span>
+                                    <p>City :&nbsp;<span class="fw-bold">
+                                            <%= singleorder.address.city %>
+                                        </span>
                                     </p>
-                                    <p>District :&nbsp;<span class="fw-bold"><%= singleorder.address.district %> </span>
+                                    <p>District :&nbsp;<span class="fw-bold">
+                                            <%= singleorder.address.district %>
+                                        </span>
                                     </p>
                                 </div>
                             </div>
-                            <div class="card-body">
-                                
-                            </div>
+
                         </div>
+
                     </div>
+                    <div class="card bg-light mt-2 text-black   p-3">
+                        <form action="/delivarystatus" method="post">
+                            <fieldset>
+                                <legend>select delivery_status</legend>
+
+                                <label><input type="radio" name="Status" value="ordered" <%
+                                        if(singleorder.delivery_status.ordered.state==true){ %> checked <% } %>>
+                                        ordered</label><br/>
+                                <label><input type="radio" name="Status" value="shipped" <%
+                                        if(singleorder.delivery_status.shipped.state==true){ %> checked <% } %>>
+                                        shipped</label><br />
+                                <label><input type="radio" name="Status" value="out_for_delivery" <%
+                                        if(singleorder.delivery_status.out_for_delivery.state==true){ %> checked <% } %>
+                                        > out_for_delivery</label><br />
+                                <label><input type="radio" name="Status" value="delivered" <%
+                                        if(singleorder.delivery_status.delivered.state==true){ %> checked <% } %>>
+                                        delivered</label><br />
+                                <label><input type="hidden" name="id" value="<%= singleorder._id%>"></label><br />
+                                <% if(!singleorder.delivery_status.delivered.state==true){ %>
+                                    <button type="submit">submit</button>
+                                    <% }else{ %>
+                                        <h5 class="text-success text-center">ORDER COMPELETED</h5>
+                                        <% } %>
+                            </fieldset>
+                        </form>
+                    </div>
+                    <% if(singleorder.payment.payment_status=='pending' && singleorder.payment.payment_method=='cash_on_delivery' ){ %>
+                        <div class="card bg-light mt-2 text-black  text-center p-3" id="paymentbtn">
+                            <h5>Got Payment</h5>
+                            <button class="btn btn-outline-success"
+                                onclick="paymentpending('<%= singleorder._id %>')">Yes</button>
+                        </div>
+                        <% } %>
                 </div>
                 <div class="col-xl-7 col-md-12 ">
 
@@ -180,7 +236,9 @@
                                     </p>
                                     <p>Quantity:&nbsp;<%= product.qnty %>
                                     </p>
-                                    <p >Amount:&nbsp;<span class="fw-bold"><%= product.qnty*product.price %></span>
+                                    <p>Amount:&nbsp;<span class="fw-bold">
+                                            <%= product.qnty*product.price %>
+                                        </span>
                                     </p>
                                 </div>
                             </div>
@@ -193,10 +251,29 @@
                 </div>
             </div>
         </div>
-
-
-
-
-
     </div>
     <%- include('../admin/layout/adminfooter.ejs') -%>
+
+
+        <script>
+            function paymentpending(id) {
+                console.log("helo");
+                $.ajax({
+                    type: "PUT",
+                    url: "/paymentpending",
+                    data: { id },
+                    dataType: "json",
+                    encode: true,
+                }).done(function (data) {
+                    if (data == 'completed') {
+                        $('#status').html('completed')
+                        $('#paymentbtn').remove()
+                        resHTML = '<div class="alert alert-success alert-dismissible"> ' +
+                            '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>' +
+                            '<strong>Success</strong>Payment updated'
+                            '</div>';
+                    }
+                    $('#message').html(resHTML)
+                });
+            }
+        </script>

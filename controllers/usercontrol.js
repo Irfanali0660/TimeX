@@ -846,7 +846,24 @@ module.exports = {
       next(error);
     }
   },
-
+  orderDetails:(req,res,next)=>{
+    try {
+      orderModel.find({userid:res.locals.userdata._id,order_status:{$ne:'pending'}}).then((orderDetails)=>{
+      res.render('user/orderDetails',{page: "Account",orderDetails})
+      })
+    } catch (error) {
+      next(error)
+    }
+  },
+  // ViewOrder:(req,res,next)=>{
+  //   try {
+  //     orderModel.findOne({userid:res.locals.userdata._id}).populate('products.product_id').then((orderDetails)=>{
+  //       res.render('user/ViewOrder',{ page: "Account",orderDetails})
+  //     })
+  //   } catch (error) {
+  //     next(error)
+  //   }
+  // },
   logout: (req, res, next) => {
     try {
       req.session.destroy();
