@@ -3,7 +3,7 @@ const adminModel = require("../model/adminModel");
 const userModel = require("../model/userModel");
 
 module.exports = {
-    userSession: async(req, res, next) => {
+    ajaxSession: async(req, res, next) => {
       
          if (req.session.userlogged) {
             res.locals.userdata=await userModel.findOne({email: req.session.useremail})

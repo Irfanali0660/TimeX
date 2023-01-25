@@ -56,9 +56,9 @@
 
                                         <div class="col-sm-5"><a
                                                 class="btn btn-dark btn-sm w-100 h-100 d-flex align-items-center justify-content-center px-0"
-                                                id="addtocart2">Add to cart</a></div>
-                                    </div><a class="btn btn-link text-dark text-decoration-none p-0" href="#!"><i
-                                            class="far fa-heart me-2"></i>Add to wish list</a>
+                                                id="addtocart2" onclick="addtocart('<%= product._id %>')">Add to cart</a></div>
+                                    </div><a class="btn btn-link text-dark text-decoration-none p-0" href="#!" onclick="wishlist('<%= product._id %>')"><i
+                                            class="far fa-heart me-2" ></i>Add to wish list</a>
                                 </div>
                             </div>
                         </div>

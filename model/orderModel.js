@@ -33,6 +33,10 @@ const orderSchema =new mongoose.Schema({
             state:{type:Boolean, default:false},
             date:{type:Date},
         },
+        canceled:{
+            state:{type:Boolean, default:false},
+            date:{type:Date}
+        },
         shipped:{
             state:{type:Boolean, default:false},
             date:{type:Date},

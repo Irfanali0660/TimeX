@@ -198,13 +198,13 @@ module.exports = {
     addcategorydetials:async (req, res, next) => {
         try {
             console.log(req.body);
-
-           let catecheck= await categoryModel.findOne({categoryName:req.body.category})
-            console.log(catecheck);
+            let Cname=req.body.category.toLowerCase()
+           let catecheck= await categoryModel.findOne({categoryName:Cname})
+            console.log(catecheck+"CHECK");
             if (!catecheck) {
                 console.log("INSIDE IF");
                 let categorys = categoryModel({
-                    categoryName: req.body.category,
+                    categoryName: Cname,
                     date: req.body.Date,
                     status: req.body.status,
                     image: req.file.filename
@@ -231,8 +231,9 @@ module.exports = {
         try {
             const id = req.params.id;
             const val= req.params.val;
+            const cname=req.body.category.toLowerCase()
             let cateToUpdate = {
-             categoryName:req.body.category,
+             categoryName:cname,
              date:req.body.Date,
              status:req.body.status
             }
@@ -350,12 +351,14 @@ module.exports = {
             next(error)
         }
     },
-    addcoupon:(req,res,next)=>{
+    addcoupon:async(req,res,next)=>{
         try {
-            if (req.body.couponCode && req.body.couponName && req.body.percentage &&  req.body.expDate && req.body.minimumAmount) {
+            const cpname=req.body.couponName.toLowerCase();
+            const cpcheck=await couponModel.findOne({couponName:cpname})
+            if (!cpcheck) {
                 console.log("INSIDE IF");
                 let coupon = couponModel({
-                    couponName: req.body.couponName,
+                    couponName: cpname,
                     couponCode: req.body.couponCode,
                     percentage: req.body.percentage,
                     expiryDate: req.body.expDate,
@@ -365,7 +368,6 @@ module.exports = {
                    res.redirect('/coupon')
                 })
             } else {
-                console.log("INSIDE ELSE");
                res.redirect('/coupon')
             }
         } catch (error) {
@@ -387,8 +389,9 @@ module.exports = {
     updatecoupon:async(req,res)=>{
         try {
             const id = req.params.id;
+            const cname=req.body.couponName.toLowerCase()
             let coupToUpdate = {
-                couponName: req.body.couponName,
+                couponName: cname,
                 couponCode: req.body.couponCode,
                 percentage: req.body.percentage,
                 expiryDate: req.body.expDate,
@@ -414,7 +417,7 @@ module.exports = {
     },
     ordermanagement:async(req,res,next)=>{
           try {
-            orderModel.find({order_status:{$ne:'pending'}}).populate('userid').then((orders)=>{
+            orderModel.find({order_status:{$ne:'pending'}}).populate('userid').sort({ordered_date:-1}).then((orders)=>{
                 res.render('admin/orderManagement', { page: 'order', admin: res.locals.admindata.name, ustatus: "false" ,orders})
             })
         } catch (error) {

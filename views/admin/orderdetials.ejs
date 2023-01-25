@@ -198,15 +198,18 @@
                                         if(singleorder.delivery_status.delivered.state==true){ %> checked <% } %>>
                                         delivered</label><br />
                                 <label><input type="hidden" name="id" value="<%= singleorder._id%>"></label><br />
-                                <% if(!singleorder.delivery_status.delivered.state==true){ %>
+                                <% if(!singleorder.delivery_status.delivered.state==true && !singleorder.delivery_status.canceled.state==true){ %>
                                     <button type="submit">submit</button>
-                                    <% }else{ %>
+                                    <% }else if(singleorder.delivery_status.canceled.state==true){ %>
+                                        <h5 class="text-danger text-danger">CANCELED</h5>
+                                      
+                                    <% }else if(singleorder.delivery_status.delivered.state==true){ %>
                                         <h5 class="text-success text-center">ORDER COMPELETED</h5>
                                         <% } %>
                             </fieldset>
                         </form>
                     </div>
-                    <% if(singleorder.payment.payment_status=='pending' && singleorder.payment.payment_method=='cash_on_delivery' ){ %>
+                    <% if(singleorder.payment.payment_status=='pending' && singleorder.payment.payment_method=='cash_on_delivery' && singleorder.delivery_status.canceled.state==false ){ %>
                         <div class="card bg-light mt-2 text-black  text-center p-3" id="paymentbtn">
                             <h5>Got Payment</h5>
                             <button class="btn btn-outline-success"

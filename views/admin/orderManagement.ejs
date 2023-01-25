@@ -45,7 +45,9 @@
               <td class="text-light">
                 <% if(order.delivery_status.delivered.state){ %> 
                   <p><b class="text-success">DELIVERED</b><small>(<%= order.delivery_status.delivered.date.getDate() %>/<%= order.delivery_status.delivered.date.getMonth()+1 %>/<%= order.delivery_status.delivered.date.getFullYear() %>)</small> </p>
-                  
+                  <% }else if(order.delivery_status.canceled.state){  %> 
+                    <p> <b class="text-danger">CANCELED</b><small>(<%= order.delivery_status.canceled.date.getDate() %>/<%= order.delivery_status.canceled.date.getMonth()+1 %>/<%= order.delivery_status.canceled.date.getFullYear() %>)</small> </p>
+                   
                 <% }else if(order.delivery_status.out_for_delivery.state){ %> 
                     <p> <b>OUT_FOR_DELIVERY</b><small>(<%= order.delivery_status.out_for_delivery.date.getDate() %>/<%= order.delivery_status.out_for_delivery.date.getMonth()+1 %>/<%= order.delivery_status.out_for_delivery.date.getFullYear() %>)</small> </p>
                     
@@ -60,7 +62,7 @@
               <td>
                 <% if(order.payment.payment_status=='pending'){ %> 
                 <%= order.payment.payment_method %>-<span class="badge border border-warning  text-warning px-2 py-1 rounded-3 fw-bold" ><%= order.payment.payment_status %></span>
-                <% }else{ %> 
+                <% }else{ %>
                 <%= order.payment.payment_method %>-<span class="badge border border-success  text-success px-2 py-1 rounded-3 fw-bold" ><%= order.payment.payment_status %></span> 
                 <% } %> 
               </td>

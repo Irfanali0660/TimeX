@@ -9,14 +9,15 @@ const { json } = require("express");
 const couponModel = require("../model/couponModel");
 const orderModel = require("../model/orderModel");
 const { name } = require("ejs");
+let env=require('dotenv');
 
 let transporter = nodemailer.createTransport({
   host: "smtp-relay.sendinblue.com",
   port: 587,
 
   auth: {
-    user: "andruce777@gmail.com",
-    pass: "UNtFC0zpY6WGBksy",
+    user: process.env.Email,
+    pass: "TwAdDcp49r21LSnB",
   },
 });
 var otp = Math.random();
@@ -121,7 +122,6 @@ module.exports = {
   getModal: async (req, res) => {
     const id = req.body.id;
     let prod = await ProductModel.findOne({ _id: id });
-    // res.render('user/productDetiails',{prod,page: 'none'})
     res.json(prod);
   },
   // otp:async(req,res,next)=>{
@@ -178,7 +178,7 @@ module.exports = {
       if (!user) {
         // send mail with defined transport object
         var mailOptions = {
-          from: "andruce777@gmail.com",
+          from: process.env.Email,
           to: req.body.email,
           subject: "Otp for registration is: ",
           html:
@@ -199,8 +199,10 @@ module.exports = {
       } else {
         res.redirect("/signup");
       }
-    } catch (err) {
-      next(err);
+    } catch (error) {
+      console.log(error); 
+      next(error);
+      
     }
   },
   verifyotp: async (req, res, next) => {
@@ -233,7 +235,7 @@ module.exports = {
   resendOTP: (req, res, next) => {
     try {
       const mailoptions = {
-        from: "andruce777@gmail.com",
+        from: process.env.Email,
         to: req.body.email,
         subject: "OTP for registration is :",
         html:
@@ -324,7 +326,7 @@ module.exports = {
               cart: {
                 product_id: pdid,
                 quantity: 1,
-                price: productprice.price,
+                // price: productprice.price,
               },
             },
           }
@@ -830,7 +832,8 @@ module.exports = {
                   { $set: { cart: [] } }
                 );
 
-                res.send("COD SUCCESSFULL");
+                // res.send("COD SUCCESSFULL");
+                res.render('user/orderSuccess',{page: "none"})
               })
               .catch((err) => {
                 next(err);
@@ -848,23 +851,80 @@ module.exports = {
   },
   orderDetails:(req,res,next)=>{
     try {
-      orderModel.find({userid:res.locals.userdata._id,order_status:{$ne:'pending'}}).then((orderDetails)=>{
+      orderModel.find({userid:res.locals.userdata._id,order_status:{$ne:'pending'}}).sort({ordered_date:-1}).then((orderDetails)=>{
       res.render('user/orderDetails',{page: "Account",orderDetails})
       })
     } catch (error) {
       next(error)
     }
   },
-  // ViewOrder:(req,res,next)=>{
-  //   try {
-  //     orderModel.findOne({userid:res.locals.userdata._id}).populate('products.product_id').then((orderDetails)=>{
-  //       res.render('user/ViewOrder',{ page: "Account",orderDetails})
-  //     })
-  //   } catch (error) {
-  //     next(error)
-  //   }
-  // },
-  logout: (req, res, next) => {
+  viewOrder:(req,res,next)=>{
+    try {
+      orderModel.findOne({_id:req.params.id,userid:res.locals.userdata._id}).populate('products.product_id').then((orderDetails)=>{
+        res.render('user/ViewOrder',{ page: "Account",orderDetails})
+      })
+    } catch (error) {
+      next(error)
+    }
+  },
+  userdetails:(req,res,next)=>{
+    try {
+      console.log("RESACGG");
+      // console.log(req.body);
+    // console.log(req.body.username); 
+      let dataUpdate={}
+      let apiRes = {}
+      console.log(req.body.num+"NUMBer");
+     
+      switch (JSON.parse(req.body.num)){
+        case 1:
+          console.log(req.body.key+"NAME");
+           dataUpdate={
+            userName:req.body.key
+          }
+          apiRes.success=true
+          apiRes.message = "UserName updated"
+          break;
+        case 2:
+           dataUpdate={
+            email:req.body.key
+          }
+          req.session.useremail = req.body.key;
+          apiRes.success=true
+          apiRes.message = "Email updated"
+          break;
+        case 3:
+          if(req.body.key.length==10){
+            dataUpdate={
+              phone:req.body.key
+            }
+            apiRes.success=true
+            apiRes.message = "Phonenumber updated"
+          }else{
+            apiRes.message = "Please enter valied phonenumber"
+          }
+          break;
+        default:
+          apiRes.message = "Network Error"
+      }
+      userModel.updateOne({_id:res.locals.userdata._id},{$set:dataUpdate}).then(()=>{
+        res.json(apiRes)
+      })
+    } catch (error) {
+      next(error)
+    }
+  },
+  cancelOrder:(req,res,next)=>{
+      try {
+        console.log();
+        orderModel.updateOne({_id:req.body.id},{$set:{'delivery_status.canceled.state':true,'delivery_status.canceled.date':Date.now()}}).then(()=>{
+          res.json('Ordercanceled')
+        })
+    } catch (error) {
+      next(error)
+    }
+  },
+  logout:(req, res, next) => {
     try {
       req.session.destroy();
       res.redirect("/login");

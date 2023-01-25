@@ -88,12 +88,14 @@
                     </div>
                 </div>
             </section>
-
+            
             <div class="page-content">
 
                 <div class="widget-content widget-content-area add-manage-product-2 container mt-3">
                     <div class="row ">
+                      <div id="response">
 
+                      </div>
 
                         <div class="col-xl-5 col-md-12 ">
                             <div class="card card-default "
@@ -138,45 +140,42 @@
 
                                 <div class="card-body">
                                     <div class="card-body">
-                                        <form class="form-horizontal" action="" method="post"
-                                            enctype="multipart/form-data">
-                                            <input type="file" name="product_images" class="d-none" id="product_images">
-                                            <div class="form-group mb-4">
-                                                <div class="row">
-                                                    <label class="col-md-4">Full Name</label>
-                                                    <div class="col-md-8">
-                                                        <input class="form-control" name="name" type="text"
-                                                            fdprocessedid="ql246j" value="<%= userdetials.userName %>">
-                                                    </div>
-                                                </div>
+                                      
+                                
+                                            
+                                            <div class="input-group mb-3">
+                                                <label class="col-md-4">Full Name</label>
+                                                <span class="input-group-text">
+                                                    <span class="bi-person"></span>
+                                                </span>
+                                                <!-- <form action="#" method="put" onclick="userdetails()" class="d-flex" > -->
+                                                <input type="text" class="form-control" placeholder="username" id="value1" aria-describedby="button-addon2" value="<%= userdetials.userName %>" name="username">
+                                                <button class="btn-sm btn-success" type="submit" id="button-addon2"  onclick="userdetails(1)"><small>change</small></button>
+                                                <!-- </form> -->
                                             </div>
-                                            <div class="form-group mb-4">
-                                                <div class="row">
-                                                    <label class="col-md-4">Email <address></address></label>
-                                                    <div class="col-md-8">
-                                                        <input class="form-control" name="Email" type="text"
-                                                            fdprocessedid="ql246j" value="<%= userdetials.email %>">
-                                                    </div>
-                                                </div>
+
+                                        
+                                            <div class="input-group mb-3">
+                                                <label class="col-md-4">Email</label>
+                                                <span class="input-group-text">
+                                                    <i class="bi bi-envelope"></i>   
+                                                </span>
+                                                <!-- <form action="/account" onsubmit="userdetails()" class="d-flex "> -->
+                                                <input type="text" class="form-control" placeholder="Email" id="value2" aria-describedby="button-addon2" value="<%= userdetials.email %>">
+                                                <button class="btn-sm btn-success" type="button" id="button-addon2" onclick="userdetails(2)"><small>change</small></button>
+                                                <!-- </form> -->
                                             </div>
-                                            <div class="form-group mb-4">
-                                                <div class="row">
-                                                    <label class="col-md-4">Phone Number</label>
-                                                    <div class="col-md-8">
-                                                        <input class="form-control" name="phonenumebr" type="number"
-                                                            fdprocessedid="ql246j" value="<%= userdetials.phone %>">
-                                                    </div>
-                                                </div>
+
+                                            <div class="input-group mb-3">
+                                                <label class="col-md-4">Phone</label>
+                                                <span class="input-group-text">
+                                                    <i class="bi bi-phone"></i>  
+                                                </span>
+                                                <!-- <form action="/account" onsubmit="userdetails()" class="d-flex"> -->
+                                                <input type="number" class="form-control" placeholder="Phone" id="value3" aria-describedby="button-addon2" value="<%= userdetials.phone %>">
+                                                <button class="btn-sm btn-success" type="button" id="button-addon2" onclick="userdetails(3)"><small>change</small></button>
+                                                <!-- </form> -->
                                             </div>
-                                            <!-- <div class="form-group mb-4">
-                                                <div class="row">
-                                                    <label class="col-md-4">Date of birth</label>
-                                                    <div class="col-md-8">
-                                                        <input class="form-control" name="dob" type="date"
-                                                            fdprocessedid="ql246j">
-                                                    </div>
-                                                </div>
-                                            </div> -->
                                             <div class="border p-2 mt-2" id="">
                                                 <div id="addressList">
                 
@@ -224,7 +223,7 @@
                                                 </div>
                                             </div> -->
 
-                                        </form>
+                                     
                                     </div>
                                 </div>
                             </div>
@@ -303,6 +302,33 @@ if (result.isConfirmed) {
   }
   })
   }
+
+
+  function userdetails(num) {
+    console.log("HELLO");
+      $.ajax({
+      type: "POST",
+      url: "/userdetails",
+     data: { key: $('#value'+num).val(),num},
+     dataType: "json",
+    encode: true,
+    }).done(function (data) {
+      if(data.success==true){
+        resHTML = '<div class="alert alert-success alert-dismissible"> ' +
+              '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>' +
+              '<strong>Success  </strong> ' + data.message +
+              '</div>';
+            $("#response").html(resHTML)
+      }else{
+        resHTML = '<div class="alert alert-danger alert-dismissible"> ' +
+              '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>' +
+              '<strong>Error!</strong> ' + data.message +
+              '</div>';
+            $("#response").html(resHTML)
+      }
+     
+    });
+    }
   </script>
 
 

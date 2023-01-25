@@ -1,7 +1,6 @@
 const express = require('express');
 const router =express.Router()
-const auth = require('../middleware/auth');
-const adminsession=require('../middleware/auth');
+const {adminSession} = require('../middleware/auth');
 const multer= require('multer');
 const {
   dashbord,
@@ -42,12 +41,6 @@ const {
   invoice} = require('../controllers/admincontrol');
 
 
-
-
-// router.use((req,res,next)=>{
-//     req.app.set('layout',path.join(__dirname,'../../views/layout/adminlayout'))
-//     next()
-//  }) 
 const FILE_TYPE_MAP = {
     'image/png':'png',
     'image/jpeg':'jpeg',
@@ -77,22 +70,22 @@ const uploadOptions = multer({ storage:storage})
  router.get('/adminlogin',adminlogin);
 
 
- router.get('/dashbord',auth.adminSession,dashbord);
- router.get('/customers',auth.adminSession,customers);
- router.get('/products',auth.adminSession,products);
- router.get('/addproduct',auth.adminSession,addProducts)
+ router.get('/dashbord',adminSession,dashbord);
+ router.get('/customers',adminSession,customers);
+ router.get('/products',adminSession,products);
+ router.get('/addproduct',adminSession,addProducts)
 //  router.get('/editproduct',auth.adminSession,controller.editproduct);
- router.get('/deleteimage/:id/:val',auth.adminSession,deleteimage)
- router.get('/editproduct/:id',auth.adminSession,editproducts);
- router.get('/category',auth.adminSession,category)
- router.get('/addcategory',auth.adminSession,addcategory)
- router.get('/updatecategory/:id',auth.adminSession,updatecategory)
- router.get('/Banners',auth.adminSession,banner)
- router.get('/Addbanner',auth.adminSession,addbanner)
- router.get('/coupon',auth.adminSession,coupon)
- router.get('/order',auth.adminSession,ordermanagement)
- router.get('/orderlist/:id',auth.adminSession,orderlist)
- router.get('/orderinvoice/:id',auth.adminSession,invoice)
+ router.get('/deleteimage/:id/:val',adminSession,deleteimage)
+ router.get('/editproduct/:id',adminSession,editproducts);
+ router.get('/category',adminSession,category)
+ router.get('/addcategory',adminSession,addcategory)
+ router.get('/updatecategory/:id',adminSession,updatecategory)
+ router.get('/Banners',adminSession,banner)
+ router.get('/Addbanner',adminSession,addbanner)
+ router.get('/coupon',adminSession,coupon)
+ router.get('/order',adminSession,ordermanagement)
+ router.get('/orderlist/:id',adminSession,orderlist)
+ router.get('/orderinvoice/:id',adminSession,invoice)
 
  
  
@@ -102,25 +95,24 @@ const uploadOptions = multer({ storage:storage})
 
 
 router.post('/adminlogin',login)
-router.post('/blockUser/:id',auth.adminSession,block);
-router.post('/unblockUser/:id',auth.adminSession,unblock)
-router.post('/deleteuser/:id',auth.adminSession,deleteuser)
-router.post('/deleteproduct/:id',auth.adminSession,deleteproduct)
-router.post('/addproduct',auth.adminSession,uploadOptions.array('product_images',10),addprodcut)
-router.post('/updateproduct/:id',auth.adminSession,uploadOptions.array('product_images',10),updateProduct);
-router.post('/addcategorydetials',auth.adminSession,uploadOptions.single('product_images',10),addcategorydetials)
-router.post('/Updatecategories/:id/:val',auth.adminSession,uploadOptions.single('product_images',10),Updatecategories)
-router.post('/deletecategories/:id/:val',auth.adminSession,deletecategories)
-router.post('/addbanner',auth.adminSession,uploadOptions.single('product_images',10),AddBanner)
-router.post('/disablebanner/:id',auth.adminSession,disable)
-router.post('/enablebanner/:id',auth.adminSession, enable);
-router.post('/deletebanner/:id/:val',auth.adminSession, deletebanner)
-router.post('/addcoupon',auth.adminSession, addcoupon)
-router.post('/deleteCoupon/:id',auth.adminSession, deleteCoupon)
-router.post('/updateCoupon/:id',auth.adminSession, updatecoupon)
+router.post('/blockUser/:id',adminSession,block);
+router.post('/unblockUser/:id',adminSession,unblock)
+router.post('/deleteuser/:id',adminSession,deleteuser)
+router.post('/deleteproduct/:id',adminSession,deleteproduct)
+router.post('/addproduct',adminSession,uploadOptions.array('product_images',10),addprodcut)
+router.post('/updateproduct/:id',adminSession,uploadOptions.array('product_images',10),updateProduct);
+router.post('/addcategorydetials',adminSession,uploadOptions.single('product_images',10),addcategorydetials)
+router.post('/Updatecategories/:id/:val',adminSession,uploadOptions.single('product_images',10),Updatecategories)
+router.post('/deletecategories/:id/:val',adminSession,deletecategories)
+router.post('/addbanner',adminSession,uploadOptions.single('product_images',10),AddBanner)
+router.post('/disablebanner/:id',adminSession,disable)
+router.post('/enablebanner/:id',adminSession, enable);
+router.post('/deletebanner/:id/:val',adminSession, deletebanner)
+router.post('/addcoupon',adminSession, addcoupon)
+router.post('/deleteCoupon/:id',adminSession, deleteCoupon)
+router.post('/updateCoupon/:id',adminSession, updatecoupon)
 router.post('/editcoupon', ajaxcoupon)
 router.post('/delivarystatus',delivarystatus)
-
 
 
 router.put('/paymentpending',paymentpending)
