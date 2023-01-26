@@ -38,7 +38,9 @@ const {
   adminlogin,
   login,
   paymentpending,
-  invoice} = require('../controllers/admincontrol');
+  invoice,
+  salesReport,
+  salesDetails} = require('../controllers/admincontrol');
 
 
 const FILE_TYPE_MAP = {
@@ -86,7 +88,7 @@ const uploadOptions = multer({ storage:storage})
  router.get('/order',adminSession,ordermanagement)
  router.get('/orderlist/:id',adminSession,orderlist)
  router.get('/orderinvoice/:id',adminSession,invoice)
-
+ router.get('/salesReport',adminSession,salesReport)
  
  
 
@@ -113,7 +115,7 @@ router.post('/deleteCoupon/:id',adminSession, deleteCoupon)
 router.post('/updateCoupon/:id',adminSession, updatecoupon)
 router.post('/editcoupon', ajaxcoupon)
 router.post('/delivarystatus',delivarystatus)
-
+router.post('/salesDetails',adminSession,salesDetails)
 
 router.put('/paymentpending',paymentpending)
 

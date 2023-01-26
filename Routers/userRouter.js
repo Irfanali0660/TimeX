@@ -61,7 +61,7 @@ router.post("/login",login);
 
 router.post("/otp", otp);
 router.post("/verifyotp", verifyotp);
-router.post("/resendotp", resendOTP);
+router.get("/resendotp", resendOTP);
 router.post("/addtocart", ajaxSession,addtocart);
 router.post("/quantity", ajaxSession,quantity);
 router.post("/quantitydec", ajaxSession,quantitydec);

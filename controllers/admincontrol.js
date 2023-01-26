@@ -16,7 +16,10 @@ const orderModel = require("../model/orderModel");
 module.exports = {
 
     dashbord: (req, res) => {
-        res.render('admin/admin_dashbord', { page: 'dashbord', admin: res.locals.admindata.name })
+        orderModel.find({order_status:{$ne:'pending'}}).populate('userid').sort({ordered_date:-1}).limit(10).then((orders)=>{
+            res.render('admin/admin_dashbord', { page: 'dashbord', admin: res.locals.admindata.name ,orders})
+        })
+        
     },
     login: async (req, res) => {
         if (req.session.adminLogin) {
@@ -479,6 +482,42 @@ module.exports = {
             orderModel.findOne({_id:req.params.id}).populate(['products.product_id','userid']).then((invoice)=>{           
                 res.render('admin/orderinvoice',{ page: 'order', admin: res.locals.admindata.name, ustatus:"false",invoice})
             })
+        } catch (error) {
+            next(error)
+        }
+    },
+    salesReport:(req,res,next)=>{
+        try {
+            res.render('admin/salesReport',{page: 'salesReport', admin: res.locals.admindata.name, ustatus:"false"})
+        } catch (error) {
+            next(error)
+        }
+    },
+    salesDetails:async(req,res,next)=>{
+        try {
+            let salesDetails = await orderModel.aggregate([
+                {
+                  $match: {
+                    order_status: "completed",
+                    'delivery_status.delivered.state':true,
+                    $and: [
+                      { ordered_date: { $gt: new Date(req.body.from) } },
+                      { ordered_date: { $lt: new Date(req.body.to) } },
+                    ],
+                  },
+                },
+                {
+                  $lookup: {
+                    foreignField: "_id",
+                    localField: "userid",
+                    from: "userdatas",
+                    as: "userid",
+                  },
+                },
+                { $sort: { ordered_date: -1 } },
+              ])
+              console.log(salesDetails);
+              res.render('admin/salesDetails',{page: 'salesReport', admin: res.locals.admindata.name, ustatus:"false",salesDetails})
         } catch (error) {
             next(error)
         }

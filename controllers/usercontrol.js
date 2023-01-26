@@ -12,13 +12,13 @@ const { name } = require("ejs");
 let env=require('dotenv');
 
 let transporter = nodemailer.createTransport({
-  host: "smtp-relay.sendinblue.com",
+  host: process.env.host,
   port: 587,
 
   auth: {
     user: process.env.Email,
-    pass: "TwAdDcp49r21LSnB",
-  },
+    pass: process.env.pass
+  }
 });
 var otp = Math.random();
 otp = otp * 1000000;
@@ -34,6 +34,7 @@ module.exports = {
       let row = await categoryModel.find().skip(1).limit(2);
       let col = await categoryModel.find().skip(3).limit(1);
       let products = await ProductModel.find().limit(8).populate("brand");
+      // req.session.user=user
       res.render("user/userhome", {
         page: "Home",
         category,
@@ -41,7 +42,7 @@ module.exports = {
         col,
         products,
         banner,
-        user: res.locals.userdata,
+        user: req.session.user
       });
     } catch (error) {
       next(error);
@@ -76,6 +77,7 @@ module.exports = {
           category,
           count,
           allcount,
+          user: req.session.user
         });
       }
       if (req.query.cate) {
@@ -90,6 +92,7 @@ module.exports = {
           category,
           count,
           allcount,
+          user: req.session.user
         });
       } else {
         console.log("ELSE");
@@ -101,6 +104,7 @@ module.exports = {
           category,
           count,
           allcount,
+          user: req.session.user
         });
       }
     } catch (error) {
@@ -114,7 +118,8 @@ module.exports = {
       console.log("INSIDE PRODUCT DETILS");
       let prod = await ProductModel.findOne({ _id: id }).populate("brand");
       let products = await ProductModel.find({ brand: val }).limit(4);
-      res.render("user/productDetiails", { prod, page: "none", products });
+      res.render("user/productDetiails", { prod, page: "none", products ,user: req.session.user
+    });
     } catch (error) {
       next(error);
     }
@@ -289,6 +294,7 @@ module.exports = {
       }
       req.session.useremail = req.body.email;
       req.session.userlogged = true;
+      req.session.user=user;
       console.log("INSIDE LOGIN");
       res.redirect("/");
     } catch (error) {
@@ -302,7 +308,7 @@ module.exports = {
       let cart = await userModel
         .findOne({ _id: id })
         .populate("cart.product_id");
-      res.render("user/cart", { page: "cart", cart });
+      res.render("user/cart", { page: "cart", cart ,user: req.session.user});
     } catch (error) {
       next(error);
     }
@@ -434,7 +440,7 @@ module.exports = {
       ]);
       console.log(wishlist);
       wishlist = wishlist[0];
-      res.render("user/wishlist", { page: "wishlist", wishlist });
+      res.render("user/wishlist", { page: "wishlist", wishlist,user: req.session.user });
     } catch (error) {
       console.log(error);
       next(error);
@@ -486,7 +492,7 @@ module.exports = {
       const id = res.locals.userdata;
       let userdetials = await userModel.findOne({ _id: id });
 
-      res.render("user/account", { page: "Account", userdetials });
+      res.render("user/account", { page: "Account", userdetials ,user: req.session.user});
     } catch (error) {
       next(error);
     }
@@ -622,7 +628,7 @@ module.exports = {
       let orderData = await orderModel.findOne({ _id: req.params.id });
       let cartbill = await userModel.findOne({ _id: res.locals.userdata._id });
 
-      res.render("user/checkout", { page: "none", cartbill, orderData });
+      res.render("user/checkout", { page: "none", cartbill, orderData ,user: req.session.user});
     } catch (error) {
       next(error);
     }
@@ -833,7 +839,7 @@ module.exports = {
                 );
 
                 // res.send("COD SUCCESSFULL");
-                res.render('user/orderSuccess',{page: "none"})
+                res.render('user/orderSuccess',{page: "none",user: req.session.user})
               })
               .catch((err) => {
                 next(err);
@@ -852,7 +858,7 @@ module.exports = {
   orderDetails:(req,res,next)=>{
     try {
       orderModel.find({userid:res.locals.userdata._id,order_status:{$ne:'pending'}}).sort({ordered_date:-1}).then((orderDetails)=>{
-      res.render('user/orderDetails',{page: "Account",orderDetails})
+      res.render('user/orderDetails',{page: "Account",orderDetails,user: req.session.user})
       })
     } catch (error) {
       next(error)
@@ -861,7 +867,7 @@ module.exports = {
   viewOrder:(req,res,next)=>{
     try {
       orderModel.findOne({_id:req.params.id,userid:res.locals.userdata._id}).populate('products.product_id').then((orderDetails)=>{
-        res.render('user/ViewOrder',{ page: "Account",orderDetails})
+        res.render('user/ViewOrder',{ page: "Account",orderDetails,user: req.session.user})
       })
     } catch (error) {
       next(error)
@@ -927,7 +933,7 @@ module.exports = {
   logout:(req, res, next) => {
     try {
       req.session.destroy();
-      res.redirect("/login");
+      res.redirect("/");
     } catch (error) {
       next(error);
     }

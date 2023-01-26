@@ -69,13 +69,13 @@
             <!-- <li class="nav-item"><a class="nav-link" href="#"> <i class="fas fa-user me-1 text-gray fw-normal"></i>Login</a></li> -->
             <li class="nav-item dropdown"><a class="nav-link dropdown-toggle <% if(page=='Account'){ %> active <% } %>" id="pagesDropdown" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="bi bi-person"></i> Account</a>
               <div class="dropdown-menu mt-3 shadow-sm" aria-labelledby="pagesDropdown">
-                <!-- < % if(req.session.userlogged){ %> -->
+                <% if(user){ %>
                   
                   <a class="dropdown-item border-0 transition-link" href="/account">Details</a>
                   <a class="dropdown-item border-0 transition-link" href="/userlogout">LogOut</a>
-                <!-- < % }else{ %> -->
-                  <!-- <a class="dropdown-item border-0 transition-link" href="/login">Login</a> -->
-               <!-- < % } %> -->
+                <% }else{ %>
+                  <a class="dropdown-item border-0 transition-link" href="/login">Login</a>
+                <% } %>
               </div>
             </li>
             
