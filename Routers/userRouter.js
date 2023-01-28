@@ -34,7 +34,10 @@ const {home,
     addwishlist,
     deleteitem,
     userdetails,
-    cancelOrder} = require("../controllers/usercontrol");
+    cancelOrder,
+    ProductReview,
+    orderSuccess,
+    verifypayment} = require("../controllers/usercontrol");
 
 
 
@@ -52,8 +55,7 @@ router.get("/account", userSession, account);
 router.get("/checkout/:id", userSession, checkout);
 router.get('/orderDetails', userSession, orderDetails)
 router.get('/viewOrder/:id',userSession, viewOrder)
-
-
+router.get('/orderSuccess',userSession, orderSuccess)
 
 router.post("/login",login);
 
@@ -78,7 +80,8 @@ router.post("/searchFun", searchFun);
 // router.post('/addaddresscheck',userSession,addaddresscheck)
 router.post("/checkoutform/:id",userSession, checkoutform);
 router.post('/cancelOrder',ajaxSession,cancelOrder);
-
+router.post('/Productreview',ajaxSession,ProductReview)
+router.post('/verifypayment',ajaxSession,verifypayment)
 
 
 

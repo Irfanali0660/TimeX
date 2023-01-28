@@ -1,5 +1,5 @@
 <%-include('../user/layout/userhead.ejs') -%>
-
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
   <div class="page-holder">
     <div class="container">
@@ -29,7 +29,7 @@
         <h2 class="h5 text-uppercase mb-4">Billing details</h2>
         <div class="row">
           <div class="col-lg-8">
-            <form action="/checkoutform/<%= orderData._id %>" id="form" method="post">
+            <form action="#" onsubmit="placeorder('<%= orderData._id %>');return false" id="form" method="post">
               <div class="row gy-3">
                 <div class="col-lg-12">
                   <label class="form-label text-sm text-uppercase" for="firstName">Full name </label>
@@ -117,6 +117,7 @@
 
 
                   </div>
+
                 </div>
                 <div class="d-flex justify-content-evenly border border-secondary py-3">
                   <div class="form-check">
@@ -129,12 +130,11 @@
                     <input class="form-check-input" type="radio" name="flexRadioDefault" id="onlinepayment"
                       value="onlinepayment" required>
                     <label class="form-check-label" for="flexRadioDefault2">
-                      ONLINE PAYMENT
+                      onlinepayment
                     </label>
                   </div>
-
                 </div>
-
+                <!-- <div id="paypal-button-container"></div> -->
                 <div class="col-lg-11 form-group text-center ">
                   <button class="btn btn-dark mb-3" type="submit">Place order</button>
                 </div>
@@ -187,9 +187,12 @@
                         </div>
                       </li>
                 </ul>
+
               </div>
             </div>
+
           </div>
+
         </div>
       </section>
     </div>
@@ -307,48 +310,95 @@
           document.getElementById("alternateAddress").setAttribute('class', 'collapse')
         }, 2000);
       }
-    </script>
 
 
-    <!-- <script>
-      function addaddress() {
+      function placeorder(id) {
+
         $.ajax({
           type: "POST",
-          url: "/addaddresscheck",
-          data: {
-            name: $('#firstName').val(),
-            address: $('#address').val(),
-            post: $('#Post').val(),
-            pin: $('#pin').val(),
-            city: $('#city').val(),
-            district: $('#district').val(),
-            state: $('#state').val()
+          url: "/checkoutform/" + id,
+          data: $('#form').serialize(),
+          dataType: "json",
+          encode: true,
+        }).done(function (data) {
+          if (data == 'COD') {
+            location.href = '/orderSuccess'
+          }
+          else {
+
+            // <button id="rzp-button1">Pay</button>
+            razorpayapyment(data)
+
+          }
+
+        })
+
+      }
+
+
+      function razorpayapyment(order) {
+        console.log(JSON.stringify(order) + 'ORDER________________');
+
+        var options = {
+          "key": order.key,
+          "amount": order.field.amount,
+          "currency": "INR",
+          "name": 'TIMEX',
+          "description": "The Transaction is under test mode, enabled by Timex",
+          "image": "/",
+          "order_id": order.field.id,
+          "handler": function (response) {
+            order.payment = {}
+            order.payment.raz_id = response.razorpay_payment_id
+            order.payment.raz_oid = response.razorpay_order_id
+            order.payment.raz_sign = response.razorpay_signature
+            order.payment.id = '<%= orderData._id %>'
+            console.log(order.payment);
+
+            paymentverification(order.payment)
           },
+          "prefill": {
+            "name": "name",
+            "email": "name@example.com",
+            "contact": "9999999999"
+          },
+          "notes": {
+            "address": "AdDev Pay"
+          },
+          "theme": {
+            "color": "#000000"
+          },
+
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+      }
+
+      function paymentverification(order) {
+        const orders = JSON.stringify(order)
+        $.ajax({
+          type: "POST",
+          url: "/verifypayment",
+          data: { orders },
           dataType: "json",
           encode: true,
         }).done(function (data) {
 
-          if (data == "LOGIN FIRST") {
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Login first!',
-              footer: '<a href="/login">Go to login</a>'
-            })
+          if (data == 'ONLINEPAYMENT') {
+            Swal.fire(
+              'Good job!',
+              'payment success!',
+              'success'
+            )
+            setTimeout(() => {
+              location.href = '/orderSuccess'
+            }, 2000);
+
+          } else {
+            alert('failed')
           }
-          console.log(data);
-        });
-
+        })
       }
+
     </script>
-
-
-     <script>
-      function placeorder(){
-        console.log("INSIDE");
-        
-        console.log(pytype);
-      }
-     </script> -->
-
     <%-include('../user/layout/userfooter.ejs') -%>

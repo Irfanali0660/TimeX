@@ -4,8 +4,10 @@ const path = require("path");
 const logger = require("morgan");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
-// const expressLayout = require('express-ejs-layouts');
+const env=require('dotenv')
 
+// const expressLayout = require('express-ejs-layouts');
+env.config()
 const db = require("./Connection/data");
 
 const adminRouter = require("./Routers/adminRouter");

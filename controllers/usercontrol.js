@@ -5,12 +5,18 @@ const categoryModel = require("../model/categoryModel");
 const { products, category } = require("./admincontrol");
 const ProductModel = require("../model/ProductModel");
 const bannerModel = require("../model/bannerModel");
-const { json } = require("express");
+const { json, response } = require("express");
 const couponModel = require("../model/couponModel");
 const orderModel = require("../model/orderModel");
 const { name } = require("ejs");
-let env=require('dotenv');
 
+const Razorpay=require('razorpay');
+const crypto=require('crypto')
+
+var instance = new Razorpay({
+  key_id:process.env.RAZ_KEY_ID,
+  key_secret:process.env.RAZ_SECRET_KEY
+});
 let transporter = nodemailer.createTransport({
   host: process.env.host,
   port: 587,
@@ -788,14 +794,6 @@ module.exports = {
       next(error);
     }
   },
-  //   addaddresscheck: (req, res, next) => {
-  //     try {
-  //       console.log(req.body, name);
-  //       res.json();
-  //     } catch (error) {
-  //       next(error);
-  //     }
-  //   },
   checkoutform: async (req, res, next) => {
     try {
       if (req.body.flexRadioDefault == "COD") {
@@ -806,8 +804,7 @@ module.exports = {
             userid: res.locals.userdata._id,
             order_status: "pending",
           });
-          console.log(req.body);
-          console.log(order);
+          
           if (order) {
             orderModel
               .updateOne(
@@ -837,22 +834,110 @@ module.exports = {
                   { _id: res.locals.userdata._id },
                   { $set: { cart: [] } }
                 );
-
                 // res.send("COD SUCCESSFULL");
-                res.render('user/orderSuccess',{page: "none",user: req.session.user})
+                // res.render('user/orderSuccess',{page: "none",user: req.session.user})
+                res.json('COD')
               })
               .catch((err) => {
                 next(err);
               });
-            // res.send('sucesss')
           }
         }
       } else {
-        res.send("RAZOPAY PENDING");
+        if (req.params.id) {
+          console.log(req.params.id);
+          const order = await orderModel.findOne({
+            _id: req.params.id,
+            userid: res.locals.userdata._id,
+            order_status: "pending",
+          });
+          
+          if (order) {
+            orderModel
+              .updateOne(
+                { _id: req.params.id },
+                {
+                  $set: {
+                    address: {
+                      name: req.body.firstName,
+                      house: req.body.House,
+                      post: req.body.Post,
+                      pin: req.body.pin,
+                      city: req.body.city,
+                      district: req.body.district,
+                      state: req.body.state,
+                    },
+                  },
+                }
+              )
+              .then(async () => {
+                await userModel.updateOne(
+                  { _id: res.locals.userdata._id },
+                  { $set: { cart: [] } }
+                );
+                console.log("INSDE THEN");
+                let total=order.bill_amount*100;
+                instance.orders.create({
+                  amount:total,
+                  currency: "INR",
+                  receipt: ''+order._id,
+                }).then((order)=>{
+                 
+                  res.json({field:order,key:process.env.RAZ_KEY_ID})
+                })
+                
+              })
+              .catch((err) => {
+                next(err);
+              });
+          }
+        }
       }
     } catch (error) {
-      console.log(error);
       next(error);
+    }
+  },
+  verifypayment:(req,res,next)=>{
+    try {
+      console.log("INSIDE VERIFY PAYMENT");
+      const response=JSON.parse(req.body.orders)
+      
+      let hamc=crypto.createHmac('sha256',process.env.RAZ_SECRET_KEY )
+      hamc.update(response.raz_oid+'|'+response.raz_id)
+      hamc=hamc.digest('hex')
+      console.log("SUCCC");
+      if(hamc==response.raz_sign){
+        console.log("INSIDE HAMC");
+        orderModel
+              .updateOne(
+                { _id: response.id },
+                {
+                  $set: {
+                    order_status:"completed",
+                    "payment.payment_id": response.raz_id,
+                    "payment.payment_order_id":response.raz_oid,
+                    "payment.payment_method": "Online_payment",
+                    "delivery_status.ordered.state": true,
+                    "delivery_status.ordered.date": Date.now(),
+                  },
+                }
+              ).then(()=>{
+                res.json('ONLINEPAYMENT')
+              })
+      }else{
+        res.json('failed')
+      }
+      
+      
+    } catch (error) {
+      next(error)
+    }
+  },
+  orderSuccess:(req,res,next)=>{
+    try {
+       res.render('user/orderSuccess',{page: "none",user: req.session.user})
+    } catch (error) {
+      next(error)
     }
   },
   orderDetails:(req,res,next)=>{
@@ -875,9 +960,7 @@ module.exports = {
   },
   userdetails:(req,res,next)=>{
     try {
-      console.log("RESACGG");
-      // console.log(req.body);
-    // console.log(req.body.username); 
+     
       let dataUpdate={}
       let apiRes = {}
       console.log(req.body.num+"NUMBer");
@@ -929,6 +1012,14 @@ module.exports = {
     } catch (error) {
       next(error)
     }
+  },
+  ProductReview:(req,res,next)=>{
+   try {
+    console.log(formProps);
+    res.json("Success")
+   } catch (error) {
+    next(error)
+   }
   },
   logout:(req, res, next) => {
     try {
