@@ -23,6 +23,10 @@ const userSchema =new mongoose.Schema({
         type:String,
         default:'unbanned'
     },
+    wallet:{
+        type: Number,
+        default:0,
+    },
     address:[
         {
             name:{type:String},

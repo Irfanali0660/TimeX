@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const moment=require('moment')
 const reviewSchema = new mongoose.Schema({
   product_id: {
     type: mongoose.Schema.Types.ObjectId,
@@ -27,4 +27,4 @@ const reviewSchema = new mongoose.Schema({
   },
 });
 
-module.exports = reviewSchema = mongoose.model("reviews", reviewSchema);
+module.exports = reviewModel = mongoose.model("reviews", reviewSchema);

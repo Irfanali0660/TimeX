@@ -11,7 +11,9 @@ const orderModel = require("../model/orderModel");
 const { name } = require("ejs");
 
 const Razorpay=require('razorpay');
-const crypto=require('crypto')
+const crypto=require('crypto');
+const reviewModel = require("../model/reviewModel");
+
 
 var instance = new Razorpay({
   key_id:process.env.RAZ_KEY_ID,
@@ -124,7 +126,9 @@ module.exports = {
       console.log("INSIDE PRODUCT DETILS");
       let prod = await ProductModel.findOne({ _id: id }).populate("brand");
       let products = await ProductModel.find({ brand: val }).limit(4);
-      res.render("user/productDetiails", { prod, page: "none", products ,user: req.session.user
+      let review=await reviewModel.find({ product_id:id}).populate('userid')
+      console.log(review);
+      res.render("user/productDetiails", { prod, page: "none", products ,user: req.session.user,review
     });
     } catch (error) {
       next(error);
@@ -182,7 +186,7 @@ module.exports = {
       req.session.Phone = req.body.phonenumber;
       req.session.Password = req.body.password;
 
-      Email = req.body.email;
+       Email = req.body.email;
 
       const user = await userModel.findOne({ email: Email });
 
@@ -247,7 +251,7 @@ module.exports = {
     try {
       const mailoptions = {
         from: process.env.Email,
-        to: req.body.email,
+        to: Email,  
         subject: "OTP for registration is :",
         html:
           "<h3>OTP for account verification is </h3>" +
@@ -834,8 +838,7 @@ module.exports = {
                   { _id: res.locals.userdata._id },
                   { $set: { cart: [] } }
                 );
-                // res.send("COD SUCCESSFULL");
-                // res.render('user/orderSuccess',{page: "none",user: req.session.user})
+               
                 res.json('COD')
               })
               .catch((err) => {
@@ -843,7 +846,61 @@ module.exports = {
               });
           }
         }
+      }else if(req.body.flexRadioDefault == "Wallet"){
+        if (req.params.id) {
+          console.log(req.params.id);
+          const order = await orderModel.findOne({
+            _id: req.params.id,
+            userid: res.locals.userdata._id,
+            order_status: "pending",
+          });
+          const user = await userModel.findOne({_id:res.locals.userdata._id})
+          const total=Math.round(order.bill_amount-(order.bill_amount*order.coupon.discount)/100)
+          if(user.wallet>total){
+            if (order) {
+              orderModel
+                .updateOne(
+                  { _id: req.params.id },
+                  {
+                    $set: {
+                      address: {
+                        name: req.body.firstName,
+                        house: req.body.House,
+                        post: req.body.Post,
+                        pin: req.body.pin,
+                        city: req.body.city,
+                        district: req.body.district,
+                        state: req.body.state,
+                      },
+                      order_status:"completed",
+                      "payment.payment.status":"completed",
+                      "payment.payment_id": "Wallet_" + req.params.id,
+                      "payment.payment_order_id": "Wallet_OID",
+                      "payment.payment_method": "Wallet_payment",
+                      "delivery_status.ordered.state": true,
+                      "delivery_status.ordered.date": Date.now(),
+                    },
+                  }
+                )
+                .then(async () => {
+                  await userModel.updateOne(
+                    { _id: res.locals.userdata._id },
+                    {$inc:{wallet: - total}},
+                    { $set: { cart: [] } }
+                  );
+                 
+                  res.json('Wallet')
+                })
+                .catch((err) => {
+                  next(err);
+                });
+            }
+          }else{
+            res.json('Not Enough cash')
+          }
+        }
       } else {
+        console.log("hello");
         if (req.params.id) {
           console.log(req.params.id);
           const order = await orderModel.findOne({
@@ -914,6 +971,7 @@ module.exports = {
                 {
                   $set: {
                     order_status:"completed",
+                    "payment.payment.status":"completed",
                     "payment.payment_id": response.raz_id,
                     "payment.payment_order_id":response.raz_oid,
                     "payment.payment_method": "Online_payment",
@@ -960,7 +1018,6 @@ module.exports = {
   },
   userdetails:(req,res,next)=>{
     try {
-     
       let dataUpdate={}
       let apiRes = {}
       console.log(req.body.num+"NUMBer");
@@ -1006,7 +1063,7 @@ module.exports = {
   cancelOrder:(req,res,next)=>{
       try {
         console.log();
-        orderModel.updateOne({_id:req.body.id},{$set:{'delivery_status.canceled.state':true,'delivery_status.canceled.date':Date.now()}}).then(()=>{
+        orderModel.updateOne({_id:req.body.id},{$set:{order_status:"canceled",'delivery_status.canceled.state':true,'delivery_status.canceled.date':Date.now()}}).then(()=>{
           res.json('Ordercanceled')
         })
     } catch (error) {
@@ -1015,11 +1072,33 @@ module.exports = {
   },
   ProductReview:(req,res,next)=>{
    try {
-    console.log(formProps);
-    res.json("Success")
+    let review=reviewModel({
+      product_id:req.params.id,
+      userid:res.locals.userdata._id,
+      title:req.body.title,
+      review:req.body.review,
+      rating:req.body.star
+    })
+    review.save().then(()=>{
+   res.redirect('/viewOrder/'+req.body.orderId)
+    })
    } catch (error) {
     next(error)
    }
+  },
+  walletCheck:(req,res,next)=>{
+    try {
+      userModel.findOne({_id:res.locals.userdata._id}).then((user)=>{
+        console.log(req.body.finalAmount+"___________)_))))))))))))");
+        if(user.wallet>req.body.finalAmount){
+          res.json("success")
+        }else{
+          res.json(user)
+        }
+      })
+    } catch (error) {
+      next(error)
+    }
   },
   logout:(req, res, next) => {
     try {

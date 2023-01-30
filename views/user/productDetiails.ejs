@@ -89,7 +89,7 @@
                     <li class="list-inline-item m-0 4"><i class="fas fa-star small text-warning"></i></li>
                 </ul>
                 <h1><%= prod.name %></h1>
-                <p class="text-muted lead">$<%= prod.price %></p>
+                <p class="text-muted lead"><i class="bi bi-currency-rupee"></i><%= prod.price %></p>
                 <p class="text-sm mb-4"><%= prod.description %></p>
                 <div class="row align-items-stretch mb-4">
                     <!-- <div class="col-sm-5 pr-sm-0">
@@ -103,23 +103,19 @@
                             </div>
                         </div>
                     </div> -->
-                    <div class="col-sm-3 pl-sm-0"><a
+                    <div class="col-sm-4 pl-sm-0"><a
+                        class="btn btn-dark btn-sm btn-block h-100 d-flex align-items-center justify-content-center px-0" onclick="wishlist('<%= prod._id %>')"
+                        href="#!"><i class="far fa-heart me-2"></i>Add to wish list</a></div>
+                    <div class="col-sm-4 pl-sm-0"><a
                             class="btn btn-dark btn-sm btn-block h-100 d-flex align-items-center justify-content-center px-0"
                             onclick="addtocart('<%= prod._id %>')" >Add to cart</a></div>
-                            <div class="col-sm-3 pl-sm-0"><a
-                                class="btn btn-dark btn-sm btn-block h-100 d-flex align-items-center justify-content-center px-0"
-                                href="">Buy now</a></div>
-                </div><a class="text-dark p-0 mb-4 d-inline-block text-decoration-none" href="#!" onclick="wishlist('<%= prod._id %>')"><i
-                        class="far fa-heart me-2"></i>Add to wish list</a><br>
-                <ul class="list-unstyled small d-inline-block">
-                    <!-- <li class="px-3 py-2 mb-1 bg-white"><strong class="text-uppercase">SKU:</strong><span
-                            class="ms-2 text-muted">039</span></li> -->
+                            
+                    </div>
+                    
                     <li class="px-3 py-2 mb-1 bg-white text-muted"><strong
                             class="text-uppercase text-dark">Category:</strong><a class="reset-anchor ms-2"
                             href="#!"><%= prod.brand.categoryName %></a></li>
-                    <!-- <li class="px-3 py-2 mb-1 bg-white text-muted"><strong
-                            class="text-uppercase text-dark">Tags:</strong><a class="reset-anchor ms-2"
-                            href="#!">Innovation</a></li> -->
+             
                 </ul>
             </div>
         </div>
@@ -137,12 +133,7 @@
                 aria-labelledby="description-tab">
                 <div class="p-4 p-lg-5 bg-white">
                     <h6 class="text-uppercase">Product description </h6>
-                    <p class="text-muted text-sm mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-                        eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa
-                        qui officia deserunt mollit anim id est laborum.</p>
+                    <p class="text-muted text-sm mb-0"><%= prod.description %></p>
                 </div>
             </div>
             
@@ -150,29 +141,45 @@
                 <div class="p-4 p-lg-5 bg-white">
                     <div class="row">
                         <div class="col-lg-8">
-                            <div class="d-flex mb-3">
+                            <% if(review.length==0){ %> 
+                                <div class="d-flex mb-3">
+                                    <h5 class="text-secondary text-muted">No Review</h5>
+                                </div>
+                                <% }else{ %> 
+                            <% review.forEach((rev) => { %>
+                                
+                            <div class="d-flex mb-3 col-7">
                                 <div class="bg-dash-dark-2"><img class="rounded-circle" src="/images/UserBlack.png"
                                     alt="" width="50"/></div>
-                                <div class="ms-3 flex-shrink-1">
-                                    <h6 class="mb-0 text-uppercase">Jason Doe</h6>
-                                    <p class="small text-muted mb-0 text-uppercase">20 May 2020</p>
-                                    <ul class="list-inline mb-1 text-xs">
-                                        <li class="list-inline-item m-0"><i
-                                                class="fas fa-star text-warning"></i></li>
-                                        <li class="list-inline-item m-0"><i
-                                                class="fas fa-star text-warning"></i></li>
-                                        <li class="list-inline-item m-0"><i
-                                                class="fas fa-star text-warning"></i></li>
-                                        <li class="list-inline-item m-0"><i
-                                                class="fas fa-star text-warning"></i></li>
-                                        <li class="list-inline-item m-0"><i
-                                                class="fas fa-star-half-alt text-warning"></i></li>
-                                    </ul>
-                                    <p class="text-sm mb-0 text-muted">Lorem ipsum dolor sit amet, consectetur
-                                        adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
-                                        magna aliqua.</p>
+                                <div class="ms-3 flex-shrink-1 w-100">
+                                    <h6 class="mb-0 text-uppercase"><%= rev.userid.userName %> </h6>
+
+                                    <div class="d-flex justify-content-between w-100">
+                                    <p class="small text-muted text-uppercase"><%= rev.date %></p>
+                                        <ul class="list-inline mb-1 text-xs me-0">
+                                                    <% for (let index = 0; index < rev.rating; index++) { %>
+                                                        <% if(rev.rating==1){ %>
+                                                            
+                                                            <li class="list-inline-item m-0"><i
+                                                    class="fas fa-star text-danger"></i></li>
+                                                   <% }else{ %> 
+                                                    <li class="list-inline-item m-0"><i
+                                                        class="fas fa-star text-warning"></i></li>
+                                                    <% } %>   
+                                                    <% } %>
+                                                    <% for (let index = 0; index <(5-rev.rating); index++) { %>
+                                                        <li class="list-inline-item m-0">
+                                                            <i class="far fa-star"></i></li>
+                                                    <% } %>
+                                        </ul>
+                                    </div>
+                                    <strong class="text-danger"><%= rev.title %></strong>
+                                    <p class="text-sm mb-0 text-muted"><%= rev.review %> </p>
                                 </div>
                             </div>
+                           <% }); %> 
+                           <% } %> 
+
                             <!-- <div class="d-flex">
                                 <div class="flex-shrink-0"><img class="rounded-circle" src="img/customer-2.png"
                                         alt="" width="50" /></div>
@@ -226,7 +233,7 @@
                         <h6> <a class="reset-anchor" href="/productdetials/<%= product._id %>/<%= prod.brand.id %>">
                                 <%= product.name %>
                             </a></h6>
-                        <p class="small text-muted">$<%= product.price %>
+                        <p class="small text-muted"><i class="bi bi-currency-rupee"></i><%= product.price %>
                         </p>
                     </div>
                 </div>
@@ -281,6 +288,5 @@
     </div> -->
         </div>
     </div>
-
-      
+</section>  
     <%-include('../user/layout/userfooter.ejs') -%>

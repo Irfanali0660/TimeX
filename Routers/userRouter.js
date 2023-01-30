@@ -37,7 +37,8 @@ const {home,
     cancelOrder,
     ProductReview,
     orderSuccess,
-    verifypayment} = require("../controllers/usercontrol");
+    verifypayment,
+    walletCheck} = require("../controllers/usercontrol");
 
 
 
@@ -80,12 +81,12 @@ router.post("/searchFun", searchFun);
 // router.post('/addaddresscheck',userSession,addaddresscheck)
 router.post("/checkoutform/:id",userSession, checkoutform);
 router.post('/cancelOrder',ajaxSession,cancelOrder);
-router.post('/Productreview',ajaxSession,ProductReview)
+router.post('/Productreview/:id',userSession,ProductReview)
 router.post('/verifypayment',ajaxSession,verifypayment)
+router.post('/walletCheck',ajaxSession,walletCheck)
 
 
-
-router.put("/addwishlist", ajaxSession,addwishlist);
+router.post("/addwishlist", ajaxSession,addwishlist);
 router.put("/deleteitem", ajaxSession, deleteitem);
 router.post('/userdetails',ajaxSession,userdetails)
 // router.put('/editbill', controller.editbill)

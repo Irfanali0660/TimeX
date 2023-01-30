@@ -2,7 +2,7 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
 
     <style>
-        div.stars {
+        /* div.stars {
   width: 270px;
   display: inline-block;
 }
@@ -28,7 +28,7 @@ label.star:hover { transform: rotate(-15deg) scale(1.3); }
 label.star:before {
   content: '\f006';
   font-family: FontAwesome;
-}
+} */
     </style>
 
     <div class="page-holder">
@@ -183,11 +183,13 @@ label.star:before {
                                                             </td>
                                                             <% if(orderDetails.delivery_status.delivered.state==true){ %> 
                                                            <td class="p-3 align-middle border-light">
-                                                            <button  type="button " class="badge " data-bs-toggle="modal" data-bs-target="#exampleModalre"onclick="refreshpdId('<%= val._id %>')">
+                                                            <button  type="button " class="badge " data-bs-toggle="modal" data-bs-target="#exampleModalre"onclick="review('<%= val.product_id._id %>')">
                                                                 <i class="bi bi-stars text-warning"></i>
                                                                 </button>
                                                            </td>
+                                                            
                                                            <% } %> 
+                                                          
                                                         </tr>
                                                         <% }) %>
                 
@@ -203,14 +205,12 @@ label.star:before {
                                         <h5 class="text-danger text-center border border-danger">canceled</h5>
                                        
                                     <% }else if(orderDetails.delivery_status.delivered.state==false){ %> 
-                                    <div class="text-end me-3">
+                                    <div id="cancel" class="text-end me-3">
                                          <!-- Button trigger modal -->
                                 <button type="button" class="btn btn-outline-danger " data-bs-toggle="modal" data-bs-target="#exampleModal">
                                     Cancel Order
                                     </button>
                                     </div>
-                 
-                                  
                                     <% }else{ %>
                                          <h5 class="text-success text-center border border-success">Order delivered</h5>
                                     <% } %>
@@ -258,7 +258,7 @@ label.star:before {
         </div>
         <div class="modal-body">
             <div class="modal-body mx-2" style="width:350px;">
-                <form action="#" onsubmit="review()" method="post"  id="star">
+                <form  method="post"  id="star">
                 
                   <label for="" class="text-dark mb-3 fw-bold">Rate the product</label>
                   <input class="star star-5" id="star-5" type="radio" name="star" value="5"/>
@@ -270,19 +270,18 @@ label.star:before {
                   <input class="star star-2" id="star-2" type="radio" name="star" value="2"/>
                   <label class="star star-2" for="star-2"></label>
                   <input class="star star-1" id="star-1" type="radio" name="star" value="1"/>
-                  <label class="star star-1" for="star-1"></label>
-                  <label class=""> Title (optional) </label><br>
-                  <input type="text" name="title" class="form-control">
+                  <label class="star star-1" for="star-1"></label><br>
+                  <label class=""> Title  </label>
+                  <input type="text" name="title" class="form-control" required>
                   <label for="reviewId">Write your review</label><br>
                   <textarea name="review" class="form-control" id="reviewId" cols="30" rows="4" required></textarea>
-        
+                  <input type="hidden" value="<%= orderDetails.id %>" name="orderId">
               </div>
               
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-success">Submit</button>
-       
         </div>
     </form> 
       </div>
@@ -300,35 +299,44 @@ label.star:before {
       dataType: "json",
      encode: true,
      }).done(function (data) {
-  
+        if(data=='Ordercanceled'){
+            Swal.fire(
+        'removed!',
+        'This product has been removed.',
+        'success'
+      )
+      resHTML='<h5 class="text-success text-center border border-success">Order delivered</h5>'
+      $('#cancel').html(resHTML)
+        }
      });
      }
 
      function refresh(){
-        console.log("hello");
+        
         document.getElementById("star").reset(); 
      }
+     function createRecord(){	
+	
+	
+ }
 
-  function refreshpdId(id){
-    let pdId=id;
-    console.log(pdId);
-     review=async()=>{
-        event.preventDefault()
-    const formData = new FormData(event.target);
-    const formProps = await Object.fromEntries(formData);
-    formProps.product = pdId
-    console.log(formProps);
-        $.ajax({
-       type: "POST",
-       url: "/Productreview",
-      data: {formProps},
-      dataType: "json",
-     encode: true,
-     }).done(function (data) {
-        console.log(data._id);
-     });
-     }
+  function review(id){
+    $('#star').attr('action','/Productreview/'+id)
   }
+    // function review(){
+    //     event.preventDefault();
+    //    console.log("REACHED REVIEW");
+    //     $.ajax({
+    //    type: "POST",
+    //    url: "/Productreview/"+pdId,
+    //   data:$('#star').serialize(),
+    //   dataType: "json",
+    //  encode: true,
+    //  }).done(function (data) {
+    //     // console.log(data._id);
+    //  });
+    //  }
+ 
      
    </script>
     <%-include('../user/layout/userfooter.ejs') -%>

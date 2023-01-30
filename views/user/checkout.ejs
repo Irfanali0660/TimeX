@@ -119,6 +119,9 @@
                   </div>
 
                 </div>
+                <div id="wallet">
+
+                </div>
                 <div class="d-flex justify-content-evenly border border-secondary py-3">
                   <div class="form-check">
                     <input class="form-check-input" type="radio" name="flexRadioDefault" id="COD" value="COD" required>
@@ -130,7 +133,14 @@
                     <input class="form-check-input" type="radio" name="flexRadioDefault" id="onlinepayment"
                       value="onlinepayment" required>
                     <label class="form-check-label" for="flexRadioDefault2">
-                      onlinepayment
+                      Onlinepayment
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="onlinepayment"
+                      value="Wallet" required onclick="walletCheck()">
+                    <label class="form-check-label" for="flexRadioDefault2">
+                      Wallet
                     </label>
                   </div>
                 </div>
@@ -154,14 +164,14 @@
 
                     <li class="d-flex align-items-center justify-content-between"><strong class="small fw-normal ">
                         <%= val.name %>
-                      </strong><span class="text-muted small">
+                      </strong><span class="text-muted small"><i class="bi bi-currency-rupee"></i>
                         <%= val.price*val.qnty %>
                       </span></li>
                     <li class="border-bottom my-2"></li>
                     <% Total=Total + (val.price*val.qnty) }) %>
                       <li class="d-flex align-items-center justify-content-between mt-2 mb-2"><strong
                           class="small text-muted  fw-bolder ">Subtotal</strong><span
-                          class="text-muted small"><span>$</span>
+                          class="text-muted small"><span><i class="bi bi-currency-rupee"></i></span>
                           <%= Total %>
                         </span></li>
                       <li class="d-flex align-items-center justify-content-between mb-3"><strong
@@ -170,7 +180,7 @@
                             <%= orderData.coupon.discount %>
                           </span>%</span></li>
                       <li class="d-flex align-items-center justify-content-between mt-3 mb-4"><strong
-                          class="text-uppercase large fw-bold ">Total</strong><span class="text-danger  fw-bold">$<span
+                          class="text-uppercase large fw-bold ">Total</strong><span class="text-danger  fw-bold"><i class="bi bi-currency-rupee"></i><span
                             id="total">
                             <%= Total %>
                           </span></span></li>
@@ -241,7 +251,7 @@
           else {
             resHTML = '<div class="alert alert-danger alert-dismissible"> ' +
               '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>' +
-              '<strong>Error!</strong> ' + data.message +
+              '<strong>Error!</strong>'+ data.message +
               '</div>';
             $("#response").html(resHTML)
           }
@@ -249,22 +259,29 @@
       }
     </script>
 
-    <!-- <script>
-      function billamount(finalAmount){
+    <script>
+      function walletCheck(){
         
         $.ajax({
-          type: "put",
-          url: "/editbill",
-          data: { bill:finalAmount,id:$('#orderid').val() },
+          type: "post",
+          url: "/walletCheck",
+          data: { finalAmount:$('#total').html() },
           dataType: "json",
           encode: true,
         }).done(function (data) {
-
-         
+          console.log(data);
+          if(data!="success"){
+            console.log("ONE");
+            resHTML = '<div class="alert alert-danger alert-dismissible"> ' +
+            '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>' +
+            '<strong>Error!</strong> Not enough cash in your wallet Only '+data.wallet+ 
+            ' in your Wallet Choose another method</div>';
+          $("#wallet").html(resHTML)
+          }
         })
     
       }
-    </script> -->
+    </script>
 
     <script>
       function addnewaddress() {
@@ -322,11 +339,33 @@
           encode: true,
         }).done(function (data) {
           if (data == 'COD') {
-            location.href = '/orderSuccess'
+            Swal.fire(
+              'Good job!',
+              'COD payment success!',
+              'success'
+            )
+            setTimeout(() => {
+              location.href = '/orderSuccess'
+            }, 2000);
+
+          }else if(data=='Not Enough cash'){
+            resHTML = '<div class="alert alert-danger alert-dismissible"> ' +
+            '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>' +
+            '<strong>Error!</strong> Not enough cash in your wallet.Choose another method</div>';
+          $("#wallet").html(resHTML)
+          }else if(data=='Wallet'){
+            Swal.fire(
+              'Good job!',
+              'Wallet payment success!',
+              'success'
+            )
+            setTimeout(() => {
+              location.href = '/orderSuccess'
+            }, 2000);
+
           }
           else {
 
-            // <button id="rzp-button1">Pay</button>
             razorpayapyment(data)
 
           }

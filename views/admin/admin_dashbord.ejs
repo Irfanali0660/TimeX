@@ -1,6 +1,7 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
-
-  <%-include('../admin/layout/adminhead.ejs') -%>
+<%-include('../admin/layout/adminhead.ejs') -%>
   <style>
     td,
     label,
@@ -16,6 +17,41 @@
               <div class="container-fluid">
                   <h2 class="h5 mb-0">Dashboard</h2>
               </div>
+          </div>
+          <div class="m-5 bg-light rounded-3">
+            <div class="row justify-content-around my-5 p-3 flex-wrap">
+              <div class="card col text-dark mx-2 border-0 ad-box-shadow pt-1  my-1" style="min-width: 120px; background-color: rgba(0, 128, 255, 0.101);">
+                  <h1 class=""><i class="bi bi-people-fill bg-primary rounded-pill px-2 py-1 h2 text-white"></i> <%= user %> </h1>
+                  <h4 class="">Users</h4>
+              </div>
+              <div class="card col mx-2 border-0 pt-1 ad-box-shadow my-1" style="min-width: 120px; background-color: rgba(0, 255, 102, 0.101);">
+                  <h1 class="text-dark">
+                      <i class="bi bi-grid bg-success rounded-pill px-2 py-1 h2 text-white"></i>
+                      <%= product %> 
+                  </h1>
+                  <h4 class="text-dark">Products</h4>
+              </div>
+              <div class="card col mx-2 pt-1 ad-box-shadow border-0  my-1" style="min-width: 120px; background-color: rgba(199, 165, 12, 0.101);">
+                  <h1 class="text-dark">
+                      <i class="bi bi-clipboard2-data-fill rounded-pill px-2 py-1 h2 text-white " style="background-color: rgb(230, 174, 20);"></i>
+                      <%= category %> 
+                  </h1>
+                  <h4 class="text-muted">Categories</h4>
+              </div>
+              <div class="card col mx-2 pt-1 ad-box-shadow border-0  my-1" style="min-width: 120px; background-color: rgba(185, 21, 244, 0.050);">
+                  <h1 class="text-dark">
+                      <i class="bi bi-bar-chart-line-fill rounded-pill px-2 py-1 h2 text-white " style="background-color: purple; ;"></i>
+                      <%= order %> 
+                  </h1>
+                  <h4 class="text-muted">Orders</h4>
+              </div>
+          </div>
+          </div>
+          <div class="m-5 bg-light rounded-3 px-5">
+            
+            <canvas class="m-5 " id="myChart" style="width:100%;max-width:600px"></canvas>
+            
+            <div id="circle" style="width:100%; max-width:600px; height:500px;"></div>
           </div>
         <div class="m-5 bg-light rounded-3"> 
           <h2 class="h5 m-3 text-black ">Latest Order</h2>
@@ -93,3 +129,71 @@
 
 <%-include('../admin/layout/adminfooter.ejs') -%>
             
+<script>
+
+<%
+function getMonthName(monthNumber) {
+  const date = new Date();
+  date.setMonth(monthNumber - 1);
+  return date.toLocaleString('en-US', { month: 'long' });
+}
+%>
+
+<% let dates = salesChart.map((val)=>{ return val._id.slice(-2)}) %>
+<% let salesCount = salesChart.map((val)=>{ return val.count}) %>
+// < % let cancelCount = salesCancel.map((val)=>{ return val.count}) %>
+var xValues = [0,<%= dates%>];
+new Chart("myChart", {
+  type: "line",
+  data: {
+    labels: xValues,
+    datasets: [{
+        label: 'Orders',
+      data: [0,<%=salesCount %>],
+      borderColor: "rgb(153, 255, 153)", //95, 250, 175,0.8
+      fill: false
+    }
+    // ,{
+    //     label: 'Cancel',
+    //   data: [0,< %= cancelCount %>],
+    //   borderColor: "green",
+    //   fill: false
+    // },
+    // {
+    //     label: 'Cancel',
+    //   data: [300,700,2000,5000,6000,4000,2000,1000,200,100],
+    //   borderColor: "blue",
+    //   fill: false
+    // }
+  ]
+  },
+  options: {
+    legend: {display: false},
+    title: {
+      display: true,
+      text: "Order chart <%= getMonthName(Number(salesChart[0]._id.substring(7,5))) %> -  <%= salesChart[0]._id.substring(0, 4)%>"
+    }
+  }
+});
+
+google.charts.load('current', {'packages':['corechart']});
+google.charts.setOnLoadCallback(drawChart);
+
+function drawChart() {
+  var data = google.visualization.arrayToDataTable([
+  ['Status', 'Count'],
+  ['Order Pending',<%= Orderpending %>],
+  ['Order Canceled',<%= Ordercanceled %>],
+  ['payment Pending',<%= paymentpending %>],
+  ['payment Paid',<%= paymentpaid %>],
+]);
+var options = {
+  title:'Total Order Status',
+  is3D:true
+  
+};
+
+var chart = new google.visualization.PieChart(document.getElementById('circle'));
+  chart.draw(data, options);
+}
+</script>

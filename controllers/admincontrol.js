@@ -15,9 +15,50 @@ const orderModel = require("../model/orderModel");
 
 module.exports = {
 
-    dashbord: (req, res) => {
+    dashbord: async(req, res) => {
+        const startOfMonth = new Date();
+        startOfMonth.setDate(1);
+        startOfMonth.setHours(0, 0, 0, 0);
+
+        const endOfMonth = new Date();
+        endOfMonth.setMonth(endOfMonth.getMonth() + 1);
+        endOfMonth.setDate(0);
+        endOfMonth.setHours(23, 59, 59, 999);
+
+        let salesChart = await orderModel.aggregate([
+            {
+              $match: {
+                order_status:{$ne:'pending'},
+                ordered_date: {
+                  $gte: startOfMonth,
+                  $lt: endOfMonth,
+                },
+              },
+            },
+            {
+              $group: {
+                _id: { $dateToString: { format: "%Y-%m-%d", date: "$ordered_date" } },
+                count: { $sum: 1 },
+              },
+            },
+            {
+              $sort: { _id: 1 },
+            },
+          ]);
+
+          let  Orderpending =await orderModel.countDocuments({ order_status: "pending"})
+          let  Ordercanceled= await orderModel.countDocuments({ order_status: "canceled"})
+          let  paymentpending= await orderModel.countDocuments({"payment.payment_status": "pending",})
+          let  paymentpaid= await orderModel.countDocuments({"payment.payment_status": "completed",})
+          
+        
+        let product= await productModel.find().count()
+        let category= await categoryModel.find().count()
+        let order= await orderModel.find({order_status:{$ne:'pending'}}).count()
+        let user= await userModel.find().count()
+
         orderModel.find({order_status:{$ne:'pending'}}).populate('userid').sort({ordered_date:-1}).limit(10).then((orders)=>{
-            res.render('admin/admin_dashbord', { page: 'dashbord', admin: res.locals.admindata.name ,orders})
+            res.render('admin/admin_dashbord', { page: 'dashbord', admin: res.locals.admindata.name ,orders,product,category,order,user,salesChart,Orderpending,Ordercanceled,paymentpending,paymentpaid})
         })
         
     },
@@ -371,6 +412,7 @@ module.exports = {
                    res.redirect('/coupon')
                 })
             } else {
+                
                res.redirect('/coupon')
             }
         } catch (error) {

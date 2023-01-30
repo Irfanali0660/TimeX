@@ -48,7 +48,7 @@
                           </div>
                         </th>
                         <td class="p-3 align-middle border-light">
-                          <p class="mb-0 small">$<span id="<%= addcart.id %>Price"><%= addcart.product_id.price %></span></p>
+                          <p class="mb-0 small"><i class="bi bi-currency-rupee"></i><span id="<%= addcart.id %>Price"><%= addcart.product_id.price %></span></p>
                         </td>
                         <td class="p-3 align-middle border-light">
                           <div class="border d-flex align-items-center justify-content-between px-3"><span class="small text-uppercase text-gray headings-font-family">Quantity</span>
@@ -60,7 +60,7 @@
                           </div>
                         </td> 
                         <td class="p-3 align-middle border-light">
-                          <p class="mb-0 small">$<span id="<%= addcart.id %>TotalPrice"><%= addcart.product_id.price*addcart.quantity %></span></p>
+                          <p class="mb-0 small"><i class="bi bi-currency-rupee"></i><span id="<%= addcart.id %>TotalPrice"><%= addcart.product_id.price*addcart.quantity %></span></p>
                         </td>
                         <td class="p-3 align-middle border-light"><button class="border-0" onclick="deletecart('<%= addcart.id %>')"><i class="fas fa-trash-alt small text-danger"></i></button></td>
                       </tr>
@@ -84,7 +84,7 @@
                     <h5 class="text-uppercase mb-4">Cart total</h5>
                     <ul class="list-unstyled mb-0">
                       <li class="border-bottom my-2"></li>
-                      <li class="d-flex align-items-center justify-content-between"><strong class="text-uppercase small font-weight-bold">Subtotal</strong><span>$<span class="text-muted small" id="cartSubTotal"><%= subTotal%></span></span></li>
+                      <li class="d-flex align-items-center justify-content-between"><strong class="text-uppercase small font-weight-bold">Subtotal</strong><span><i class="bi bi-currency-rupee"></i><span class="text-muted small" id="cartSubTotal"><%= subTotal%></span></span></li>
                    
                     </ul>
                   </div>
