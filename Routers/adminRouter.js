@@ -40,7 +40,9 @@ const {
   paymentpending,
   invoice,
   salesReport,
-  salesDetails} = require('../controllers/admincontrol');
+  salesDetails,
+  refundcash} = require('../controllers/admincontrol');
+const { ajaxSession } = require('../middleware/ajax');
 
 
 const FILE_TYPE_MAP = {
@@ -116,6 +118,8 @@ router.post('/updateCoupon/:id',adminSession, updatecoupon)
 router.post('/editcoupon', ajaxcoupon)
 router.post('/delivarystatus',delivarystatus)
 router.post('/salesDetails',adminSession,salesDetails)
+router.post('/refundcash',refundcash)
+
 
 router.put('/paymentpending',paymentpending)
 

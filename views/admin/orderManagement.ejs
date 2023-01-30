@@ -43,7 +43,9 @@
                 <%= order.ordered_date.getDate() %>/<%= order.ordered_date.getMonth()+1 %>/<%= order.ordered_date.getFullYear() %>
               </td>
               <td class="text-light">
-                <% if(order.delivery_status.delivered.state){ %> 
+                <% if(order.delivery_status.returned.state){ %> 
+                  <p><b class="text-warning">RETURNED</b><small>(<%= order.delivery_status.returned.date.getDate() %>/<%= order.delivery_status.returned.date.getMonth()+1 %>/<%= order.delivery_status.returned.date.getFullYear() %>)</small> </p>
+                <% }else if(order.delivery_status.delivered.state){ %> 
                   <p><b class="text-success">DELIVERED</b><small>(<%= order.delivery_status.delivered.date.getDate() %>/<%= order.delivery_status.delivered.date.getMonth()+1 %>/<%= order.delivery_status.delivered.date.getFullYear() %>)</small> </p>
                   <% }else if(order.delivery_status.canceled.state){  %> 
                     <p> <b class="text-danger">CANCELED</b><small>(<%= order.delivery_status.canceled.date.getDate() %>/<%= order.delivery_status.canceled.date.getMonth()+1 %>/<%= order.delivery_status.canceled.date.getFullYear() %>)</small> </p>

@@ -38,7 +38,8 @@ const {home,
     ProductReview,
     orderSuccess,
     verifypayment,
-    walletCheck} = require("../controllers/usercontrol");
+    walletCheck,
+    returnOrder} = require("../controllers/usercontrol");
 
 
 
@@ -84,6 +85,9 @@ router.post('/cancelOrder',ajaxSession,cancelOrder);
 router.post('/Productreview/:id',userSession,ProductReview)
 router.post('/verifypayment',ajaxSession,verifypayment)
 router.post('/walletCheck',ajaxSession,walletCheck)
+router.post('/returnOrder/:id',ajaxSession,returnOrder)
+
+
 
 
 router.post("/addwishlist", ajaxSession,addwishlist);

@@ -49,11 +49,18 @@ const orderSchema =new mongoose.Schema({
             state:{type:Boolean, default:false},
             date:{type:Date},
         },
+        returned:{
+            state:{type:Boolean, default:false},
+            date:{type:Date}
+        },
     },
     coupon:{
         name:{type:String},
         code:{type:String},
         discount:{type:Number}
+    },
+    returnreason:{
+        type:String
     },
     ordered_date: {type:Date, default: Date.now(), index:true},
 

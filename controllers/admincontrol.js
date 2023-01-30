@@ -564,6 +564,36 @@ module.exports = {
             next(error)
         }
     },
+    refundcash:async(req,res,next)=>{
+        try {
+            let order=await orderModel.findOne({_id:req.body.id})
+            const total=Math.round(order.bill_amount-(order.bill_amount*order.coupon.discount)/100)
+            if(req.body.id){
+                orderModel
+                .updateOne(
+                  { _id: req.body.id },
+                  {
+                    $set: {
+                    "payment.payment_status":"refund completed",
+                    }
+                  }
+                ).then((data)=>{
+                    console.log(data+"SUCESSS");
+                 userModel.updateOne({_id:order.userid},{
+                    $inc:{
+                        wallet:total
+                    }
+                 }).then(()=>{
+                    res.json('success')
+                 })
+                })
+              }else{
+                res.json('false')
+              }
+        } catch (error) {
+            next(error)
+        }
+    },
     logout: (req,res,next) => {
       try {
         req.session.adminlogin = false;

@@ -202,10 +202,19 @@
                                     <button type="submit">submit</button>
                                     <% }else if(singleorder.delivery_status.canceled.state==true){ %>
                                         <h5 class="text-danger text-danger">CANCELED</h5>
-                                      
+                                    <% }else if(singleorder.delivery_status.returned.state==true){ %>
+                                        <h5 class="text-warning text-center">ORDER RETURNED</h5>
+                                        <% if(singleorder.payment.payment_status!=="refund completed"){ %>
+                                        <div class="card bg-light mt-2 text-black p-3" id="Refund">
+                                            <h5 class=" text-center mb-3">Refund Cash= <span class="text-danger fw-bold"><%= (Math.round(singleorder.bill_amount-(singleorder.bill_amount*singleorder.coupon.discount)/100)) %></span></h5>
+                                            <button type="button" class="bg-dark text-light" onclick="refundcash('<%= singleorder._id%>')">Refund</button>
+                                        </div>
+                                         <% } %>
                                     <% }else if(singleorder.delivery_status.delivered.state==true){ %>
                                         <h5 class="text-success text-center">ORDER COMPELETED</h5>
+                                        
                                         <% } %>
+                                        
                             </fieldset>
                         </form>
                     </div>
@@ -277,6 +286,26 @@
                             '</div>';
                     }
                     $('#message').html(resHTML)
+                });
+            }
+
+            function refundcash(id){
+                $.ajax({
+                    type: "post",
+                    url: "/refundcash",
+                    data: { id },
+                    dataType: "json",
+                    encode: true,
+                }).done(function (data) {
+                    if (data =='success') {
+                        resHTML = '<div class="alert alert-success alert-dismissible"> ' +
+                            '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>' +
+                            '<strong>Success</strong>Refund Success'
+                            '</div>';
+                            $('#message').html(resHTML)
+                            $('#Refund').remove()
+                    }
+                   
                 });
             }
         </script>

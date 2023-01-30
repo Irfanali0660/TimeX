@@ -13,7 +13,7 @@ const { name } = require("ejs");
 const Razorpay=require('razorpay');
 const crypto=require('crypto');
 const reviewModel = require("../model/reviewModel");
-
+const ITEMS_PAGE=12;
 
 var instance = new Razorpay({
   key_id:process.env.RAZ_KEY_ID,
@@ -102,7 +102,22 @@ module.exports = {
           allcount,
           user: req.session.user
         });
-      } else {
+      }else if (req.query.page) {
+        const page = req.query.page
+        let products = await ProductModel.find().skip((page - 1) * ITEMS_PAGE).limit(ITEMS_PAGE)
+        let count = await ProductModel.find({
+          brand: req.query.cate,
+        }).countDocuments();
+        res.render("user/products", {
+          page: "Shop",
+          products,
+          category,
+          count,
+          allcount,
+          user: req.session.user
+        });
+      }
+       else {
         console.log("ELSE");
         let products = await ProductModel.find().limit(12);
         let count = await ProductModel.find().limit(12).count();
@@ -807,8 +822,7 @@ module.exports = {
             _id: req.params.id,
             userid: res.locals.userdata._id,
             order_status: "pending",
-          });
-          
+          })
           if (order) {
             orderModel
               .updateOne(
@@ -873,7 +887,7 @@ module.exports = {
                         state: req.body.state,
                       },
                       order_status:"completed",
-                      "payment.payment.status":"completed",
+                      "payment.payment_status":"completed",
                       "payment.payment_id": "Wallet_" + req.params.id,
                       "payment.payment_order_id": "Wallet_OID",
                       "payment.payment_method": "Wallet_payment",
@@ -971,7 +985,7 @@ module.exports = {
                 {
                   $set: {
                     order_status:"completed",
-                    "payment.payment.status":"completed",
+                    "payment.payment_status":"completed",
                     "payment.payment_id": response.raz_id,
                     "payment.payment_order_id":response.raz_oid,
                     "payment.payment_method": "Online_payment",
@@ -1096,6 +1110,31 @@ module.exports = {
           res.json(user)
         }
       })
+    } catch (error) {
+      next(error)
+    }
+  },
+  returnOrder:(req,res,next)=>{
+    try {
+      console.log(req.body.reason);
+      console.log(req.params.id);
+      if(req.params.id){
+        orderModel
+        .updateOne(
+          { _id: req.params.id },
+          {
+            $set: {
+              order_status:"returned",
+              "delivery_status.returned.state": true,
+              "delivery_status.returned.date": Date.now()
+            },
+          }
+        ).then(()=>{
+          res.json('Success')
+        })
+      }else{
+        res.json('false')
+      }
     } catch (error) {
       next(error)
     }
