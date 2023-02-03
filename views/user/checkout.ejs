@@ -1,443 +1,463 @@
 <%-include('../user/layout/userhead.ejs') -%>
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
-  <div class="page-holder">
-    <div class="container">
-      <!-- HERO SECTION-->
-      <section class="py-5 bg-light">
-        <div class="container">
-          <div class="row px-4 px-lg-5 py-lg-4 align-items-center">
-            <div class="col-lg-6">
-              <h1 class="h2 text-uppercase mb-0">Checkout</h1>
-            </div>
-            <div class="col-lg-6 text-lg-end">
-              <nav aria-label="breadcrumb">
-                <ol class="breadcrumb justify-content-lg-end mb-0 px-0 bg-light">
-                  <li class="breadcrumb-item"><a class="text-dark" href="/">Home</a></li>
-                  <li class="breadcrumb-item"><a class="text-dark" href="/cart">Cart</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Checkout</li>
-                </ol>
-              </nav>
-            </div>
+<div class="page-holder">
+  <div class="container">
+    <!-- HERO SECTION-->
+    <section class="py-5 bg-light">
+      <div class="container">
+        <div class="row px-4 px-lg-5 py-lg-4 align-items-center">
+          <div class="col-lg-6">
+            <h1 class="h2 text-uppercase mb-0">Checkout</h1>
+          </div>
+          <div class="col-lg-6 text-lg-end">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb justify-content-lg-end mb-0 px-0 bg-light">
+                <li class="breadcrumb-item"><a class="text-dark" href="/">Home</a></li>
+                <li class="breadcrumb-item"><a class="text-dark" href="/cart">Cart</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+              </ol>
+            </nav>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
 
-      <section class="py-4">
-        <!-- BILLING ADDRESS-->
-        <h2 class="h5 text-uppercase mb-4">Billing details</h2>
-        <div class="row">
-          <div class="col-lg-8">
-            <form action="#" onsubmit="placeorder('<%= orderData._id %>');return false" id="form" method="post">
-              <div class="row gy-3">
-                <div class="col-lg-12">
-                  <label class="form-label text-sm text-uppercase" for="firstName">Full name </label>
-                  <input class="form-control form-control-lg" type="text" name="firstName" id="firstName" required>
-                </div>
-                <div class="col-lg-12">
-                  <label class="form-label text-sm text-uppercase" for="address">House </label>
-                  <input class="form-control form-control-lg" type="text" name="House" id="address" required>
-                </div>
-                <div class="col-lg-6">
-                  <label class="form-label text-sm text-uppercase" for="email">Post </label>
-                  <input class="form-control form-control-lg" type="text" name="Post" id="Post" required>
-                </div>
-                <div class="col-lg-6">
-                  <label class="form-label text-sm text-uppercase" for="phone">Pin Number </label>
-                  <input class="form-control form-control-lg" type="tel" name="pin" id="pin" required>
-                </div>
-                <div class="col-lg-6">
-                  <label class="form-label text-sm text-uppercase" for="city">Town/City </label>
-                  <input class="form-control form-control-lg" type="text" name="city" id="city" required>
-                </div>
-                <div class="col-lg-6">
-                  <label class="form-label text-sm text-uppercase" for="state">District</label>
-                  <input class="form-control form-control-lg" type="text" name="district" id="district" required>
-                </div>
-                <div class="col-lg-12">
-                  <label class="form-label text-sm text-uppercase" for="addressalt">State </label>
-                  <input class="form-control form-control-lg" type="text" name="state" id="state" required>
-                </div>
-                <div class="col-lg-6">
-                  <button class="btn btn-link text-dark p-0 shadow-0" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#alternateAddress">
-                    <div class="form-check">
-                      <input class="form-check-input" id="alternateAddressCheckbox" type="checkbox">
-                      <label class="form-check-label" for="alternateAddressCheckbox">Alternate billing address</label>
+    <section class="py-4">
+      <!-- BILLING ADDRESS-->
+      <h2 class="h5 text-uppercase mb-4">Billing details</h2>
+      <div class="row">
+        <div class="col-lg-8">
+          <form action="#" onsubmit="quantitycheck('<%= orderData._id %>');return false" id="form" method="post">
+            <div class="row gy-3">
+              <div class="col-lg-12">
+                <label class="form-label text-sm text-uppercase" for="firstName">Full name </label>
+                <input class="form-control form-control-lg" type="text" name="firstName" id="firstName" required>
+              </div>
+              <div class="col-lg-12">
+                <label class="form-label text-sm text-uppercase" for="address">House </label>
+                <input class="form-control form-control-lg" type="text" name="House" id="address" required>
+              </div>
+              <div class="col-lg-6">
+                <label class="form-label text-sm text-uppercase" for="email">Post </label>
+                <input class="form-control form-control-lg" type="text" name="Post" id="Post" required>
+              </div>
+              <div class="col-lg-6">
+                <label class="form-label text-sm text-uppercase" for="phone">Pin Number </label>
+                <input class="form-control form-control-lg" type="tel" name="pin" id="pin" required>
+              </div>
+              <div class="col-lg-6">
+                <label class="form-label text-sm text-uppercase" for="city">Town/City </label>
+                <input class="form-control form-control-lg" type="text" name="city" id="city" required>
+              </div>
+              <div class="col-lg-6">
+                <label class="form-label text-sm text-uppercase" for="state">District</label>
+                <input class="form-control form-control-lg" type="text" name="district" id="district" required>
+              </div>
+              <div class="col-lg-12">
+                <label class="form-label text-sm text-uppercase" for="addressalt">State </label>
+                <input class="form-control form-control-lg" type="text" name="state" id="state" required>
+              </div>
+              <div class="col-lg-6">
+                <button class="btn btn-link text-dark p-0 shadow-0" type="button" data-bs-toggle="collapse" data-bs-target="#alternateAddress">
+                  <div class="form-check">
+                    <input class="form-check-input" id="alternateAddressCheckbox" type="checkbox">
+                    <label class="form-check-label" for="alternateAddressCheckbox">Alternate billing address</label>
+                  </div>
+                </button>
+              </div>
+              <div class="d-flex justify-content-evenly">
+              </div>
+              <div class="collapse" id="alternateAddress">
+                <div class="row gy-3 border-bottom border-secondary">
+                  <div class="col-12 mt-4">
+                    <h2 class="h4 text-uppercase mb-4">Alternative billing details</h2>
+                  </div>
+
+                  <div id="addressList" class="">
+
+                    <h5 class="text-secondary border-bottom py-2 mb-2">Saved Addresses</h5>
+                    <div class="d-flex justify-content-center">
+                      <button class="btn btn-dark mt-3 mb-3" onclick="addnewaddress()" type="submit">add new
+                        address</button>
                     </div>
-                  </button>
-                </div>
-                <div class="d-flex justify-content-evenly">
-
-                  <!-- <input type="radio" class="btn-check" name="options-outlined" id="danger-outlined" autocomplete="off">
-                  <label class="btn btn-outline-secondary" for="danger-outlined">Online payment</label>
-
-                  <input type="radio" class="btn-check" name="options-outlined" id="success-outlined" autocomplete="off" checked>
-                  <label class="btn btn-outline-secondary" for="success-outlined">Cash on delivary</label> -->
-
-
-                </div>
-                <div class="collapse" id="alternateAddress">
-                  <div class="row gy-3 border-bottom border-secondary">
-                    <div class="col-12 mt-4">
-                      <h2 class="h4 text-uppercase mb-4">Alternative billing details</h2>
-                    </div>
-
-                    <div id="addressList" class="">
-
-                      <h5 class="text-secondary border-bottom py-2 mb-2">Saved Addresses</h5>
-                      <div class="d-flex justify-content-center">
-                        <button class="btn btn-dark mt-3 mb-3" onclick="addnewaddress()" type="submit">add new
-                          address</button>
-                      </div>
-                      <% if(cartbill.address.length==0){%>
-                        <h3 class="text-dark text-center">No Address Avaliable</h3>
-                        <p class="text-muted text-center"> Add new address</p>
-                        <% }else{ %>
-                          <% cartbill.address.forEach((val,i)=>{ %>
-                            <a href="#" class="text-decoration-none text-dark ">
-                              <div class="card p-3 bg-light my-2" id="addrschdd">
-                                <h6>Address <%= i+1 %>
-                                </h6>
-                                <div class="col-md-6">
-                                  <p id="p"><b>
-                                      <%= val.name%>
-                                    </b>,&nbsp;<%= val.house +', '+ val.post +' , ' +val.pin+' ,'+ val.city +','
+                    <% if(cartbill.address.length==0){%>
+                    <h3 class="text-dark text-center">No Address Avaliable</h3>
+                    <p class="text-muted text-center"> Add new address</p>
+                    <% }else{ %>
+                    <% cartbill.address.forEach((val,i)=>{ %>
+                    <a href="#" class="text-decoration-none text-dark ">
+                      <div class="card p-3 bg-light my-2" id="addrschdd">
+                        <h6>Address <%= i+1 %>
+                        </h6>
+                        <div class="col-md-6">
+                          <p id="p"><b>
+                              <%= val.name%>
+                            </b>,&nbsp;<%= val.house +', '+ val.post +' , ' +val.pin+' ,'+ val.city +','
                                       +val.district+', '+val.state   %></p>
-                                          </div>
-                                         <small  onclick="selectaddress('<%=val._id %>')"><span
-                                        class="addchange text-primary text-lg-end"
-                                        id="<%= val._id %>change">select</span></small>
-                                </div>
-                            </a>
-                            <% }) %>
-                              <% } %>
-                    </div>
-
-
+                        </div>
+                        <small onclick="selectaddress('<%=val._id %>')"><span class="addchange text-primary text-lg-end" id="<%= val._id %>change">select</span></small>
+                      </div>
+                    </a>
+                    <% }) %>
+                    <% } %>
                   </div>
-
-                </div>
-                <div id="wallet">
-
-                </div>
-                <div class="d-flex justify-content-evenly border border-secondary py-3">
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="COD" value="COD" required>
-                    <label class="form-check-label" for="flexRadioDefault1">
-                      COD
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="onlinepayment"
-                      value="onlinepayment" required>
-                    <label class="form-check-label" for="flexRadioDefault2">
-                      Onlinepayment
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="onlinepayment"
-                      value="Wallet" required onclick="walletCheck()">
-                    <label class="form-check-label" for="flexRadioDefault2">
-                      Wallet
-                    </label>
-                  </div>
-                </div>
-                <!-- <div id="paypal-button-container"></div> -->
-                <div class="col-lg-11 form-group text-center ">
-                  <button class="btn btn-dark mb-3" type="submit">Place order</button>
                 </div>
               </div>
-
-            </form>
-
-          </div>
-          <!-- ORDER SUMMARY-->
-          <div class="col-lg-4">
-            <div class="card border-0 rounded-0 p-lg-4 bg-light">
-              <div class="card-body">
-                <h5 class="text-uppercase mb-4">Your order</h5>
-                <ul class="list-unstyled mb-0">
-
-                  <% let Total=0; orderData.products.forEach((val)=>{ %>
-
-                    <li class="d-flex align-items-center justify-content-between"><strong class="small fw-normal ">
-                        <%= val.name %>
-                      </strong><span class="text-muted small"><i class="bi bi-currency-rupee"></i>
-                        <%= val.price*val.qnty %>
-                      </span></li>
-                    <li class="border-bottom my-2"></li>
-                    <% Total=Total + (val.price*val.qnty) }) %>
-                      <li class="d-flex align-items-center justify-content-between mt-2 mb-2"><strong
-                          class="small text-muted  fw-bolder ">Subtotal</strong><span
-                          class="text-muted small"><span><i class="bi bi-currency-rupee"></i></span>
-                          <%= Total %>
-                        </span></li>
-                      <li class="d-flex align-items-center justify-content-between mb-3"><strong
-                          class="small text-muted  fw-bold">Discount</strong><span class="text-muted small"><span
-                            id="discount">
-                            <%= orderData.coupon.discount %>
-                          </span>%</span></li>
-                      <li class="d-flex align-items-center justify-content-between mt-3 mb-4"><strong
-                          class="text-uppercase large fw-bold ">Total</strong><span class="text-danger  fw-bold"><i class="bi bi-currency-rupee"></i><span
-                            id="total">
-                            <%= Total %>
-                          </span></span></li>
-                      <li>
-                        <div id="response">
-
-                        </div>
-                        <div class="input-group mb-0">
-                          <input id="value" class="form-control" type="text" name="coupon"
-                            placeholder="Enter your coupon">
-                          <input type="hidden" value="<%= orderData._id %>" id="orderid">
-                          <button class="btn btn-dark btn-sm w-100" onclick="couponcheck()"><i
-                              class="fas fa-gift me-2"></i>Apply coupon</button>
-                        </div>
-                      </li>
-                </ul>
-
+              <div id="wallet">
+              </div>
+              <div class="d-flex justify-content-evenly border border-secondary py-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="COD" value="COD" required>
+                  <label class="form-check-label" for="flexRadioDefault1">
+                    COD
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="onlinepayment" value="onlinepayment" required>
+                  <label class="form-check-label" for="flexRadioDefault2">
+                    Onlinepayment
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="onlinepayment" value="Wallet" required onclick="walletCheck()">
+                  <label class="form-check-label" for="flexRadioDefault2">
+                    Wallet
+                  </label>
+                </div>
+              </div>
+              <!-- <div id="paypal-button-container"></div> -->
+              <div class="col-lg-11 form-group text-center ">
+                <button class="btn btn-dark mb-3" type="submit">Place order</button>
               </div>
             </div>
 
+          </form>
+
+        </div>
+        <!-- ORDER SUMMARY-->
+        <div class="col-lg-4">
+          <div class="card border-0 rounded-0 p-lg-4 bg-light">
+            <div class="card-body">
+              <h5 class="text-uppercase mb-4">Your order</h5>
+              <ul class="list-unstyled mb-0">
+
+                <% let Total=0; orderData.products.forEach((val)=>{ %>
+
+                <li class="d-flex align-items-center justify-content-between"><strong class="small fw-normal ">
+                    <%= val.name %>
+                  </strong><span class="text-muted small"><i class="bi bi-currency-rupee"></i>
+                    <%= val.price*val.qnty %>
+                  </span></li>
+                <li class="border-bottom my-2"></li>
+                <% Total=Total + (val.price*val.qnty) }) %>
+                <li class="d-flex align-items-center justify-content-between mt-2 mb-2"><strong class="small text-muted  fw-bolder ">Subtotal</strong><span class="text-muted small"><span><i class="bi bi-currency-rupee"></i></span>
+                    <%= Total %>
+                  </span></li>
+                <li class="d-flex align-items-center justify-content-between mb-3"><strong class="small text-muted  fw-bold">Discount</strong><span class="text-muted small"><span id="discount">
+                      <%= orderData.coupon.discount %>
+                    </span>%</span></li>
+                <li class="d-flex align-items-center justify-content-between mt-3 mb-4"><strong class="text-uppercase large fw-bold ">Total</strong><span class="text-danger  fw-bold"><i class="bi bi-currency-rupee"></i><span id="total">
+                      <%= Total %>
+                    </span></span></li>
+                <li>
+                  <div id="response">
+
+                  </div>
+                  <div class="input-group mb-0">
+                    <input id="value" class="form-control" type="text" name="coupon" placeholder="Enter your coupon">
+                    <input type="hidden" value="<%= orderData._id %>" id="orderid">
+                    <button class="btn btn-dark btn-sm w-100" onclick="couponcheck()"><i class="fas fa-gift me-2"></i>Apply coupon</button>
+                  </div>
+                </li>
+              </ul>
+
+            </div>
           </div>
 
         </div>
-      </section>
-    </div>
+
+      </div>
+    </section>
+  </div>
 
 
-    <script>
+  <!-- <script>
+    const total = Number($('#total').html())
+    const percentage = Number($('#discount').html())
+    const finalAmount = total - ((total * percentage) / 100)
+    $("#total").html(Math.round(finalAmount))
 
-      const total = Number($('#total').html())
-      const percentage = Number($('#discount').html())
-      console.log(percentage + "PERCENTAGE");
-      const finalAmount = total - ((total * percentage) / 100)
-      $("#total").html(Math.round(finalAmount))
-      function couponcheck() {
-        $.ajax({
-          type: "POST",
-          url: "/couponcheck",
-          data: { key: $('#value').val(), id: $('#orderid').val() },
-          dataType: "json",
-          encode: true,
-        }).done(function (data) {
-          console.log(data.coupon);
-          // console.log(data.order.bill_amount+"AMOUNT");
-
-          if (data == "LOGIN FIRST") {
-            console.log("SWEET");
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Login first!',
-              footer: '<a href="/login">Go to login</a>'
-            })
-          }
-          else if (data.success == true) {
-            resHTML = '<div class="alert alert-success alert-dismissible"> ' +
-              '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>' +
-              '<strong>Success  </strong> ' + data.message +
-              '</div>';
-            $("#response").html(resHTML)
-            const total = Number($('#total').html())
-            const percentage = data.coupon.percentage
-            const finalAmount = total - ((total * percentage) / 100)
-            $("#discount").html(data.coupon.percentage)
-            $("#total").html(Math.round(finalAmount))
-            // billamount(Math.round(finalAmount));
-          }
-          else {
-            resHTML = '<div class="alert alert-danger alert-dismissible"> ' +
-              '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>' +
-              '<strong>Error!</strong>'+ data.message +
-              '</div>';
-            $("#response").html(resHTML)
-          }
-        });
-      }
-    </script>
-
-    <script>
-      function walletCheck(){
-        
-        $.ajax({
-          type: "post",
-          url: "/walletCheck",
-          data: { finalAmount:$('#total').html() },
-          dataType: "json",
-          encode: true,
-        }).done(function (data) {
-          console.log(data);
-          if(data!="success"){
-            console.log("ONE");
-            resHTML = '<div class="alert alert-danger alert-dismissible"> ' +
+    function couponcheck() {
+      $.ajax({
+        type: "POST",
+        url: "/couponcheck",
+        data: {
+          key: $('#value').val(),
+          id: $('#orderid').val()
+        },
+        dataType: "json",
+        encode: true,
+      }).done(function(data) {
+        console.log(data.coupon);
+        if (data == "LOGIN FIRST") {
+          console.log("SWEET");
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Login first!',
+            footer: '<a href="/login">Go to login</a>'
+          })
+        } else if (data.success == true) {
+          resHTML = '<div class="alert alert-success alert-dismissible"> ' +
             '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>' +
-            '<strong>Error!</strong> Not enough cash in your wallet Only '+data.wallet+ 
+            '<strong>Success  </strong> ' + data.message +
+            '</div>';
+          $("#response").html(resHTML)
+          const total = Number($('#total').html())
+          const percentage = data.coupon.percentage
+          const finalAmount = total - ((total * percentage) / 100)
+          $("#discount").html(data.coupon.percentage)
+          $("#total").html(Math.round(finalAmount))
+          // billamount(Math.round(finalAmount));
+        } else {
+          resHTML = '<div class="alert alert-danger alert-dismissible"> ' +
+            '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>' +
+            '<strong>Error!</strong>' + data.message +
+            '</div>';
+          $("#response").html(resHTML)
+        }
+      });
+    }
+  </script>
+
+  <script>
+    function walletCheck() {
+
+      $.ajax({
+        type: "post",
+        url: "/walletCheck",
+        data: {
+          finalAmount: $('#total').html()
+        },
+        dataType: "json",
+        encode: true,
+      }).done(function(data) {
+        console.log(data);
+        if (data != "success") {
+          console.log("ONE");
+          resHTML = '<div class="alert alert-danger alert-dismissible"> ' +
+            '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>' +
+            '<strong>Error!</strong> Not enough cash in your wallet Only ' + data.wallet +
             ' in your Wallet Choose another method</div>';
           $("#wallet").html(resHTML)
-          }
-        })
-    
-      }
-    </script>
+        }
+      })
 
-    <script>
-      function addnewaddress() {
-        document.getElementById("form").reset();
-        // document.getElementById("form").setAttribute('action','/placeorder')
+    }
+  </script>
+
+  <script>
+    function addnewaddress() {
+      document.getElementById("form").reset();
+      // document.getElementById("form").setAttribute('action','/placeorder')
+      document.getElementById("alternateAddress").setAttribute('class', 'collapse')
+      $(".addchange").attr('class', 'addchange text-primary text-lg-end')
+      $(".addchange").html('select');
+    }
+
+    function selectaddress(id) {
+      $(".addchange").attr('class', 'addchange text-primary text-lg-end')
+      $(".addchange").html('select');
+      $.ajax({
+        type: "POST",
+        url: "/selectaddress",
+        data: {
+          id
+        },
+        dataType: "json",
+        encode: true,
+      }).done(function(data) {
+
+        if (data == "LOGIN FIRST") {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Login first!',
+            footer: '<a href="/login">Go to login</a>'
+          })
+        }
+
+        console.log(data);
+
+        $('#firstName').val(data.name)
+        $('#address').val(data.house)
+        $('#Post').val(data.post)
+        $('#city').val(data.city)
+        $('#district').val(data.district)
+        $('#state').val(data.state)
+        $('#pin').val(data.pin)
+      });
+      document.getElementById(id + "change").setAttribute('class', 'addchange text-success text-lg-end')
+      document.getElementById(id + "change").innerHTML = '<i class="bi bi-check2-circle"></i>' + 'selected';
+      setTimeout(() => {
         document.getElementById("alternateAddress").setAttribute('class', 'collapse')
-        $(".addchange").attr('class', 'addchange text-primary text-lg-end')
-        $(".addchange").html('select');
-      }
-      function selectaddress(id) {
-        $(".addchange").attr('class', 'addchange text-primary text-lg-end')
-        $(".addchange").html('select');
-        $.ajax({
-          type: "POST",
-          url: "/selectaddress",
-          data: { id },
-          dataType: "json",
-          encode: true,
-        }).done(function (data) {
+      }, 2000);
+    }
 
-          if (data == "LOGIN FIRST") {
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Login first!',
-              footer: '<a href="/login">Go to login</a>'
-            })
-          }
+    function quantitycheck(id) {
 
-          console.log(data);
+      $.ajax({
+        type: "POST",
+        url: "/checkquantity",
+        data: {
+          id
+        },
+        dataType: "json",
+        encode: true,
+      }).done(function(data) {
 
-          $('#firstName').val(data.name)
-          $('#address').val(data.house)
-          $('#Post').val(data.post)
-          $('#city').val(data.city)
-          $('#district').val(data.district)
-          $('#state').val(data.state)
-          $('#pin').val(data.pin)
-        });
-        document.getElementById(id + "change").setAttribute('class', 'addchange text-success text-lg-end')
-        document.getElementById(id + "change").innerHTML = '<i class="bi bi-check2-circle"></i>' + 'selected';
-        setTimeout(() => {
-          document.getElementById("alternateAddress").setAttribute('class', 'collapse')
-        }, 2000);
-      }
+        if (data.exist) {
+          console.log(data.exist);
+          resHTML = '<div class="alert alert-warning alert-dismissible"> ' +
+            '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>' +
+            '<strong>Sorry Out of Stock!</strong><br>' + data.exist +
+            ' </div>';
+          $("#wallet").html(resHTML)
+        } else {
+          console.log("ELSE");
+          placeorder(id);
+        }
+      })
+    }
 
+    function placeorder(id) {
 
-      function placeorder(id) {
+      $.ajax({
+        type: "POST",
+        url: "/checkoutform/" + id,
+        data: $('#form').serialize(),
+        dataType: "json",
+        encode: true,
+      }).done(function(data) {
+        if (data == 'COD') {
+          Swal.fire(
+            'Good job!',
+            'COD payment success!',
+            'success'
+          )
+          setTimeout(() => {
+            location.href = '/orderSuccess'
+          }, 2000);
 
-        $.ajax({
-          type: "POST",
-          url: "/checkoutform/" + id,
-          data: $('#form').serialize(),
-          dataType: "json",
-          encode: true,
-        }).done(function (data) {
-          if (data == 'COD') {
-            Swal.fire(
-              'Good job!',
-              'COD payment success!',
-              'success'
-            )
-            setTimeout(() => {
-              location.href = '/orderSuccess'
-            }, 2000);
-
-          }else if(data=='Not Enough cash'){
-            resHTML = '<div class="alert alert-danger alert-dismissible"> ' +
+        } else if (data == 'Not Enough cash') {
+          resHTML = '<div class="alert alert-danger alert-dismissible"> ' +
             '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>' +
             '<strong>Error!</strong> Not enough cash in your wallet.Choose another method</div>';
           $("#wallet").html(resHTML)
-          }else if(data=='Wallet'){
-            Swal.fire(
-              'Good job!',
-              'Wallet payment success!',
-              'success'
-            )
-            setTimeout(() => {
-              location.href = '/orderSuccess'
-            }, 2000);
+        } else if (data == 'Wallet') {
+          Swal.fire(
+            'Good job!',
+            'Wallet payment success!',
+            'success'
+          )
+          setTimeout(() => {
+            location.href = '/orderSuccess'
+          }, 2000);
 
-          }
-          else {
+        } else {
 
-            razorpayapyment(data)
+          razorpayapyment(data)
 
-          }
+        }
 
-        })
+      })
 
-      }
+    }
 
 
-      function razorpayapyment(order) {
-        console.log(JSON.stringify(order) + 'ORDER________________');
+    function razorpayapyment(order) {
+      var options = {
+        "key": order.key,
+        "amount": order.field.amount,
+        "currency": "INR",
+        "name": 'TIMEX',
+        "description": "The Transaction is under test mode, enabled by Timex",
+        "image": "/",
+        "order_id": order.field.id,
+        "handler": function(response) {
+          order.payment = {}
+          order.payment.raz_id = response.razorpay_payment_id
+          order.payment.raz_oid = response.razorpay_order_id
+          order.payment.raz_sign = response.razorpay_signature
+          order.payment.id = '<%= orderData._id %>'
 
-        var options = {
-          "key": order.key,
-          "amount": order.field.amount,
-          "currency": "INR",
-          "name": 'TIMEX',
-          "description": "The Transaction is under test mode, enabled by Timex",
-          "image": "/",
-          "order_id": order.field.id,
-          "handler": function (response) {
-            order.payment = {}
-            order.payment.raz_id = response.razorpay_payment_id
-            order.payment.raz_oid = response.razorpay_order_id
-            order.payment.raz_sign = response.razorpay_signature
-            order.payment.id = '<%= orderData._id %>'
-            console.log(order.payment);
+          paymentverification(order.payment)
+        },
+        "prefill": {
+          "name": "name",
+          "email": "name@example.com",
+          "contact": "9999999999"
+        },
+        "notes": {
+          "address": "TimeX Pay"
+        },
+        "theme": {
+          "color": "#000000"
+        },
 
-            paymentverification(order.payment)
-          },
-          "prefill": {
-            "name": "name",
-            "email": "name@example.com",
-            "contact": "9999999999"
-          },
-          "notes": {
-            "address": "AdDev Pay"
-          },
-          "theme": {
-            "color": "#000000"
-          },
+      };
+      var rzp1 = new Razorpay(options);
+      rzp1.open();
+    }
 
-        };
-        var rzp1 = new Razorpay(options);
-        rzp1.open();
-      }
+    function paymentverification(order) {
+      const orders = JSON.stringify(order)
+      $.ajax({
+        type: "POST",
+        url: "/verifypayment",
+        data: {
+          orders
+        },
+        dataType: "json",
+        encode: true,
+      }).done(function(data) {
 
-      function paymentverification(order) {
-        const orders = JSON.stringify(order)
-        $.ajax({
-          type: "POST",
-          url: "/verifypayment",
-          data: { orders },
-          dataType: "json",
-          encode: true,
-        }).done(function (data) {
-
-          if (data == 'ONLINEPAYMENT') {
-            Swal.fire(
-              'Good job!',
-              'payment success!',
-              'success'
-            )
-            setTimeout(() => {
-              location.href = '/orderSuccess'
-            }, 2000);
-
-          } else {
-            alert('failed')
-          }
-        })
-      }
-
-    </script>
-    <%-include('../user/layout/userfooter.ejs') -%>
+        if (data == 'ONLINEPAYMENT') {
+          let timerInterval
+          Swal.fire({
+            title: ' Processing!',
+            html: 'I will close in <b></b> milliseconds.',
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: () => {
+              Swal.showLoading()
+              const b = Swal.getHtmlContainer().querySelector('b')
+              timerInterval = setInterval(() => {
+                b.textContent = Swal.getTimerLeft()
+              }, 100)
+            },
+            willClose: () => {
+              clearInterval(timerInterval)
+            }
+          }).then((result) => {
+            /* Read more about handling dismissals below */
+            if (result.dismiss === Swal.DismissReason.timer) {
+              Swal.fire(
+                'Good job!',
+                'payment success!',
+                'success'
+              )
+              setTimeout(() => {
+                location.href = '/orderSuccess'
+              }, 2000);
+            }
+          })
+        } else {
+          alert('failed')
+        }
+      })
+    }
+  </script> -->
+  <%-include('../user/layout/userfooter.ejs') -%>

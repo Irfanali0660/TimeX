@@ -18,7 +18,6 @@ const {
   ordermanagement,
   orderlist,
   block,unblock,
-  deleteuser,
   deleteproduct,
   addprodcut,
   updateProduct,
@@ -59,7 +58,6 @@ const storage = multer.diskStorage({
     if(isValid){
       uploadError = null
     }
-    console.log("INSIDE MULTER");
     cb(uploadError, './public/productimages')
   },
   filename: function (req, file, cb) {
@@ -78,7 +76,6 @@ const uploadOptions = multer({ storage:storage})
  router.get('/customers',adminSession,customers);
  router.get('/products',adminSession,products);
  router.get('/addproduct',adminSession,addProducts)
-//  router.get('/editproduct',auth.adminSession,controller.editproduct);
  router.get('/deleteimage/:id/:val',adminSession,deleteimage)
  router.get('/editproduct/:id',adminSession,editproducts);
  router.get('/category',adminSession,category)
@@ -101,7 +98,6 @@ const uploadOptions = multer({ storage:storage})
 router.post('/adminlogin',login)
 router.post('/blockUser/:id',adminSession,block);
 router.post('/unblockUser/:id',adminSession,unblock)
-router.post('/deleteuser/:id',adminSession,deleteuser)
 router.post('/deleteproduct/:id',adminSession,deleteproduct)
 router.post('/addproduct',adminSession,uploadOptions.array('product_images',10),addprodcut)
 router.post('/updateproduct/:id',adminSession,uploadOptions.array('product_images',10),updateProduct);

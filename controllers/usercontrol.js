@@ -2,47 +2,47 @@ const userModel = require("../model/userModel");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const categoryModel = require("../model/categoryModel");
-const { products, category } = require("./admincontrol");
+// const { products, category } = require("./admincontrol");
 const ProductModel = require("../model/ProductModel");
 const bannerModel = require("../model/bannerModel");
-const { json, response } = require("express");
+// const { json, response } = require("express");
 const couponModel = require("../model/couponModel");
 const orderModel = require("../model/orderModel");
-const { name } = require("ejs");
+// const { name } = require("ejs");
 
-const Razorpay=require('razorpay');
-const crypto=require('crypto');
+const Razorpay = require("razorpay");
+const crypto = require("crypto");
 const reviewModel = require("../model/reviewModel");
-const ITEMS_PAGE=12;
+const ITEMS_PAGE = 12;
 
-var instance = new Razorpay({
-  key_id:process.env.RAZ_KEY_ID,
-  key_secret:process.env.RAZ_SECRET_KEY
+let instance = new Razorpay({
+  key_id: process.env.RAZ_KEY_ID,
+  key_secret: process.env.RAZ_SECRET_KEY,
 });
+
 let transporter = nodemailer.createTransport({
   host: process.env.host,
   port: 587,
 
   auth: {
     user: process.env.Email,
-    pass: process.env.pass
-  }
+    pass: process.env.pass,
+  },
 });
-var otp = Math.random();
+let otp = Math.random();
 otp = otp * 1000000;
 otp = parseInt(otp);
-console.log(otp);
 
 module.exports = {
+  //================================ User Home ==================================//
+
   home: async (req, res, next) => {
     try {
-      console.log(res.locals.userdata);
       let banner = await bannerModel.findOne({ status: true }).limit(1);
       let category = await categoryModel.find().limit(1);
       let row = await categoryModel.find().skip(1).limit(2);
       let col = await categoryModel.find().skip(3).limit(1);
       let products = await ProductModel.find().limit(8).populate("brand");
-      // req.session.user=user
       res.render("user/userhome", {
         page: "Home",
         category,
@@ -50,21 +50,27 @@ module.exports = {
         col,
         products,
         banner,
-        user: req.session.user
+        user: req.session.user,
       });
     } catch (error) {
       next(error);
     }
   },
-  // login:(req,res)=>{
-  //     res.render('user/login')
-  // },
+
+  //================================ signup ==================================//
+
   signup: (req, res) => {
     res.render("user/signup");
   },
+
+  //================================ OtpPage ==================================//
+
   otpget: (req, res) => {
     res.render("user/Otppage");
   },
+
+  //================================ Shop ==================================//
+
   shop: async (req, res, next) => {
     try {
       let category = await categoryModel.find({ status: "Show" });
@@ -77,19 +83,16 @@ module.exports = {
         let count = await ProductModel.find({
           name: { $regex: req.query.search },
         }).countDocuments();
-        console.log(count);
-        console.log(products);
         res.render("user/products", {
           page: "Shop",
           products,
           category,
           count,
           allcount,
-          user: req.session.user
+          user: req.session.user,
         });
       }
       if (req.query.cate) {
-        console.log(req.query.cate + "CATEGORY");
         let products = await ProductModel.find({ brand: req.query.cate });
         let count = await ProductModel.find({
           brand: req.query.cate,
@@ -100,11 +103,13 @@ module.exports = {
           category,
           count,
           allcount,
-          user: req.session.user
+          user: req.session.user,
         });
-      }else if (req.query.page) {
-        const page = req.query.page
-        let products = await ProductModel.find().skip((page - 1) * ITEMS_PAGE).limit(ITEMS_PAGE)
+      } else if (req.query.page) {
+        const page = req.query.page;
+        let products = await ProductModel.find()
+          .skip((page - 1) * ITEMS_PAGE)
+          .limit(ITEMS_PAGE);
         let count = await ProductModel.find({
           brand: req.query.cate,
         }).countDocuments();
@@ -114,11 +119,9 @@ module.exports = {
           category,
           count,
           allcount,
-          user: req.session.user
+          user: req.session.user,
         });
-      }
-       else {
-        console.log("ELSE");
+      } else {
         let products = await ProductModel.find().limit(12);
         let count = await ProductModel.find().limit(12).count();
         res.render("user/products", {
@@ -127,84 +130,55 @@ module.exports = {
           category,
           count,
           allcount,
-          user: req.session.user
+          user: req.session.user,
         });
       }
     } catch (error) {
       next(error);
     }
   },
+
+  //================================ Single Productpage ==================================//
+
   productdetials: async (req, res, next) => {
     try {
       const id = req.params.id;
       const val = req.params.val;
-      console.log("INSIDE PRODUCT DETILS");
       let prod = await ProductModel.findOne({ _id: id }).populate("brand");
       let products = await ProductModel.find({ brand: val }).limit(4);
-      let review=await reviewModel.find({ product_id:id}).populate('userid')
-      console.log(review);
-      res.render("user/productDetiails", { prod, page: "none", products ,user: req.session.user,review
-    });
+      let review = await reviewModel
+        .find({ product_id: id })
+        .populate("userid");
+      res.render("user/productDetiails", {
+        prod,
+        page: "none",
+        products,
+        user: req.session.user,
+        review,
+      });
     } catch (error) {
       next(error);
     }
   },
+
+  //================================ Product Modal ==================================//
+
   getModal: async (req, res) => {
     const id = req.body.id;
     let prod = await ProductModel.findOne({ _id: id });
     res.json(prod);
   },
-  // otp:async(req,res,next)=>{
-  //     try{
-  //         let userName=req.body.name
-  //         let Email=req.body.email
-  //         let phone=req.body.phonenumber
-  //         let password=req.body.password
-  //         req.session.email=Email
-  //         console.log(req.body);
-  //         // userModel.({email:Email})
 
-  //         password= await bcrypt.hash(password,10)
-  //         console.log(password);
-  //         let newUser= new userModel({userName, email:Email,phone:phone,password:password})
-  //         newUser.save().then((data)=>{
-  //             console.log(data);
-  //             const mailoptions={
-  //                 from:'andruce777@gmail.com',
-  //                 to:req.body.email,
-  //                 subject:"OTP for registration is :",
-  //                 html: "<h3>OTP for account verification is </h3>" + "<h1 style='font-weight:bold;'>" + otp + "</h1>"
-  //             };
-  //             transporter.sendMail(mailoptions,(error,info)=>{
-  //                 if (error) {
-  //                     return console.log(error);
-  //                   }
-  //                   console.log('Message sent: %s', info.messageId);
-  //                   console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-  //                   res.render('user/Otppage')
-  //             });
-  //         }).catch((er)=>{
-  //             console.log(er)
-  //             console.log("ERROR CATCH");
-  //             res.redirect('/signup')
-  //         })
-  //     }
-  //     catch(err){
-  //         next(err)
-  //     }
-  // },
   // ============================OTP============================
+
   otp: async (req, res, next) => {
     try {
       req.session.Name = req.body.name;
       req.session.Email = req.body.email;
       req.session.Phone = req.body.phonenumber;
       req.session.Password = req.body.password;
-
-       Email = req.body.email;
-
+      Email = req.body.email;
       const user = await userModel.findOne({ email: Email });
-
       if (!user) {
         // send mail with defined transport object
         var mailOptions = {
@@ -217,32 +191,26 @@ module.exports = {
             otp +
             "</h1>", // html body
         };
-
         transporter.sendMail(mailOptions, (error, info) => {
           if (error) {
-            return console.log(error);
+            res.render("error/error");
           }
-          console.log("Message sent: %s", info.messageId);
-          console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
           res.render("user/Otppage");
         });
       } else {
         res.redirect("/signup");
       }
     } catch (error) {
-      console.log(error); 
       next(error);
-      
     }
   },
+
+  //================================ Verify Otp ==================================//
+
   verifyotp: async (req, res, next) => {
     try {
-      console.log(otp);
       if (req.body.otp == otp) {
-        console.log("SECOND");
-
         req.session.Password = await bcrypt.hash(req.session.Password, 10);
-        console.log(req.session.Password);
         let newUser = userModel({
           userName: req.session.Name,
           email: req.session.Email,
@@ -251,8 +219,9 @@ module.exports = {
         });
 
         newUser.save().then(() => {
-          req.session.useremail = req.body.email;
+          req.session.useremail = req.session.Email;
           req.session.userlogged = true;
+          req.session.user = newUser;
           res.redirect("/");
         });
       } else {
@@ -262,11 +231,14 @@ module.exports = {
       next(err);
     }
   },
+
+  //================================ Resend Otp ==================================//
+
   resendOTP: (req, res, next) => {
     try {
       const mailoptions = {
         from: process.env.Email,
-        to: Email,  
+        to: Email,
         subject: "OTP for registration is :",
         html:
           "<h3>OTP for account verification is </h3>" +
@@ -276,10 +248,8 @@ module.exports = {
       };
       transporter.sendMail(mailoptions, (error, info) => {
         if (error) {
-          return console.log(error);
+          res.render("error/error");
         }
-        console.log("Message sent: %s", info.messageId);
-        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
         res.render("user/Otppage");
       });
     } catch (err) {
@@ -287,13 +257,14 @@ module.exports = {
     }
   },
 
-  // ++++++++++++++++++++++++++++++SIGNUP USER+++++++++++++++++++++++++++++++++++++++++++
+  //================================ Login Page ==================================//
 
   loginget: (req, res) => {
-    // const user=await userModel.find()
-    // res.send("HELLO")
     res.render("user/login", { userSts: "unbanned", userName: "correct" });
   },
+
+  //================================ Login Post ==================================//
+
   login: async (req, res, next) => {
     try {
       const { email, password } = req.body;
@@ -319,32 +290,34 @@ module.exports = {
       }
       req.session.useremail = req.body.email;
       req.session.userlogged = true;
-      req.session.user=user;
-      console.log("INSIDE LOGIN");
+      req.session.user = user;
       res.redirect("/");
     } catch (error) {
       next(error);
     }
   },
+
+  //================================ Cart ==================================//
+
   cart: async (req, res, next) => {
     try {
-      console.log("HELLO CART");
       const id = res.locals.userdata;
       let cart = await userModel
         .findOne({ _id: id })
         .populate("cart.product_id");
-      res.render("user/cart", { page: "cart", cart ,user: req.session.user});
+      res.render("user/cart", { page: "cart", cart, user: req.session.user });
     } catch (error) {
       next(error);
     }
   },
+
+  //================================ Cart ==================================//
+
   addtocart: async (req, res, next) => {
     try {
       const id = res.locals.userdata;
       const pdid = req.body.id;
-      // const price=req.body.price;
       let productprice = await ProductModel.findOne({ _id: pdid });
-      console.log(productprice);
       let isExist = await userModel.findOne({ _id: id });
       let cart = isExist.cart.findIndex(
         (pdid) => pdid.product_id == req.body.id
@@ -370,19 +343,18 @@ module.exports = {
       next(error);
     }
   },
+
+  //================================ Cart Quantity Increase ==================================//
+
   quantity: async (req, res, next) => {
     try {
       const id = res.locals.userdata;
       const cdid = req.body.id;
-      console.log("REACHED");
       let productcheck = await userModel.findOne({ _id: id, "cart._id": cdid });
       productcheck.cart.forEach(async (val, i) => {
         if (val._id.toString() == cdid.toString()) {
-          console.log(val.quantity + "successs");
           productquantity = await ProductModel.findOne({ _id: val.product_id });
-          console.log(productquantity.stock + "TEST CHECK");
           if (productquantity.stock <= val.quantity) {
-            console.log("INSIDE IF");
             res.json({ key: "over", price: productquantity.stock });
           } else {
             await userModel.updateOne(
@@ -397,15 +369,13 @@ module.exports = {
       next(error);
     }
   },
+
+  //================================ Cart Ouantity decrease ==================================//
+
   quantitydec: async (req, res, next) => {
     try {
       const id = res.locals.userdata;
       const cdid = req.body.id;
-      // console.log(quantitycheck);
-      //  let isExist= await userModel.aggregate([{$match:[{_id:id,cart:cdid}]},{$group:{cart}}]);
-      // console.log(isExist+"CHECK IS EXIST");
-      // let quantitycheck=isExist.cart.quantity
-      // console.log(quantitycheck+"OVER CHEC");
       let quantitycheck = await userModel.findOne({
         _id: id,
         "cart._id": cdid,
@@ -419,7 +389,7 @@ module.exports = {
             );
             res.json("deleted");
           } else {
-            let userCart = await userModel.updateOne(
+            await userModel.updateOne(
               { _id: id, "cart._id": cdid },
               { $inc: { "cart.$.quantity": -1 } }
             );
@@ -427,19 +397,17 @@ module.exports = {
           }
         }
       });
-      // let userCart = await userModel.updateOne({_id:id,'cart._id':cdid},{$inc:{'cart.$.quantity':-1}})
-      // res.json("added")
     } catch (error) {
-      // console.log(error);
       next(error);
     }
   },
+
+  //================================ Delete Cart ==================================//
+
   deletecart: async (req, res, next) => {
     try {
       const id = res.locals.userdata;
       const cdid = req.body.id;
-      console.log(cdid);
-      console.log(id);
       await userModel.updateOne(
         { _id: id._id },
         { $pull: { cart: { _id: cdid } } }
@@ -449,9 +417,11 @@ module.exports = {
       next(error);
     }
   },
+
+  //================================ wishlist ==================================//
+
   wishlist: async (req, res, next) => {
     try {
-      //    let wishlist= await userModel.findOne({_id:res.locals.userdata._id}).populate('wishlist._id')
       let wishlist = await userModel.aggregate([
         { $match: { _id: res.locals.userdata._id } },
         {
@@ -463,29 +433,25 @@ module.exports = {
           },
         },
       ]);
-      console.log(wishlist);
       wishlist = wishlist[0];
-      res.render("user/wishlist", { page: "wishlist", wishlist,user: req.session.user });
+      res.render("user/wishlist", {
+        page: "wishlist",
+        wishlist,
+        user: req.session.user,
+      });
     } catch (error) {
-      console.log(error);
       next(error);
     }
   },
 
+  //================================ Add Wishlist ==================================//
+
   addwishlist: async (req, res, next) => {
     try {
       const id = res.locals.userdata;
-      // const pdid=req.body.id;
-      console.log("WISHLIST");
-      // const price=req.body.price;
-      // let productprice=await ProductModel.findOne({_id:pdid})
-      // console.log(productprice);
       let isExist = await userModel.findOne({ _id: id });
-      console.log(req.body.id);
       let wishlist = isExist.wishlist.findIndex((pdid) => pdid == req.body.id);
-      console.log(wishlist);
       if (wishlist == -1) {
-        console.log("Inside");
         await userModel.updateOne(
           { _id: id },
           { $push: { wishlist: req.body.id } }
@@ -498,37 +464,44 @@ module.exports = {
       next(error);
     }
   },
+
+  //================================ Delete Item ==================================//
+
   deleteitem: async (req, res, next) => {
     try {
-      console.log("WISHLIST remove");
       await userModel.updateOne(
         { _id: res.locals.userdata.id },
         { $pull: { wishlist: req.body.id } }
       );
       res.json("added");
     } catch (error) {
-      console.log(error);
       next(error);
     }
   },
+
+  //================================ User Account ==================================//
+
   account: async (req, res, next) => {
     try {
-      console.log("HELLO");
       const id = res.locals.userdata;
       let userdetials = await userModel.findOne({ _id: id });
 
-      res.render("user/account", { page: "Account", userdetials ,user: req.session.user});
+      res.render("user/account", {
+        page: "Account",
+        userdetials,
+        user: req.session.user,
+      });
     } catch (error) {
       next(error);
     }
   },
+
+  //================================ Add Address ==================================//
+
   addaddress: async (req, res, next) => {
     try {
       const id = res.locals.userdata._id;
-      console.log(id);
       let isExist = await userModel.findOne({ _id: id });
-      console.log(isExist + "INSIDE");
-
       let newaddresss = {
         name: req.body.Name,
         house: req.body.House,
@@ -538,8 +511,6 @@ module.exports = {
         state: req.body.state,
         pin: req.body.pin,
       };
-
-      // console.log(newaddresss+"CHECK");
       await userModel.updateOne(
         { _id: id },
         { $push: { address: newaddresss } }
@@ -549,32 +520,28 @@ module.exports = {
       next(error);
     }
   },
+
+  //================================ Edit Address ==================================//
+
   editaddress: async (req, res, next) => {
     try {
-      console.log("REACHED");
       const id = res.locals.userdata._id;
       const addid = req.body.id;
-      console.log(addid);
       let useraddress = await userModel.findOne({ _id: id });
-      // console.log(useraddress +"LOG");
       useraddress.address.forEach((val) => {
         if (val.id.toString() == addid.toString()) {
           res.json(val);
         }
       });
     } catch (error) {
-      console.log(error);
       next(error);
     }
   },
+
+  //================================ Update Address ==================================//
+
   updateaddress: async (req, res, next) => {
     try {
-      // console.log(id);
-      // let isExist=await userModel.findOne({_id:id})
-      // console.log(isExist+"INSIDE");
-      // console.log(req.body);
-      console.log(req.params.id + "ADDRESS ID");
-      console.log(req.body);
       let newaddressupdate = {
         "address.$.name": req.body.Name,
         "address.$.house": req.body.House,
@@ -584,7 +551,6 @@ module.exports = {
         "address.$.state": req.body.state,
         "address.$.pin": req.body.pin,
       };
-      console.log(newaddressupdate);
       await userModel
         .updateOne(
           { _id: res.locals.userdata._id, "address._id": req.params.id },
@@ -594,10 +560,12 @@ module.exports = {
           res.redirect("/account");
         });
     } catch (error) {
-      console.log(error);
       next(error);
     }
   },
+
+  //================================ Delete Address ==================================//
+
   deleteaddress: async (req, res, next) => {
     try {
       await userModel.updateOne(
@@ -609,17 +577,19 @@ module.exports = {
       next(error);
     }
   },
+
+  //================================ Order Id creation ==================================//
+
   orderid: async (req, res, next) => {
     try {
       const id = res.locals.userdata._id;
-      console.log(id);
       let total = 0;
       let cartproducts = [];
 
       let cartbill = await userModel
         .findOne({ _id: id })
         .populate("cart.product_id");
-      if (cartbill) {
+      if (cartbill.cart.length > 0) {
         cartbill.cart.forEach((_id) => {
           total = total + _id.quantity * _id.product_id.price;
           let product = {
@@ -638,31 +608,38 @@ module.exports = {
         };
         let neworder = new orderModel(product);
         neworder.save().then((data) => {
-          console.log(data._id + "ID");
           res.json(data);
         });
+      } else {
+        res.json("empty");
       }
     } catch (error) {
       next(error);
     }
   },
 
+  //================================ Checkout Page ==================================//
+
   checkout: async (req, res, next) => {
     try {
-      console.log(req.params.id);
       let orderData = await orderModel.findOne({ _id: req.params.id });
       let cartbill = await userModel.findOne({ _id: res.locals.userdata._id });
-
-      res.render("user/checkout", { page: "none", cartbill, orderData ,user: req.session.user});
+      res.render("user/checkout", {
+        page: "none",
+        cartbill,
+        orderData,
+        user: req.session.user,
+      });
     } catch (error) {
       next(error);
     }
   },
+
+  //================================ Apply Coupon ==================================//
+
   couponcheck: (req, res, next) => {
     try {
       let apiRes = {};
-      console.log(req.body.key);
-      console.log(req.body.id);
       if (req.body.key) {
         couponModel
           .findOne({
@@ -672,7 +649,6 @@ module.exports = {
           .then((data) => {
             if (data) {
               if (data.expiryDate >= new Date()) {
-                console.log("INSIDE");
                 orderModel
                   .findOne({
                     _id: req.body.id,
@@ -680,52 +656,46 @@ module.exports = {
                     order_status: "pending",
                   })
                   .then((orderdetials) => {
-                    if (orderdetials.bill_amount > data.minimumAmount) {
-                      orderModel
-                        .updateOne(
-                          {
-                            _id: req.body.id,
-                            userid: res.locals.userdata._id,
-                            order_status: "pending",
-                          },
-                          {
-                            $set: {
-                              coupon: {
-                                name: data.couponName,
-                                code: data.couponCode,
-                                discount: data.percentage,
-                              },
-                            },
-                          }
-                        )
-                        .then(async () => {
-                          await couponModel.updateOne(
-                            { _id: data._id },
+                    if (orderdetials.coupon.name) {
+                      apiRes.message = "This Coupon appiled your order";
+                      res.json(apiRes);
+                    } else {
+                      if (orderdetials.bill_amount > data.minimumAmount) {
+                        orderModel
+                          .updateOne(
                             {
-                              $addToSet: {
-                                couponUser: res.locals.userdata._id,
+                              _id: req.body.id,
+                              userid: res.locals.userdata._id,
+                              order_status: "pending",
+                            },
+                            {
+                              $set: {
+                                coupon: {
+                                  name: data.couponName,
+                                  code: data.couponCode,
+                                  discount: data.percentage,
+                                },
                               },
                             }
-                          );
-                          console.log(data + "ORDER DETAILS");
-                          apiRes.coupon = data;
-                          apiRes.message = "Applied coupon";
-                          apiRes.success = true;
-                          res.json(apiRes);
-                        });
-                    } else {
-                      apiRes.message =
-                        "This coupon in not used for this bill amount";
-                      res.json(apiRes);
+                          )
+                          .then(async () => {
+                            apiRes.coupon = data;
+                            apiRes.message = "Applied coupon";
+                            apiRes.success = true;
+                            res.json(apiRes);
+                          });
+                      } else {
+                        apiRes.message =
+                          "This coupon in not used for this bill amount";
+                        res.json(apiRes);
+                      }
                     }
                   });
               } else {
-                console.log("coupon expired");
                 apiRes.message = "coupon expired";
                 res.json(apiRes);
               }
             } else {
-              console.log("Invalid coupon ");
               apiRes.message = "Invalid coupon || This coupon already used";
               res.json(apiRes);
             }
@@ -735,24 +705,14 @@ module.exports = {
         res.json(apiRes);
       }
     } catch (error) {
-      console.log(error);
       next(error);
     }
   },
-  // editbill:(req,res,next)=>{
-  //      try {
-  //       if(req.body.bill){
-  //          orderModel.updateOne({_id:req.body.id},{$set:{bill_amount:req.body.bill}}).then(()=>{
-  //              res.json()
-  //          })
-  //       }
-  //      }catch (error) {
-  //       next(next)
-  //      }
-  // },
+
+  //================================ Select Address ==================================//
+
   selectaddress: async (req, res, next) => {
     try {
-      console.log("REACHED");
       const id = res.locals.userdata._id;
       const addid = req.body.id;
       let useraddress = await userModel.findOne({ _id: id });
@@ -765,9 +725,11 @@ module.exports = {
       next(error);
     }
   },
+
+  //================================ Search Fun ==================================//
+
   searchFun: async (req, res, next) => {
     try {
-      console.log("success searchfun");
       let apiRes = {};
       const searResult = [];
       if (req.body.value) {
@@ -802,27 +764,68 @@ module.exports = {
           });
         });
 
-        console.log(searResult);
         apiRes.search = searResult;
         res.json(apiRes);
       } else {
         res.json("noresult");
       }
     } catch (error) {
-      console.log(error);
       next(error);
     }
   },
+
+  //================================ Check quantity ==================================//
+
+  checkquantity: async (req, res, next) => {
+    try {
+      let check = false;
+      let prods = [];
+      const orderData = await orderModel
+        .findOne({
+          _id: req.body.id,
+          userid: res.locals.userdata._id,
+          order_status: "pending",
+        })
+        .populate("products.product_id");
+      for (let i = 0; i < orderData.products.length; i++) {
+        if (
+          orderData.products[i].qnty > orderData.products[i].product_id.stock
+        ) {
+          check = true;
+          prods.push(orderData.products[i].product_id.name);
+        }
+      }
+      if (check == true) {
+        res.json({ exist: prods });
+      } else {
+        res.json("Unique");
+      }
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  //============== Check Out form (COD,ONLINE PAYMENT,WALLET) ==============//
+
   checkoutform: async (req, res, next) => {
     try {
       if (req.body.flexRadioDefault == "COD") {
         if (req.params.id) {
-          console.log(req.params.id);
           const order = await orderModel.findOne({
             _id: req.params.id,
             userid: res.locals.userdata._id,
             order_status: "pending",
-          })
+          });
+          if (order.coupon.name) {
+            await couponModel.updateOne(
+              { couponName: order.coupon.name },
+              {
+                $addToSet: {
+                  couponUser: res.locals.userdata._id,
+                },
+              }
+            );
+          }
           if (order) {
             orderModel
               .updateOne(
@@ -838,7 +841,7 @@ module.exports = {
                       district: req.body.district,
                       state: req.body.state,
                     },
-                    order_status:"completed",
+                    order_status: "completed",
                     "payment.payment_id": "COD_" + req.params.id,
                     "payment.payment_order_id": "COD_noOID",
                     "payment.payment_method": "cash_on_delivery",
@@ -852,25 +855,29 @@ module.exports = {
                   { _id: res.locals.userdata._id },
                   { $set: { cart: [] } }
                 );
-               
-                res.json('COD')
+
+                res.json("COD");
               })
               .catch((err) => {
                 next(err);
               });
           }
         }
-      }else if(req.body.flexRadioDefault == "Wallet"){
+      } else if (req.body.flexRadioDefault == "Wallet") {
         if (req.params.id) {
-          console.log(req.params.id);
           const order = await orderModel.findOne({
             _id: req.params.id,
             userid: res.locals.userdata._id,
             order_status: "pending",
           });
-          const user = await userModel.findOne({_id:res.locals.userdata._id})
-          const total=Math.round(order.bill_amount-(order.bill_amount*order.coupon.discount)/100)
-          if(user.wallet>total){
+          const user = await userModel.findOne({
+            _id: res.locals.userdata._id,
+          });
+          const total = Math.round(
+            order.bill_amount -
+              (order.bill_amount * order.coupon.discount) / 100
+          );
+          if (user.wallet > total) {
             if (order) {
               orderModel
                 .updateOne(
@@ -886,8 +893,8 @@ module.exports = {
                         district: req.body.district,
                         state: req.body.state,
                       },
-                      order_status:"completed",
-                      "payment.payment_status":"completed",
+                      order_status: "completed",
+                      "payment.payment_status": "completed",
                       "payment.payment_id": "Wallet_" + req.params.id,
                       "payment.payment_order_id": "Wallet_OID",
                       "payment.payment_method": "Wallet_payment",
@@ -899,30 +906,28 @@ module.exports = {
                 .then(async () => {
                   await userModel.updateOne(
                     { _id: res.locals.userdata._id },
-                    {$inc:{wallet: - total}},
+                    { $inc: { wallet: -total } },
                     { $set: { cart: [] } }
                   );
-                 
-                  res.json('Wallet')
+
+                  res.json("Wallet");
                 })
                 .catch((err) => {
                   next(err);
                 });
             }
-          }else{
-            res.json('Not Enough cash')
+          } else {
+            res.json("Not Enough cash");
           }
         }
       } else {
-        console.log("hello");
         if (req.params.id) {
-          console.log(req.params.id);
           const order = await orderModel.findOne({
             _id: req.params.id,
             userid: res.locals.userdata._id,
             order_status: "pending",
           });
-          
+
           if (order) {
             orderModel
               .updateOne(
@@ -946,17 +951,16 @@ module.exports = {
                   { _id: res.locals.userdata._id },
                   { $set: { cart: [] } }
                 );
-                console.log("INSDE THEN");
-                let total=order.bill_amount*100;
-                instance.orders.create({
-                  amount:total,
-                  currency: "INR",
-                  receipt: ''+order._id,
-                }).then((order)=>{
-                 
-                  res.json({field:order,key:process.env.RAZ_KEY_ID})
-                })
-                
+                let total = order.bill_amount * 100;
+                instance.orders
+                  .create({
+                    amount: total,
+                    currency: "INR",
+                    receipt: "" + order._id,
+                  })
+                  .then((order) => {
+                    res.json({ field: order, key: process.env.RAZ_KEY_ID });
+                  });
               })
               .catch((err) => {
                 next(err);
@@ -968,178 +972,273 @@ module.exports = {
       next(error);
     }
   },
-  verifypayment:(req,res,next)=>{
+
+  //================================ VerifyPayment ==================================//
+
+  verifypayment: (req, res, next) => {
     try {
-      console.log("INSIDE VERIFY PAYMENT");
-      const response=JSON.parse(req.body.orders)
-      
-      let hamc=crypto.createHmac('sha256',process.env.RAZ_SECRET_KEY )
-      hamc.update(response.raz_oid+'|'+response.raz_id)
-      hamc=hamc.digest('hex')
-      console.log("SUCCC");
-      if(hamc==response.raz_sign){
-        console.log("INSIDE HAMC");
+      const response = JSON.parse(req.body.orders);
+      let hamc = crypto.createHmac("sha256", process.env.RAZ_SECRET_KEY);
+      hamc.update(response.raz_oid + "|" + response.raz_id);
+      hamc = hamc.digest("hex");
+      if (hamc == response.raz_sign) {
         orderModel
-              .updateOne(
-                { _id: response.id },
-                {
-                  $set: {
-                    order_status:"completed",
-                    "payment.payment_status":"completed",
-                    "payment.payment_id": response.raz_id,
-                    "payment.payment_order_id":response.raz_oid,
-                    "payment.payment_method": "Online_payment",
-                    "delivery_status.ordered.state": true,
-                    "delivery_status.ordered.date": Date.now(),
-                  },
-                }
-              ).then(()=>{
-                res.json('ONLINEPAYMENT')
-              })
-      }else{
-        res.json('failed')
+          .updateOne(
+            { _id: response.id },
+            {
+              $set: {
+                order_status: "completed",
+                "payment.payment_status": "completed",
+                "payment.payment_id": response.raz_id,
+                "payment.payment_order_id": response.raz_oid,
+                "payment.payment_method": "Online_payment",
+                "delivery_status.ordered.state": true,
+                "delivery_status.ordered.date": Date.now(),
+              },
+            }
+          )
+          .then(() => {
+            res.json("ONLINEPAYMENT");
+          });
+      } else {
+        res.json("failed");
       }
-      
-      
     } catch (error) {
-      next(error)
+      next(error);
     }
   },
-  orderSuccess:(req,res,next)=>{
+
+  //================================ order success page ==================================//
+
+  orderSuccess: (req, res, next) => {
     try {
-       res.render('user/orderSuccess',{page: "none",user: req.session.user})
+      res.render("user/orderSuccess", { page: "none", user: req.session.user });
     } catch (error) {
-      next(error)
+      next(error);
     }
   },
-  orderDetails:(req,res,next)=>{
+
+  //================================ order Details ==================================//
+
+  orderDetails: (req, res, next) => {
     try {
-      orderModel.find({userid:res.locals.userdata._id,order_status:{$ne:'pending'}}).sort({ordered_date:-1}).then((orderDetails)=>{
-      res.render('user/orderDetails',{page: "Account",orderDetails,user: req.session.user})
-      })
+      orderModel
+        .find({
+          userid: res.locals.userdata._id,
+          order_status: { $ne: "pending" },
+        })
+        .sort({ ordered_date: -1 })
+        .then((orderDetails) => {
+          res.render("user/orderDetails", {
+            page: "Account",
+            orderDetails,
+            user: req.session.user,
+          });
+        });
     } catch (error) {
-      next(error)
+      next(error);
     }
   },
-  viewOrder:(req,res,next)=>{
+
+  //================================ View Order ==================================//
+
+  viewOrder: (req, res, next) => {
     try {
-      orderModel.findOne({_id:req.params.id,userid:res.locals.userdata._id}).populate('products.product_id').then((orderDetails)=>{
-        res.render('user/ViewOrder',{ page: "Account",orderDetails,user: req.session.user})
-      })
+      orderModel
+        .findOne({ _id: req.params.id, userid: res.locals.userdata._id })
+        .populate("products.product_id")
+        .then((orderDetails) => {
+          res.render("user/ViewOrder", {
+            page: "Account",
+            orderDetails,
+            user: req.session.user,
+          });
+        });
     } catch (error) {
-      next(error)
+      next(error);
     }
   },
-  userdetails:(req,res,next)=>{
+
+  //================================ User details edit==================================//
+
+  userdetails: (req, res, next) => {
     try {
-      let dataUpdate={}
-      let apiRes = {}
-      console.log(req.body.num+"NUMBer");
-     
-      switch (JSON.parse(req.body.num)){
+      let dataUpdate = {};
+      let apiRes = {};
+      switch (JSON.parse(req.body.num)) {
         case 1:
-          console.log(req.body.key+"NAME");
-           dataUpdate={
-            userName:req.body.key
-          }
-          apiRes.success=true
-          apiRes.message = "UserName updated"
+          dataUpdate = {
+            userName: req.body.key,
+          };
+          apiRes.success = true;
+          apiRes.message = "UserName updated";
           break;
         case 2:
-           dataUpdate={
-            email:req.body.key
-          }
+          dataUpdate = {
+            email: req.body.key,
+          };
           req.session.useremail = req.body.key;
-          apiRes.success=true
-          apiRes.message = "Email updated"
+          apiRes.success = true;
+          apiRes.message = "Email updated";
           break;
         case 3:
-          if(req.body.key.length==10){
-            dataUpdate={
-              phone:req.body.key
-            }
-            apiRes.success=true
-            apiRes.message = "Phonenumber updated"
-          }else{
-            apiRes.message = "Please enter valied phonenumber"
+          if (req.body.key.length == 10) {
+            dataUpdate = {
+              phone: req.body.key,
+            };
+            apiRes.success = true;
+            apiRes.message = "Phonenumber updated";
+          } else {
+            apiRes.message = "Please enter valied phonenumber";
           }
           break;
         default:
-          apiRes.message = "Network Error"
+          apiRes.message = "Network Error";
       }
-      userModel.updateOne({_id:res.locals.userdata._id},{$set:dataUpdate}).then(()=>{
-        res.json(apiRes)
-      })
+      userModel
+        .updateOne({ _id: res.locals.userdata._id }, { $set: dataUpdate })
+        .then(() => {
+          res.json(apiRes);
+        });
     } catch (error) {
-      next(error)
+      next(error);
     }
   },
-  cancelOrder:(req,res,next)=>{
-      try {
-        console.log();
-        orderModel.updateOne({_id:req.body.id},{$set:{order_status:"canceled",'delivery_status.canceled.state':true,'delivery_status.canceled.date':Date.now()}}).then(()=>{
-          res.json('Ordercanceled')
-        })
-    } catch (error) {
-      next(error)
-    }
-  },
-  ProductReview:(req,res,next)=>{
-   try {
-    let review=reviewModel({
-      product_id:req.params.id,
-      userid:res.locals.userdata._id,
-      title:req.body.title,
-      review:req.body.review,
-      rating:req.body.star
-    })
-    review.save().then(()=>{
-   res.redirect('/viewOrder/'+req.body.orderId)
-    })
-   } catch (error) {
-    next(error)
-   }
-  },
-  walletCheck:(req,res,next)=>{
+
+  //================================ Cancel Orders ==================================//
+
+  cancelOrder: (req, res, next) => {
     try {
-      userModel.findOne({_id:res.locals.userdata._id}).then((user)=>{
-        console.log(req.body.finalAmount+"___________)_))))))))))))");
-        if(user.wallet>req.body.finalAmount){
-          res.json("success")
-        }else{
-          res.json(user)
-        }
-      })
-    } catch (error) {
-      next(error)
-    }
-  },
-  returnOrder:(req,res,next)=>{
-    try {
-      console.log(req.body.reason);
-      console.log(req.params.id);
-      if(req.params.id){
-        orderModel
+      orderModel
         .updateOne(
-          { _id: req.params.id },
+          { _id: req.body.id },
           {
             $set: {
-              order_status:"returned",
-              "delivery_status.returned.state": true,
-              "delivery_status.returned.date": Date.now()
+              order_status: "canceled",
+              "delivery_status.canceled.state": true,
+              "delivery_status.canceled.date": Date.now(),
             },
           }
-        ).then(()=>{
-          res.json('Success')
-        })
-      }else{
-        res.json('false')
-      }
+        )
+        .then(() => {
+          res.json("Ordercanceled");
+        });
     } catch (error) {
-      next(error)
+      next(error);
     }
   },
-  logout:(req, res, next) => {
+
+  //================================ Product Reviews ==================================//
+
+  ProductReview: (req, res, next) => {
+    try {
+      let review = reviewModel({
+        product_id: req.params.id,
+        userid: res.locals.userdata._id,
+        title: req.body.title,
+        review: req.body.review,
+        rating: req.body.star,
+      });
+      review.save().then(() => {
+        res.redirect("/viewOrder/" + req.body.orderId);
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  //================================ Wallet Balance Check ==================================//
+
+  walletCheck: (req, res, next) => {
+    try {
+      userModel.findOne({ _id: res.locals.userdata._id }).then((user) => {
+        if (user.wallet > req.body.finalAmount) {
+          res.json("success");
+        } else {
+          res.json(user);
+        }
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  //================================ Return Orderes ==================================//
+
+  returnOrder: (req, res, next) => {
+    try {
+      if (req.params.id) {
+        orderModel
+          .updateOne(
+            { _id: req.params.id },
+            {
+              $set: {
+                order_status: "returned",
+                "delivery_status.returned.state": true,
+                "delivery_status.returned.date": Date.now(),
+              },
+            }
+          )
+          .then(() => {
+            res.json("Success");
+          });
+      } else {
+        res.json("false");
+      }
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  //================================ Count Cart and wallet in buttons ==================================//
+
+  count: (req, res, next) => {
+    try {
+      userModel.findOne({ _id: res.locals.userdata._id }).then((user) => {
+        res.json(user);
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+  about: (req, res, next) => {
+    try {
+      res.render("user/about", { page: "about", user: req.session.user });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  //================================ Wallet History ==================================//
+
+  walletHistory: (req, res, next) => {
+    try {
+      orderModel
+        .aggregate([
+          {
+            $match: {
+              $and: [
+                { userid: res.locals.userdata._id },
+                { "payment.payment_method": "Wallet_payment" },
+              ],
+            },
+          },
+        ])
+        .then((data) => {
+          res.render("user/walletHistory", {
+            page: "Nill",
+            user: req.session.user,
+            data,
+          });
+        });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  //================================ User Loginout ==================================//
+
+  logout: (req, res, next) => {
     try {
       req.session.destroy();
       res.redirect("/");

@@ -1,7 +1,4 @@
-
-
   <%-include('../admin/layout/adminhead.ejs') -%>
-
   <div class="page-content">
     <div class="bg-dash-dark-2 py-3">
         <div class="container-fluid">
@@ -33,7 +30,6 @@
                     Images
                   </div>
                   <div class="card-body">
-                    <!-- < % forEach(()=>{ % > -->
                     <div class="border mb-1" style="height: 230px;">
                       <label for="product_images" class="d-block">
                         <div id="image_drop_area"
@@ -44,7 +40,6 @@
                         </div>
                       </label>
                     </div>
-                    <!-- < % }) % > -->
                     <div id="dragged_images">
                     </div>
                   </div>
@@ -52,9 +47,7 @@
               </div>
             </div>
             <div class="col-xl-7 col-md-12 ">
-    
               <div class="admincard card card-default" style="border-color: white !important;">
-    
                 <div class="card-body">
                   <div class="card-body">
                     <form class="form-horizontal" action="/addcategorydetials" method="post" enctype="multipart/form-data">
@@ -91,8 +84,6 @@
                             </div>
                         </div>
                     </div>
-    
-    
                       <div class="d-flex justify-content-center  mt-4 mb-lg-4">
                         <button type="submit" class="btn btn-success px-5 p-2">Submit</button>
                       </div>

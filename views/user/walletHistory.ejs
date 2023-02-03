@@ -7,13 +7,13 @@
       <div class="container">
         <div class="row px-4 px-lg-5 py-lg-4 align-items-center">
           <div class="col-lg-6">
-            <h1 class="h2 text-uppercase mb-0">Order history</h1>
+            <h1 class="h2 text-uppercase mb-0">Wallet history</h1>
           </div>
           <div class="col-lg-6 text-lg-end">
             <nav aria-label="breadcrumb">
               <ol class="breadcrumb justify-content-lg-end mb-0 px-0 bg-light">
                 <li class="breadcrumb-item"><a class="text-dark" href="/">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Order history</li>
+                <li class="breadcrumb-item active" aria-current="page">Wallet history</li>
               </ol>
             </nav>
           </div>
@@ -45,46 +45,39 @@
             <div class="admincard card card-default" style="border-color: white !important;">
               <div class="card-body ">
                 <div class="card-body ">
-                  <% if(orderDetails.length==0){ %>
-                  <h3 class="text-dark text-center">No Orders</h3>
-                  <div class="d-flex justify-content-center flex-coloumn">
-                    <a href="/shop" class="btn btn-success">Go to Shop</a>
-                  </div>
-                  <% }else{ %>
+                    <% if(data.length==0){ %> 
+                        <h3 class="text-center">No WalletHistory</h3>
+                        <% }else{ %> 
                   <div class="table-responsive mb-4 border border-2 border-black">
                     <table class="table text-nowrap">
                       <thead class="bg-light">
+                      
                         <tr>
                           <th class="border-0 p-3 ps-3" scope="col"> <strong class="text-sm text-uppercase">Ordered Date</strong></th>
                           <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Address</strong></th>
                           <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Total price</strong></th>
-                          <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Payment method</strong></th>
                           <th class="border-0 p-3 text-center" scope="col"> <strong class="text-sm text-uppercase">status</strong></th>
                           <th class="border-0 p-3 text-center" scope="col"> <strong class="text-sm text-uppercase">View detials</strong></th>
                         </tr>
                       </thead>
                       <tbody class="border-0">
+                        <% data.forEach((val) => { %>
 
-                        <% orderDetails.forEach((val)=>{ %>
                         <tr>
                           <th class="ps-0 py-3 border-light ps-3" scope="row">
                             <div class="d-flex align-items-center ">
                               <%= val.ordered_date.getDate() %>/<%= val.ordered_date.getMonth()+1 %>/<%= val.ordered_date.getFullYear() %>
-
                             </div>
                           </th>
                           <th class="ps-0 py-3 border-light align-middle" scope="row">
-                            <div class="ms-3"><%= val.address.name %><br><%= val.address.house %></div>
+                            <%= val.address.name %>
                           </th>
                           <td class="p-3 align-middle border-light">
-                            <% if(val.payment.payment_status=='refund completed'){ %>
-                            <span class="text-success">+<%=(Math.round(val.bill_amount-(val.bill_amount*val.coupon.discount)/100))%></span>
-                            <% }else{ %>
-                            <span class="text-danger">-<%=(Math.round(val.bill_amount-(val.bill_amount*val.coupon.discount)/100))%></span>
-                            <% } %>
-                          </td>
-                          <td class="p-3 align-middle border-light">
-                            <p class="mb-0 small"><%= val.payment.payment_method %></p>
+                            <% if(val.payment.payment_status=='refund completed'){ %> 
+                                <span class="text-success">+<%= val.bill_amount %> </span>
+                                <% }else{ %>
+                                    <span class="text-danger">-<%= val.bill_amount %> </span>
+                                <% } %> 
                           </td>
                           <td class="p-3 align-middle border-light ps-5">
                             <%  if(val.delivery_status.canceled.state){ %>
@@ -98,7 +91,7 @@
                             <% }else if(val.delivery_status.out_for_delivery.state){ %>
                             <span class="badge border border-primary text-primary px-2 py-1  fw-bold">OUT_FOR_DELIVERY</span>
 
-                            <% }else if(val.delivery_status.shipped.state){  %>
+                            <% }else if(val.delivery_status.shipped.state){ %>
 
                             <span class="badge border border-info text-info px-2 py-1  fw-bold">SHIPPED</span>
 
@@ -107,13 +100,12 @@
 
                             <% } %>
                           </td>
+                          <td class="p-3 align-middle border-light ps-5">
+                            <a href="/viewOrder/<%= val._id %>"><i class="bi bi-eye text-black"></i></a>
                           </td>
-                          <td class="p-4 text-center border-light">
-                            <a href="/viewOrder/<%= val.id %>"><i class="bi bi-eye text-black"></i></a>
                           </td>
                         </tr>
-                        <% }) %>
-                        <% } %>
+                        <% })} %>
                       </tbody>
                     </table>
                   </div>

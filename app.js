@@ -4,10 +4,9 @@ const path = require("path");
 const logger = require("morgan");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
-const env=require('dotenv')
+const env = require("dotenv");
 
-// const expressLayout = require('express-ejs-layouts');
-env.config()
+env.config();
 const db = require("./Connection/data");
 
 const adminRouter = require("./Routers/adminRouter");
@@ -24,7 +23,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(session({ secret: "Hope", cookie: { maxAge: 6000000000 } }));
-console.log(__dirname);
+
+app.use(function (req, res, next) {
+  res.header("Cache-Control", "private, no-cache, no-store, must-revalidate");
+  res.header("Expires", "-1");
+  res.header("Pragma", "no-cache");
+  next();
+});
 
 app.use("/", adminRouter);
 app.use("/", userRouter);

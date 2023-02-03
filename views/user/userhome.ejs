@@ -1,180 +1,173 @@
+<div class="page-holder">
+  <%-include('../user/layout/userhead.ejs') -%>
+  <!--  Modal -->
+  <div class="modal fade" id="productView" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content overflow-hidden border-0">
+        <button class="btn-close p-4 position-absolute top-0 end-0 z-index-20 shadow-0" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-body p-0">
+          <div class="row align-items-stretch">
+            <div class="col-lg-6 p-lg-0 d-flex justify-content-center align-items-center "><img src="" alt="" style="width: 80%;" id="prodImg"></div>
+            <div class="col-lg-6">
+              <div class="p-4 my-md-4">
+                <h2 id="name" class="h4"></h2>
+                <p class="text-muted"><i class="bi bi-currency-rupee"></i><span id="price"></span></p>
+                <p class="text-sm mb-4" id="description"></p>
+                <div class="row align-items-stretch mb-4 gx-0">
+                  <div class="col-sm-5"><a class="btn btn-dark btn-sm w-100 h-100 d-flex align-items-center justify-content-center px-0" id="addtocart2">Add to cart</a></div>
+                </div><a class="btn btn-link text-dark text-decoration-none p-0" id="wishlist2"><i class="far fa-heart me-2"></i>Add to wish list</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
+  <!-- HERO SECTION-->
 
+  <div class="container">
+    <% if(banner){ %>
+    <section class=" pb-3 bg-cover bg-center d-flex align-items-center" style="background:url(/productimages/<%= banner.image %>); height: 50vh; background-size: cover;">
+      <div class="container py-5">
+        <div class="row px-4 px-lg-5">
+          <div class="col-lg-6">
+            <p class="text-muted small text-uppercase mb-2">
+              <%= banner.bannerName %>
+            </p>
+            <h1 class="h2 text-uppercase mb-3">
+              <%= banner.description %>
+            </h1><a class="btn btn-dark" href="/shop">Browse collections</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <% } %>
+    <!-- CATEGORIES SECTION-->
+    <section class="pt-5">
+      <header class="text-center">
+        <p class="small text-muted small text-uppercase mb-1">Carefully created collections</p>
+        <h2 class="h5 text-uppercase mb-4">Browse our categories</h2>
+      </header>
+      <div class="row">
+        <% category.forEach((cate)=>{ %>
+        <div class="col-md-4"><a class="category-item" href="/shop?cate=<%= cate._id %>"><img class="img-fluid" src="productimages/<%= cate.image %>" alt="" /><strong class="category-item-title">
+              <%= cate.categoryName %>
+            </strong></a>
+        </div>
+        <% }) %>
 
-  <div class="page-holder">
-    <%-include('../user/layout/userhead.ejs') -%>
-      <!--  Modal -->
-      <div class="modal fade" id="productView" tabindex="-1">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-          <div class="modal-content overflow-hidden border-0">
-            <button class="btn-close p-4 position-absolute top-0 end-0 z-index-20 shadow-0" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-            <div class="modal-body p-0">
-              <div class="row align-items-stretch">
-                <div class="col-lg-6 p-lg-0 d-flex justify-content-center align-items-center "><img src="" alt="" style="width: 80%;" id="prodImg"></div>
-                <div class="col-lg-6">
-                  <div class="p-4 my-md-4">
-                    <!-- <ul class="list-inline mb-2">
-                      <li class="list-inline-item m-0"><i class="fas fa-star small text-warning"></i></li>
-                      <li class="list-inline-item m-0 1"><i class="fas fa-star small text-warning"></i></li>
-                      <li class="list-inline-item m-0 2"><i class="fas fa-star small text-warning"></i></li>
-                      <li class="list-inline-item m-0 3"><i class="fas fa-star small text-warning"></i></li>
-                      <li class="list-inline-item m-0 4"><i class="fas fa-star small text-warning"></i></li>
-                    </ul> -->
-                    <h2 id="name" class="h4"></h2>
-                    <p class="text-muted"><i class="bi bi-currency-rupee"></i><span id="price" ></span></p>
-                    <p class="text-sm mb-4" id="description"></p>
-                    <div class="row align-items-stretch mb-4 gx-0">
-                      <!-- <div class="col-sm-7">
-                        <div class="border d-flex align-items-center justify-content-between py-1 px-3"><span class="small text-uppercase text-gray mr-4 no-select">Quantity</span>
-                          <div class="quantity">
-                            <button class="dec-btn p-0"><i class="fas fa-caret-left"></i></button>
-                            <input class="form-control border-0 shadow-0 p-0" type="text" value="1">
-                            <button class="inc-btn p-0"><i class="fas fa-caret-right"></i></button>
-                          </div>
-                        </div>
-                      </div> -->
-                      <div class="col-sm-5"><a class="btn btn-dark btn-sm w-100 h-100 d-flex align-items-center justify-content-center px-0" id="addtocart2">Add to cart</a></div>
-                    </div><a class="btn btn-link text-dark text-decoration-none p-0" href="#!"><i class="far fa-heart me-2"></i>Add to wish list</a>
-                  </div>
+        <div class="col-md-4">
+          <% row.forEach((ro)=>{ %>
+          <a class="category-item mb-4 mt-2" href="/shop?cate=<%= ro._id %>"><img class="img-fluid" src="productimages/<%= ro.image %>" alt="" /><strong class="category-item-title">
+              <%= ro.categoryName %>
+            </strong></a>
+          <% }) %>
+        </div>
+
+        <% col.forEach((co)=>{ %>
+        <div class="col-md-4"><a class="category-item" href="/shop?cate=<%= co._id %>"><img class="img-fluid" src="productimages/<%= co.image %>" alt="" /><strong class="category-item-title">
+              <%= co.categoryName %>
+            </strong></a>
+        </div>
+        <% }) %>
+      </div>
+    </section>
+    <!-- TRENDING PRODUCTS-->
+    <section class="py-3">
+      <div class="text-center py-2 mb-4">
+        <header>
+          <p class="small text-muted small text-uppercase mb-1 mt-4">Made the hard way</p>
+          <h2 class=" h5 text-uppercase mb-4 ">Top trending products</h2>
+          <!-- <hr class="border-2"> -->
+        </header>
+      </div>
+
+      <div class="row">
+        <!-- PRODUCT-->
+        <% products.forEach((product)=>{ %>
+        <div class="col-xl-3 col-lg-4 col-sm-6">
+          <div class="product text-center">
+            <div class="position-relative mb-3">
+              <div class="badge text-white "></div><a class="d-block p-5" href="/productdetials/<%= product._id %>/<%= product.brand._id %>"><img class="img-fluid w-100" src="productimages/<%= product.image[0] %>" alt="..."></a>
+              <div class="product-overlay">
+                <ul class="mb-0 list-inline">
+                  <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#" onclick="wishlist('<%= product._id %>')"><i class="bi bi-heart"></i></a></li>
+                  <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" onclick="addtocart('<%= product._id %>')">Add to cart</a></li>
+                  <li class="list-inline-item me-0"><a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal" onclick="getModal('<%= product._id %>')"><i class="bi bi-fullscreen"></i></a></li>
+                </ul>
+              </div>
+            </div>
+            <h6> <a class="reset-anchor" href="/productdetials/<%= product._id %>/<%= product.brand._id %>">
+                <%= product.name %>
+              </a></h6>
+            <p class="small text-muted"><i class="bi bi-currency-rupee"></i>
+              <%= product.price %>
+            </p>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+    </section>
+    <!-- SERVICES-->
+    <section class="py-5 bg-light">
+      <div class="container">
+        <div class="row text-center gy-3">
+          <div class="col-lg-4">
+            <div class="d-inline-block">
+              <div class="d-flex align-items-end">
+                <img src="/svg img/Fast Delivery free icons designed by Irvan Kurnianto.png" alt="" style="width: 50px; height: 50px;">
+                <div class="text-start ms-3">
+                  <h6 class="text-uppercase mb-1">Free shipping</h6>
+                  <p class="text-sm mb-0 text-muted">Free shipping worldwide</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="d-inline-block">
+              <div class="d-flex align-items-end">
+                <img class="fw-bold" src="/svg img/24-7-support-10894.png" alt="" style="width: 45px; height: 45  px;">
+                <div class="text-start ms-3">
+                  <h6 class="text-uppercase mb-1">24 x 7 service</h6>
+                  <p class="text-sm mb-0 text-muted">Free shipping worldwide</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="d-inline-block">
+              <div class="d-flex align-items-end">
+                <img src="/svg img/discount-label-price-svgrepo-com.svg" alt="" style="width: 45px; height: 45px;">
+                <div class="text-start ms-3">
+                  <h6 class="text-uppercase mb-1">Festivaloffers</h6>
+                  <p class="text-sm mb-0 text-muted">Free shipping worldwide</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      
-      <!-- HERO SECTION-->
-     
-      <div class="container">
-        <% if(banner){ %>
-        <section class=" pb-3 bg-cover bg-center d-flex align-items-center" style="background:url(/productimages/<%= banner.image %>); height: 50vh; background-size: cover;">
-          <div class="container py-5">
-            <div class="row px-4 px-lg-5">
-              <div class="col-lg-6">
-                <p class="text-muted small text-uppercase mb-2"><%= banner.bannerName %></p>
-                <h1 class="h2 text-uppercase mb-3"><%= banner.description %></h1><a class="btn btn-dark" href="/shop">Browse collections</a>
-              </div>
-            </div>
+    </section>
+    <!-- NEWSLETTER-->
+    <section class="py-5">
+      <div class="container p-0">
+        <div class="row gy-3">
+          <div class="col-lg-6">
+            <h5 class="text-uppercase">Let's be friends!</h5>
+            <p class="text-sm text-muted mb-0">Nisi nisi tempor consequat laboris nisi.</p>
           </div>
-        </section>
-        <% } %>
-        <!-- CATEGORIES SECTION-->
-        <section class="pt-5">
-          <header class="text-center">
-            <p class="small text-muted small text-uppercase mb-1">Carefully created collections</p>
-            <h2 class="h5 text-uppercase mb-4">Browse our categories</h2>
-          </header>
-          <div class="row">
-          <% category.forEach((cate)=>{ %>
-            <div class="col-md-4"><a class="category-item" href="/shop?cate=<%= cate._id %>"><img class="img-fluid" src="productimages/<%= cate.image %>" alt=""/><strong class="category-item-title"><%= cate.categoryName %></strong></a>
-            </div>
-            <% }) %>
-           
-            <div class="col-md-4">
-              <% row.forEach((ro)=>{ %>
-              <a class="category-item mb-4 mt-2" href="/shop?cate=<%= ro._id %>"><img class="img-fluid" src="productimages/<%= ro.image %>" alt=""/><strong class="category-item-title"><%= ro.categoryName %></strong></a>
-              <% }) %>
-            </div>
-            
-            <% col.forEach((co)=>{ %>
-            <div class="col-md-4"><a class="category-item" href="/shop?cate=<%= co._id %>"><img class="img-fluid" src="productimages/<%= co.image %>" alt=""/><strong class="category-item-title"><%= co.categoryName %></strong></a>
-            </div>
-            <% }) %>
+          <div class="col-lg-6">
+            <form action="#">
+              <div class="input-group">
+                <input class="form-control form-control-lg" type="email" placeholder="Enter your email address" aria-describedby="button-addon2">
+                <button class="btn btn-dark" id="button-addon2" type="submit">Subscribe</button>
+              </div>
+            </form>
           </div>
-        </section>
-        <!-- TRENDING PRODUCTS-->
-        <section class="py-3">
-          <div class="text-center py-2 mb-4">
-            <header >
-              <p class="small text-muted small text-uppercase mb-1 mt-4">Made the hard way</p>
-              <h2 class=" h5 text-uppercase mb-4 ">Top trending products</h2>
-              <!-- <hr class="border-2"> -->
-            </header>
-          </div>
-         
-          <div class="row">
-            <!-- PRODUCT-->
-            <% products.forEach((product)=>{ %>
-            <div class="col-xl-3 col-lg-4 col-sm-6">
-              <div class="product text-center">
-                <div class="position-relative mb-3">
-                  <div class="badge text-white "></div><a class="d-block p-5" href="/productdetials/<%= product._id %>/<%= product.brand._id %>"><img class="img-fluid w-100" src="productimages/<%= product.image[0] %>" alt="..."  ></a>
-                  <div class="product-overlay">
-                    <ul class="mb-0 list-inline">
-                      <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#" onclick="wishlist('<%= product._id %>')"><i class="bi bi-heart"></i></a></li>
-                      <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" onclick="addtocart('<%= product._id %>')" >Add to cart</a></li>
-                      <li class="list-inline-item me-0"><a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal" onclick="getModal('<%= product._id %>')"><i class="bi bi-fullscreen"></i></a></li>
-                    </ul>
-                  </div>
-                </div>
-                <h6> <a class="reset-anchor" href="/productdetials/<%= product._id %>/<%= product.brand._id %>"><%= product.name %></a></h6>
-                <p class="small text-muted"><i class="bi bi-currency-rupee"></i><%= product.price %></p>
-              </div>
-            </div>
-            <% }) %>
-          </div>
-        </section>
-        <!-- SERVICES-->
-        <section class="py-5 bg-light">
-          <div class="container">
-            <div class="row text-center gy-3">
-              <div class="col-lg-4">
-                <div class="d-inline-block">
-                  <div class="d-flex align-items-end">
-                    <img src="/svg img/Fast Delivery free icons designed by Irvan Kurnianto.png" alt="" style="width: 50px; height: 50px;">
-                    <div class="text-start ms-3">
-                      <h6 class="text-uppercase mb-1">Free shipping</h6>
-                      <p class="text-sm mb-0 text-muted">Free shipping worldwide</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-4">
-                <div class="d-inline-block">
-                  <div class="d-flex align-items-end">
-                  <img class="fw-bold" src="/svg img/24-7-support-10894.png" alt="" style="width: 45px; height: 45  px;">
-                    <div class="text-start ms-3">
-                      <h6 class="text-uppercase mb-1">24 x 7 service</h6>
-                      <p class="text-sm mb-0 text-muted">Free shipping worldwide</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-4">
-                <div class="d-inline-block">
-                  <div class="d-flex align-items-end">
-                  <img src="/svg img/discount-label-price-svgrepo-com.svg" alt="" style="width: 45px; height: 45px;">
-                    <div class="text-start ms-3">
-                      <h6 class="text-uppercase mb-1">Festivaloffers</h6>
-                      <p class="text-sm mb-0 text-muted">Free shipping worldwide</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-        <!-- NEWSLETTER-->
-        <section class="py-5">
-          <div class="container p-0">
-            <div class="row gy-3">
-              <div class="col-lg-6">
-                <h5 class="text-uppercase">Let's be friends!</h5>
-                <p class="text-sm text-muted mb-0">Nisi nisi tempor consequat laboris nisi.</p>
-              </div>
-              <div class="col-lg-6">
-                <form action="#">
-                  <div class="input-group">
-                    <input class="form-control form-control-lg" type="email" placeholder="Enter your email address" aria-describedby="button-addon2">
-                    <button class="btn btn-dark" id="button-addon2" type="submit">Subscribe</button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </section>
+        </div>
       </div>
+    </section>
+  </div>
 
-      
-      <%-include('../user/layout/userfooter.ejs') -%>
-
+  <%-include('../user/layout/userfooter.ejs') -%>

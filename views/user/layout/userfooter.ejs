@@ -34,29 +34,30 @@
         <div class="col-md-6 text-center text-md-start">
           <p class="small text-muted mb-0">&copy; 2023 All rights reserved.</p>
         </div>
-        <!-- <div class="col-md-6 text-center text-md-end"> -->
-        <!-- <p class="small text-muted mb-0">Template designed by <a class="text-white reset-anchor" href="https://bootstrapious.com/p/boutique-bootstrap-e-commerce-template">Bootstrapious</a></p> -->
-        <!-- If you want to remove the backlink, please purchase the Attribution-Free License. See details in readme.txt or license.txt. Thanks!-->
-        <!-- </div> -->
+
       </div>
     </div>
   </div>
 </footer>
-<script>
+
+<!-- <script>
   function getModal(id) {
     $.ajax({
       type: "POST",
       url: "/getModal",
-      data: { id },
+      data: {
+        id
+      },
       dataType: "json",
       encode: true,
-    }).done(function (data) {
-      console.log(data);
+    }).done(function(data) {
       $('#prodImg').attr('src', '/productimages/' + data.image[0])
       $('#name').html(data.name)
       $('#price').html(data.price)
       $('#description').html(data.description)
       $('#addtocart2').attr('onclick', 'addtocart("' + data._id + '") ')
+      $('#wishlist2').attr('onclick', 'wishlist("' + data._id + '") ')
+
     });
   }
 </script>
@@ -65,30 +66,27 @@
     $.ajax({
       type: "POST",
       url: "/addtocart",
-      data: { id },
+      data: {
+        id
+      },
       dataType: "json",
       encode: true,
-    }).done(function (data) {
-
-      // total += data.price
-      // console.log(total+"TOTAL")
+    }).done(function(data) {
+      cartCout();
       if (data == "LOGIN FIRST") {
-        console.log("SWEET");
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
           text: 'Login first!',
           footer: '<a href="/login">Go to login</a>'
         })
-      }
-      else if (data == "alreadyexit") {
+      } else if (data == "alreadyexit") {
         Swal.fire({
           icon: 'warning',
           title: 'Already added',
           footer: '<a href="/cart">Check cart</a>'
         })
-      }
-      else if (data.key == "added") {
+      } else if (data.key == "added") {
         Swal.fire({
           icon: 'success',
           title: 'Successfully added',
@@ -112,6 +110,7 @@
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
+      cartCout();
       if (result.isConfirmed) {
         let price = Number($('#' + id + 'Price').html())
         let Qnty = Number($('#' + id + 'Qnty').val())
@@ -120,10 +119,12 @@
         $.ajax({
           type: "POST",
           url: "/deletecart",
-          data: { id },
+          data: {
+            id
+          },
           dataType: "json",
           encode: true,
-        }).done(function (data) {
+        }).done(function(data) {
           Swal.fire(
             'removed!',
             'This product has been removed.',
@@ -137,7 +138,6 @@
 </script>
 
 <script>
-  // subTotal=currentTotal;
   function quantity(id) {
     let Qnty = Number($('#' + id + 'Qnty').val())
 
@@ -146,10 +146,12 @@
       $.ajax({
         type: "POST",
         url: "/quantity",
-        data: { id },
+        data: {
+          id
+        },
         dataType: "json",
         encode: true,
-      }).done(function (data) {
+      }).done(function(data) {
         let price = Number($('#' + id + 'Price').html())
         let Qnty = Number($('#' + id + 'Qnty').val())
         let currentTotal = Number($('#cartSubTotal').html())
@@ -157,40 +159,33 @@
         $('#' + id + 'TotalPrice').html(price * (Qnty + 1))
         $('#cartSubTotal').html(currentTotal + price)
         $('#Total').html(currentTotal + price)
-        console.log('TOTAL: ' + currentTotal);
-        console.log('pricetot: ' + price * Qnty);
-        console.log('price: ' + price);
-        console.log('quty: ' + Qnty);
-        // console.log(data+"datd");
-        // console.log(Qnty+"quantity");
-        // console.log(price+"price");
-        // if(data.key=="over"){
-        //   $('#'+id+'Qnty').attr('max',data.price) 
-        //   Swal.fire('Any fool can use a computer')
-        // }
+        cartCout();
       });
     } else {
-      Swal.fire({ text: 'Sorry! Limited stock' })
+      Swal.fire({
+        text: 'Sorry! Limited stock'
+      })
     }
   }
 </script>
 <script>
-  // subTotal=currentTotal
   function quantitydec(id) {
     $.ajax({
       type: "POST",
       url: "/quantitydec",
-      data: { id },
+      data: {
+        id
+      },
       dataType: "json",
       encode: true,
-    }).done(function (data) {
+    }).done(function(data) {
       let price = Number($('#' + id + 'Price').html())
       let Qnty = Number($('#' + id + 'Qnty').val())
       $('#' + id + 'TotalPrice').html(price * Qnty)
       let currentTotal = Number($('#cartSubTotal').html())
       $('#cartSubTotal').html(currentTotal - price)
       $('#Total').html(currentTotal - price)
-
+      cartCout();
 
       if (data == "deleted") {
         Swal.fire(
@@ -208,13 +203,13 @@
     $.ajax({
       type: "post",
       url: "/addwishlist",
-      data: { id },
+      data: {
+        id
+      },
       dataType: "json",
       encode: true,
-    }).done(function (data) {
-
-      // total += data.price
-      // console.log(total+"TOTAL")
+    }).done(function(data) {
+      cartCout();
       if (data == "LOGIN FIRST") {
         Swal.fire({
           icon: 'error',
@@ -222,16 +217,13 @@
           text: 'Login first!',
           footer: '<a href="/login">Go to login</a>'
         })
-      }
-      else if (data == "alreadyexit") {
+      } else if (data == "alreadyexit") {
         Swal.fire({
           icon: 'warning',
           title: 'Already added',
           footer: '<a href="/wishlist">check whishlist</a>'
         })
-      }
-      else if (data.key == "added") {
-        // $('#subtotal').html(total) 
+      } else if (data.key == "added") {
         Swal.fire({
           icon: 'success',
           title: 'Successfully added',
@@ -242,10 +234,26 @@
       }
     });
   }
-</script>
+  window.onload = cartCout()
+
+  function cartCout() {
+    $.ajax({
+      type: "get",
+      url: "/count",
+      data: {},
+      dataType: "json",
+      encode: true,
+    }).done(function(data) {
+
+      $('#CartLength').html(data.cart.length)
+      $('#wishlist').html(data.wishlist.length)
+    })
+  }
+</script> -->
 
 </section>
 <!-- JavaScript files-->
+<script src="/js/defualt.js"></script>
 <script src="/public/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="/vendor/glightbox/js/glightbox.min.js"></script>
 <script src="/vendor/nouislider/nouislider.min.js"></script>
@@ -263,7 +271,7 @@
     var ajax = new XMLHttpRequest();
     ajax.open("GET", path, true);
     ajax.send();
-    ajax.onload = function (e) {
+    ajax.onload = function(e) {
       var div = document.createElement("div");
       div.className = 'd-none';
       div.innerHTML = ajax.responseText;
@@ -275,11 +283,10 @@
   // while using file:// protocol
   // pls don't forget to change to your domain :)
   injectSvgSprite('https://bootstraptemple.com/files/icons/orion-svg-sprite.svg');
-
 </script>
 <!-- FontAwesome CSS - loading as last, so it doesn't block rendering-->
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
-  integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
 </body>
+
 </html>

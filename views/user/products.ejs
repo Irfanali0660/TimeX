@@ -1,255 +1,206 @@
 <%-include('../user/layout/userhead.ejs') -%>
 
 
-    <div class="modal fade bg-white" id="adSearchBar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+<div class="modal fade bg-white" id="adSearchBar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 
-        <div class="modal-dialog modal-lg" role="document">
+  <div class="modal-dialog modal-lg" role="document">
 
-            <div class="w-100 pt-1 mb-5 text-end ">
-                <a class="navbar-brand " href="/">
-                    <h1 class=" mb-5"><span style="color: red;">T</span>IME <span class="Timehead">X</span></h1>
-                </a>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-content modal-body border-0 p">
-                <form id="formsearch" method="get">
-                    <div class="input-group mb-0">
-                        <input type="text" class="form-control " id="inputModalSearch" name="search"
-                            placeholder="Search" onkeyup='searchFun(this.value)'>
-                        <button type="submit" class="input-group-text bg-dark text-light">
-                            <i class="fa fa-fw fa-search text-white"></i>
-                        </button>
-                    </div>
-                </form>
-
-
-
-                <div class="border w-100 rounded-3" id="searchResult">
-                    <!-- Search result -->
-
-                </div>
-            </div>
-        </div>
+    <div class="w-100 pt-1 mb-5 text-end ">
+      <a class="navbar-brand " href="/">
+        <h1 class=" mb-5"><span style="color: red;">T</span>IME <span class="Timehead">X</span></h1>
+      </a>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
-
-
-
-    <!--  Modal -->
-    <% products.forEach((product)=>{ %>
-        <div class="modal fade" id="productView" tabindex="-1">
-            <div class="modal-dialog modal-lg modal-dialog-centered">
-                <div class="modal-content overflow-hidden border-0">
-                    <button class="btn-close p-4 position-absolute top-0 end-0 z-index-20 shadow-0" type="button"
-                        data-bs-dismiss="modal" aria-label="Close"></button>
-                    <div class="modal-body p-0">
-                        <div class="row align-items-stretch">
-                            <div class="col-lg-6 p-lg-0 d-flex justify-content-center align-items-center"><img src=""
-                                    alt="" style="width: 80%;" id="prodImg"></div>
-                            <div class="col-lg-6">
-                                <div class="p-4 my-md-4">
-
-                                    <h2 id="name" class="h4"></h2>
-                                    <p class="text-muted"><i class="bi bi-currency-rupee"></i><span id="price"></span></p>
-                                    <p class="text-sm mb-4" id="description"></p>
-                                    <div class="row align-items-stretch mb-4 gx-0">
-
-                                        <div class="col-sm-5"><a
-                                                class="btn btn-dark btn-sm w-100 h-100 d-flex align-items-center justify-content-center px-0"
-                                                id="addtocart2" onclick="addtocart('<%= product._id %>')">Add to cart</a></div>
-                                    </div><a class="btn btn-link text-dark text-decoration-none p-0" href="#!" onclick="wishlist('<%= product._id %>')"><i
-                                            class="far fa-heart me-2" ></i>Add to wish list</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="modal-content modal-body border-0 p">
+      <form id="formsearch" method="get">
+        <div class="input-group mb-0">
+          <input type="text" class="form-control " id="inputModalSearch" name="search" placeholder="Search" onkeyup='searchFun(this.value)'>
+          <button type="submit" class="input-group-text bg-dark text-light">
+            <i class="fa fa-fw fa-search text-white"></i>
+          </button>
         </div>
-        <% }) %>
-            <div class="container">
-                <!-- HERO SECTION-->
-                <section class="py-5 bg-light">
-                    <div class="container">
-                        <div class="row px-4 px-lg-5 py-lg-4 align-items-center">
-                            <div class="col-lg-6">
-                                <h1 class="h2 text-uppercase mb-0">Shop</h1>
-                            </div>
-                            <div class="col-lg-6 text-lg-end">
-                                <nav aria-label="breadcrumb">
-                                    <ol class="breadcrumb justify-content-lg-end mb-0 px-0 bg-light">
-                                        <li class="breadcrumb-item"><a class="text-dark" href="/">Home</a></li>
-                                        <li class="breadcrumb-item active" aria-current="page">Shop</li>
-                                    </ol>
-                                </nav>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-                <section class="py-5">
-                    <div class="container p-0">
-                        <div class="row">
-                            <!-- SHOP SIDEBAR-->
-                            <div class="col-lg-3 order-2 order-lg-1">
-                                <h5 class="text-uppercase mb-4">Categories</h5>
-                                <div class="py-2 px-4 bg-dark text-white mb-3 mt-5"><strong
-                                        class="small text-uppercase fw-bold ">Brand
-                                    </strong></div>
-                                <ul class="list-unstyled small text-muted ps-lg-4 font-weight-normal ">
-                                    <li class="mb-2"><a class="reset-anchor" href="/shop">All brand</a></li>
-                                </ul>
-                                <% category.forEach((cate)=>{ %>
-                                    <ul class="list-unstyled small text-muted ps-lg-4 font-weight-normal ">
-                                        <li class="mb-2"><a class="reset-anchor" href="/shop?cate=<%= cate._id %>">
-                                                <%= cate.categoryName %>
-                                            </a></li>
-                                    </ul>
-                                    <% }) %>
+      </form>
+      <div class="border w-100 rounded-3" id="searchResult">
+        <!-- Search result -->
+      </div>
+    </div>
+  </div>
+</div>
 
-                            </div>
-                            <!-- SHOP LISTING-->
-                            <div class="col-lg-9 order-1 order-lg-2 mb-5 mb-lg-0">
-                                <div class="row mb-3 align-items-center">
+<!--  Modal -->
+<% products.forEach((product)=>{ %>
+<div class="modal fade" id="productView" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content overflow-hidden border-0">
+      <button class="btn-close p-4 position-absolute top-0 end-0 z-index-20 shadow-0" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+      <div class="modal-body p-0">
+        <div class="row align-items-stretch">
+          <div class="col-lg-6 p-lg-0 d-flex justify-content-center align-items-center"><img src="" alt="" style="width: 80%;" id="prodImg"></div>
+          <div class="col-lg-6">
+            <div class="p-4 my-md-4">
 
-                                    <div class="col-lg-6 mb-2 mb-lg-0">
-                                        <p class="text-sm text-muted mb-0">Showing 1-<%= count %> of <%= allcount %>
-                                                    results</p>
-                                    </div>
-                                    <div class="col-lg-6 mb-2 mb-lg-0 ">
-                                        <!-- <form class="d-flex">
-                                            <input class="form-control me-2" type="search" placeholder="Search"
-                                                aria-label="Search">
-                                            <button class="btn btn-dark">Search</button>
-                                        </form> -->
+              <h2 id="name" class="h4"></h2>
+              <p class="text-muted"><i class="bi bi-currency-rupee"></i><span id="price"></span></p>
+              <p class="text-sm mb-4" id="description"></p>
+              <div class="row align-items-stretch mb-4 gx-0">
 
-                                        <div
-                                            class="navbar align-self-center d-flex justify-content-center align-items-center">
-                                            <div class="d-lg-none flex-sm-fill mt-3 mb-4 col-7 col-sm-auto pr-3 ">
-                                                <div class="input-group">
-                                                    <input type="text " class="form-control" id="inputMobileSearch"
-                                                        placeholder="Search ...">
-                                                    <div class="input-group-text">
-                                                        <i class="fa fa-fw fa-search"></i>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <p class="m-3">
-                                                Search
-                                            </p>
-                                            <a class="nav-icon d-none d-lg-inline" href="#" data-bs-toggle="modal"
-                                                data-bs-target="#adSearchBar">
-                                                <i class="fa fa-fw fa-search text-dark mr-2"></i>
-                                            </a>
-
-
-                                        </div>
-
-                                    </div>
-                                    <div class="row mt-5">
-                                        <!-- PRODUCT-->
-                                        <% if(products.length==0){ %>
-                                            <h3 class="text-dark text-center">No product matching</h3>
-                                            <p class="text-muted text-center"> Search another product</p>
-                                            <% }else{ %>
-                                                <% products.forEach((product)=>{ %>
-                                                    <div class="col-lg-4 col-sm-6">
-                                                        <div class="product text-center ">
-                                                            <div class="mb-3 position-relative">
-                                                                <div class="badge text-white bg-"></div><a
-                                                                    class="d-block"
-                                                                    href="/productdetials/<%= product._id %>/<%= product.brand._id %>"><img
-                                                                        class="image img-fluid w-100 p-5 border border-dark rounded-4"
-                                                                        src="productimages/<%= product.image[0] %>"
-                                                                        alt="..."></a>
-                                                                <div class="product-overlay ">
-                                                                    <ul class="mb-0 list-inline">
-                                                                        <li class="list-inline-item m-0 p-0"><a
-                                                                                class="btn btn-sm btn-outline-dark"
-                                                                                href="#!"
-                                                                                onclick="wishlist('<%= product._id %>')"><i
-                                                                                    class="bi bi-heart"></i></a></li>
-                                                                        <li class="list-inline-item m-0 p-0"><a
-                                                                                class="btn btn-sm btn-dark"
-                                                                                onclick="addtocart('<%= product._id %>')">Add
-                                                                                to
-                                                                                cart</a></li>
-                                                                        <li class="list-inline-item mr-0"><a
-                                                                                class="btn btn-sm btn-outline-dark"
-                                                                                href="#productView"
-                                                                                data-bs-toggle="modal"
-                                                                                onclick="getModal('<%= product._id %>')"><i
-                                                                                    class="bi bi-fullscreen"></i></a>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                            <h6> <a class="reset-anchor" href="/productdetials/">
-                                                                    <%= product.name %>
-                                                                </a></h6>
-                                                            <p class="small text-muted"><i class="bi bi-currency-rupee"></i><%= product.price %>
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                    <% }) %>
-                                                        <% } %>
-
-                                                            <!-- PAGINATION-->
-                                                            <nav aria-label="Page navigation example">
-                                                                <ul
-                                                                    class="pagination justify-content-center justify-content-lg-end">
-                                                                    <li class="page-item mx-1"><a class="page-link"
-                                                                            href="/shop?page=1" aria-label="Previous"><span
-                                                                                aria-hidden="true">«</span></a>
-                                                                    </li>
-                                                                    <li class="page-item mx-1"><a
-                                                                            class="page-link" href="/shop?page=1">1</a></li>
-                                                                    <li class="page-item mx-1"><a class="page-link"
-                                                                            href="/shop?page=2">2</a>
-                                                                    </li>
-                                                                    <li class="page-item ms-1"><a class="page-link"
-                                                                            href="/shop?page=2" aria-label="Next"><span
-                                                                                aria-hidden="true">»</span></a>
-                                                                    </li>
-                                                                </ul>
-                                                            </nav>
-                                    </div>
-                                </div>
-                            </div>
-                </section>
+                <div class="col-sm-5"><a class="btn btn-dark btn-sm w-100 h-100 d-flex align-items-center justify-content-center px-0" id="addtocart2" onclick="addtocart('<%= product._id %>')">Add to cart</a></div>
+              </div><a class="btn btn-link text-dark text-decoration-none p-0" id="wishlist2" onclick="wishlist('<%= product._id %>')"><i class="far fa-heart me-2"></i>Add to wish list</a>
             </div>
-            <script>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% }) %>
+<div class="container">
+  <!-- HERO SECTION-->
+  <section class="py-5 bg-light">
+    <div class="container">
+      <div class="row px-4 px-lg-5 py-lg-4 align-items-center">
+        <div class="col-lg-6">
+          <h1 class="h2 text-uppercase mb-0">Shop</h1>
+        </div>
+        <div class="col-lg-6 text-lg-end">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb justify-content-lg-end mb-0 px-0 bg-light">
+              <li class="breadcrumb-item"><a class="text-dark" href="/">Home</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Shop</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="py-5">
+    <div class="container p-0">
+      <div class="row">
+        <!-- SHOP SIDEBAR-->
+        <div class="col-lg-3 order-2 order-lg-1">
+          <h5 class="text-uppercase mb-4">Categories</h5>
+          <div class="py-2 px-4 bg-dark text-white mb-3 mt-5"><strong class="small text-uppercase fw-bold ">Brand
+            </strong></div>
+          <ul class="list-unstyled small text-muted ps-lg-4 font-weight-normal ">
+            <li class="mb-2"><a class="reset-anchor" href="/shop">All brand</a></li>
+          </ul>
+          <% category.forEach((cate)=>{ %>
+          <ul class="list-unstyled small text-muted ps-lg-4 font-weight-normal ">
+            <li class="mb-2"><a class="reset-anchor" href="/shop?cate=<%= cate._id %>">
+                <%= cate.categoryName %>
+              </a></li>
+          </ul>
+          <% }) %>
 
-                function searchFun(value) {
-                    document.getElementById("formsearch").setAttribute('action', '/shop?search=' + value + '')
-                    $.ajax({
-                        type: "POST",
-                        url: "/searchFun",
-                        data: { value },
-                        dataType: "json",
-                        encode: true,
-                    }).done(function (data) {
+        </div>
+        <!-- SHOP LISTING-->
+        <div class="col-lg-9 order-1 order-lg-2 mb-5 mb-lg-0">
+          <div class="row mb-3 align-items-center">
 
-                        //   
-                        if (data == 'noresult') {
-                            resHTML = '<h6 class="text-secondary ">NO RESULT</h6>'
-                            $("#searchResult").html(resHTML)
-                        } else {
-                            $("#searchResult").html('')
-                            resHTML = ''
-                            data.search.forEach(function (val) {
-                                if (val.type == 'product') {
-                                    resHTML += '<a href="/productdetials/' + val.id + '/' + val.cate + '" class="text-decoration-none"><h6 class="text-dark ms-2 ">' + val.titile + '</h6></a>'
-                                } else {
-                                    console.log(val);
-                                    resHTML += '<a href="/shop?cate=' + val.id + '"class="text-decoration-none"><h6 class="text-black ms-2">' + val.titile + '</h6></a>'
-                                }
-                            });
-                            $("#searchResult").append(resHTML)
-                        }
-                    });
-                }
+            <div class="col-lg-6 mb-2 mb-lg-0">
+              <p class="text-sm text-muted mb-0">Showing 1-<%= count %> of <%= allcount %>
+                results</p>
+            </div>
+            <div class="col-lg-6 mb-2 mb-lg-0 ">
+              <div class="navbar align-self-center d-flex justify-content-center align-items-center">
+                <div class="d-lg-none flex-sm-fill mt-3 mb-4 col-7 col-sm-auto pr-3 ">
+                  <div class="input-group">
+                    <input type="text " class="form-control" id="inputMobileSearch" placeholder="Search ...">
+                    <div class="input-group-text">
+                      <i class="fa fa-fw fa-search"></i>
+                    </div>
+                  </div>
 
-            </script>
+                </div>
+                <p class="m-3">
+                  Search
+                </p>
+                <a class="nav-icon d-none d-lg-inline" href="#" data-bs-toggle="modal" data-bs-target="#adSearchBar">
+                  <i class="fa fa-fw fa-search text-dark mr-2"></i>
+                </a>
+              </div>
+            </div>
+            <div class="row mt-5">
+              <!-- PRODUCT-->
+              <% if(products.length==0){ %>
+              <h3 class="text-dark text-center">No product matching</h3>
+              <p class="text-muted text-center"> Search another product</p>
+              <% }else{ %>
+              <% products.forEach((product)=>{ %>
+              <div class="col-lg-4 col-sm-6">
+                <div class="product text-center ">
+                  <div class="mb-3 position-relative">
+                    <div class="badge text-white bg-"></div><a class="d-block" href="/productdetials/<%= product._id %>/<%= product.brand._id %>"><img class="image img-fluid w-100 p-5 border border-dark rounded-4" src="productimages/<%= product.image[0] %>" alt="..."></a>
+                    <div class="product-overlay ">
+                      <ul class="mb-0 list-inline">
+                        <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!" onclick="wishlist('<%= product._id %>')"><i class="bi bi-heart"></i></a></li>
+                        <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" onclick="addtocart('<%= product._id %>')">Add
+                            to
+                            cart</a></li>
+                        <li class="list-inline-item mr-0"><a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal" onclick="getModal('<%= product._id %>')"><i class="bi bi-fullscreen"></i></a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <h6> <a class="reset-anchor" href="/productdetials/">
+                      <%= product.name %>
+                    </a></h6>
+                  <p class="small text-muted"><i class="bi bi-currency-rupee"></i><%= product.price %>
+                  </p>
+                </div>
+              </div>
+              <% }) %>
+              <% } %>
 
-            <%-include('../user/layout/userfooter.ejs') -%>
+              <!-- PAGINATION-->
+              <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center justify-content-lg-end">
+                  <li class="page-item mx-1"><a class="page-link" href="/shop?page=1" aria-label="Previous"><span aria-hidden="true">«</span></a>
+                  </li>
+                  <li class="page-item mx-1"><a class="page-link" href="/shop?page=1">1</a></li>
+                  <li class="page-item mx-1"><a class="page-link" href="/shop?page=2">2</a>
+                  </li>
+                  <li class="page-item ms-1"><a class="page-link" href="/shop?page=2" aria-label="Next"><span aria-hidden="true">»</span></a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+  </section>
+</div>
+<!-- <script>
+  function searchFun(value) {
+    document.getElementById("formsearch").setAttribute('action', '/shop?search=' + value + '')
+    $.ajax({
+      type: "POST",
+      url: "/searchFun",
+      data: {
+        value
+      },
+      dataType: "json",
+      encode: true,
+    }).done(function(data) {
+
+      //   
+      if (data == 'noresult') {
+        resHTML = '<h6 class="text-secondary ">NO RESULT</h6>'
+        $("#searchResult").html(resHTML)
+      } else {
+        $("#searchResult").html('')
+        resHTML = ''
+        data.search.forEach(function(val) {
+          if (val.type == 'product') {
+            resHTML += '<a href="/productdetials/' + val.id + '/' + val.cate + '" class="text-decoration-none"><h6 class="text-dark ms-2 ">' + val.titile + '</h6></a>'
+          } else {
+            console.log(val);
+            resHTML += '<a href="/shop?cate=' + val.id + '"class="text-decoration-none"><h6 class="text-black ms-2">' + val.titile + '</h6></a>'
+          }
+        });
+        $("#searchResult").append(resHTML)
+      }
+    });
+  }
+</script> -->
+
+<%-include('../user/layout/userfooter.ejs') -%>
