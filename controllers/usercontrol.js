@@ -2,13 +2,11 @@ const userModel = require("../model/userModel");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const categoryModel = require("../model/categoryModel");
-// const { products, category } = require("./admincontrol");
 const ProductModel = require("../model/ProductModel");
 const bannerModel = require("../model/bannerModel");
-// const { json, response } = require("express");
 const couponModel = require("../model/couponModel");
 const orderModel = require("../model/orderModel");
-// const { name } = require("ejs");
+
 
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
@@ -1228,13 +1226,63 @@ module.exports = {
         ])
         .then((data) => {
           res.render("user/walletHistory", {
-            page: "Nill",
+            page: "Account",
             user: req.session.user,
             data,
           });
         });
     } catch (error) {
       next(error);
+    }
+  },
+
+  // ============================== change password page=================================//
+
+  changepassword:(req,res,next)=>{
+    try {
+      console.log("INSIDE CHANGE");
+      res.render('user/changePassword',{ page: "Account",user: req.session.user})
+    } catch (error) {
+      console.log(Error);
+      next(error)
+    }
+  },
+
+  // ============================== change password =================================//
+
+  changepass:async(req,res,next)=>{
+    try {
+      let apiRes={}
+    if(req.body.num==1){
+      if(req.body.key){
+        const user=await userModel.findOne({_id:res.locals.userdata._id})
+        const isPass = await bcrypt.compare(req.body.key, user.password);
+        if(isPass){
+          apiRes.success=true
+          apiRes.message="Enter New Password"
+          res.json(apiRes)
+        }else{
+          apiRes.message="Incorrect Password"
+          res.json(apiRes)
+        }
+      }else{
+        apiRes.message="Enter Password "
+        res.json(apiRes)
+      }
+    }else{
+      if(req.body.key  && req.body.key.length>=8){
+        let pass=await bcrypt.hash(req.body.key, 10);
+        userModel.updateOne({_id:res.locals.userdata._id},{$set:{password:pass}}).then((data)=>{
+        res.json("Success")
+        })
+      }
+      else{
+        apiRes.message="password must be 8 letter"
+        res.json(apiRes)
+      }
+    }
+    } catch (error) {
+      next(error)
     }
   },
 

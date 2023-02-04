@@ -332,7 +332,7 @@ function cancelOrder(id) {
     if (data == "Ordercanceled") {
       Swal.fire("removed!", "This Order has been canceled.", "success");
       resHTML =
-        '<h5 class="text-success text-center border border-success">Order delivered</h5>';
+        '<h5 class="text-success text-center border border-success">Order canceled</h5>';
       $("#cancel").html(resHTML);
     }
   });

@@ -46,6 +46,8 @@ const {
   checkquantity,
   about,
   walletHistory,
+  changepassword,
+  changepass
 } = require("../controllers/usercontrol");
 
 router.get("/", home);
@@ -64,8 +66,8 @@ router.get("/viewOrder/:id", userSession, viewOrder);
 router.get("/orderSuccess", userSession, orderSuccess);
 router.get("/count", userSession, count);
 router.get("/about", about);
-router.get("/walletHistory", userSession, walletHistory);
-
+router.get("/walletHistory",userSession, walletHistory);
+router.get('/changepassword',userSession,changepassword)
 
 router.post("/login", login);
 
@@ -93,6 +95,7 @@ router.post("/verifypayment", ajaxSession, verifypayment);
 router.post("/walletCheck", ajaxSession, walletCheck);
 router.post("/returnOrder/:id", ajaxSession, returnOrder);
 router.post("/checkquantity", ajaxSession, checkquantity);
+router.post('/changepass',ajaxSession,changepass)
 router.post("/addwishlist", ajaxSession, addwishlist);
 router.post("/userdetails", ajaxSession, userdetails);
 
