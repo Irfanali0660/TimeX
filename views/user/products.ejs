@@ -169,38 +169,5 @@
         </div>
   </section>
 </div>
-<!-- <script>
-  function searchFun(value) {
-    document.getElementById("formsearch").setAttribute('action', '/shop?search=' + value + '')
-    $.ajax({
-      type: "POST",
-      url: "/searchFun",
-      data: {
-        value
-      },
-      dataType: "json",
-      encode: true,
-    }).done(function(data) {
-
-      //   
-      if (data == 'noresult') {
-        resHTML = '<h6 class="text-secondary ">NO RESULT</h6>'
-        $("#searchResult").html(resHTML)
-      } else {
-        $("#searchResult").html('')
-        resHTML = ''
-        data.search.forEach(function(val) {
-          if (val.type == 'product') {
-            resHTML += '<a href="/productdetials/' + val.id + '/' + val.cate + '" class="text-decoration-none"><h6 class="text-dark ms-2 ">' + val.titile + '</h6></a>'
-          } else {
-            console.log(val);
-            resHTML += '<a href="/shop?cate=' + val.id + '"class="text-decoration-none"><h6 class="text-black ms-2">' + val.titile + '</h6></a>'
-          }
-        });
-        $("#searchResult").append(resHTML)
-      }
-    });
-  }
-</script> -->
 
 <%-include('../user/layout/userfooter.ejs') -%>

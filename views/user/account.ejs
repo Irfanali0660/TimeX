@@ -116,14 +116,9 @@
             </div>
           </div>
           <div class="col-xl-7 col-md-12 ">
-
             <div class="admincard card card-default" style="border-color: white !important;">
-
               <div class="card-body">
                 <div class="card-body">
-
-
-
                   <div class="input-group mb-3">
                     <label class="col-md-4">Full Name</label>
                     <span class="input-group-text">
@@ -132,8 +127,6 @@
                     <input type="text" class="form-control" placeholder="username" id="value1" aria-describedby="button-addon2" value="<%= userdetials.userName %>" name="username">
                     <button class="btn-sm btn-success" type="submit" id="button-addon2" onclick="userdetails(1)"><small>change</small></button>
                   </div>
-
-
                   <div class="input-group mb-3">
                     <label class="col-md-4">Email</label>
                     <span class="input-group-text">
@@ -142,7 +135,6 @@
                     <input type="text" class="form-control" placeholder="Email" id="value2" aria-describedby="button-addon2" value="<%= userdetials.email %>">
                     <button class="btn-sm btn-success" type="button" id="button-addon2" onclick="userdetails(2)"><small>change</small></button>
                   </div>
-
                   <div class="input-group mb-3">
                     <label class="col-md-4">Phone</label>
                     <span class="input-group-text">
@@ -153,7 +145,6 @@
                   </div>
                   <div class="border p-2 mt-2" id="">
                     <div id="addressList">
-
                       <h5 class="text-secondary border-bottom py-2 mb-2">Saved Addresses</h5>
                       <% if(userdetials.address.length==0){ %>
                       <h3 class="text-dark text-center">No Address Avaliable</h3>
@@ -183,9 +174,6 @@
                       <% }) %>
                       <% } %>
                     </div>
-
-
-
                     <div class="bg-dash-dark-2 py-4">
                       <div class="container-fluid d-flex justify-content-center">
 
@@ -206,114 +194,5 @@
       </div>
     </div>
   </div>
-
-  <!-- <script>
-    function addaddress() {
-      document.getElementById("actionmodel").reset();
-      document.getElementById("actionmodel").setAttribute('action', '/addaddress')
-    }
-
-    function editaddress(id) {
-      $.ajax({
-        type: "POST",
-        url: "/editaddress",
-        data: {
-          id
-        },
-        dataType: "json",
-        encode: true,
-      }).done(function(data) {
-
-        if (data == "LOGIN FIRST") {
-          console.log("SWEET");
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Login first!',
-            footer: '<a href="/login">Go to login</a>'
-          })
-        }
-
-        console.log(data);
-        $('#actionmodel').attr('action', '/updateaddress/' + data._id)
-        $('#name').val(data.name)
-        $('#house').val(data.house)
-        $('#post').val(data.post)
-        $('#city').val(data.city)
-        $('#district').val(data.district)
-        $('#state').val(data.state)
-        $('#pin').val(data.pin)
-      });
-    }
-  </script>
-
-  <script>
-    function deleteaddress(id) {
-
-      Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-      }).then((result) => {
-        if (result.isConfirmed) {
-
-          $.ajax({
-            type: "POST",
-            url: "/deleteaddress",
-            data: {
-              id
-            },
-            dataType: "json",
-            encode: true,
-          }).done(function(data) {
-            $('#' + id + 'item').remove()
-            Swal.fire(
-              'removed!',
-              'This Address has been removed.',
-              'success'
-            )
-          });
-        }
-      })
-    }
-
-
-    function userdetails(num) {
-      console.log("HELLO");
-      $.ajax({
-        type: "POST",
-        url: "/userdetails",
-        data: {
-          key: $('#value' + num).val(),
-          num
-        },
-        dataType: "json",
-        encode: true,
-      }).done(function(data) {
-        if (data.success == true) {
-          resHTML = '<div class="alert alert-success alert-dismissible"> ' +
-            '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>' +
-            '<strong>Success  </strong> ' + data.message +
-            '</div>';
-          $("#response").html(resHTML)
-        } else {
-          resHTML = '<div class="alert alert-danger alert-dismissible"> ' +
-            '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>' +
-            '<strong>Error!</strong> ' + data.message +
-            '</div>';
-          $("#response").html(resHTML)
-        }
-
-      });
-    }
-  </script> -->
-
-
-
-
 
   <%-include('../user/layout/userfooter.ejs') -%>

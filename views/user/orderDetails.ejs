@@ -64,13 +64,11 @@
                         </tr>
                       </thead>
                       <tbody class="border-0">
-
                         <% orderDetails.forEach((val)=>{ %>
                         <tr>
                           <th class="ps-0 py-3 border-light ps-3" scope="row">
                             <div class="d-flex align-items-center ">
                               <%= val.ordered_date.getDate() %>/<%= val.ordered_date.getMonth()+1 %>/<%= val.ordered_date.getFullYear() %>
-
                             </div>
                           </th>
                           <th class="ps-0 py-3 border-light align-middle" scope="row">
@@ -104,7 +102,6 @@
 
                             <% }else if(val.delivery_status.ordered.state){ %>
                             <span class="badge border border-black text-black px-2 py-1  fw-bold">ORDERED</span>
-
                             <% } %>
                           </td>
                           </td>

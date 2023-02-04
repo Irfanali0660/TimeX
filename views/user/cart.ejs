@@ -95,23 +95,4 @@
   </div>
 </div>
 
-<!-- <script>
-  function orderid() {
-    $.ajax({
-      type: "POST",
-      url: "/orderid",
-      data: {},
-      dataType: "json",
-      encode: true,
-    }).done(function(data) {
-      if (data == "empty") {
-        Swal.fire('Cart is empty')
-      } else {
-        location.href = '/checkout/' + data._id;
-      }
-
-    });
-  }
-</script> -->
-
 <%-include('../user/layout/userfooter.ejs') -%>

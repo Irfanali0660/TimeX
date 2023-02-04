@@ -7,7 +7,6 @@
     color: black !important;
   }
 </style>
-
 <div class="page-content">
   <div class="bg-dash-dark-2 py-4">
     <div class="container-fluid d-flex justify-content-between">
@@ -78,7 +77,6 @@
                   </tr>
                 </tbody>
               </table>
-
             </div>
             <div class="col-12 col-lg-6">
               <table class="table table-striped ">
@@ -225,7 +223,7 @@
                 <p>Quantity:&nbsp;<%= product.qnty %>
                 </p>
                 <p>Amount:&nbsp;<span class="fw-bold"><i class="bi bi-currency-rupee"></i>
-                  <%=product.qnty*product.price %>
+                    <%=product.qnty*product.price %>
                   </span>
                 </p>
               </div>
@@ -263,7 +261,7 @@
       $('#message').html(resHTML)
     });
   }
-
+  
   function refundcash(id) {
     $.ajax({
       type: "post",

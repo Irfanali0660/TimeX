@@ -20,7 +20,6 @@
         </div>
       </div>
     </section>
-
     <div class="page-content">
       <div class="widget-content widget-content-area add-manage-product-2 container mt-3">
         <div class="row ">
@@ -45,13 +44,13 @@
             <div class="admincard card card-default" style="border-color: white !important;">
               <div class="card-body ">
                 <div class="card-body ">
-                    <% if(data.length==0){ %> 
-                        <h3 class="text-center">No WalletHistory</h3>
-                        <% }else{ %> 
+                  <% if(data.length==0){ %>
+                  <h3 class="text-center">No WalletHistory</h3>
+                  <% }else{ %>
                   <div class="table-responsive mb-4 border border-2 border-black">
                     <table class="table text-nowrap">
                       <thead class="bg-light">
-                      
+
                         <tr>
                           <th class="border-0 p-3 ps-3" scope="col"> <strong class="text-sm text-uppercase">Ordered Date</strong></th>
                           <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Address</strong></th>
@@ -73,11 +72,11 @@
                             <%= val.address.name %>
                           </th>
                           <td class="p-3 align-middle border-light">
-                            <% if(val.payment.payment_status=='refund completed'){ %> 
-                                <span class="text-success">+<%= val.bill_amount %> </span>
-                                <% }else{ %>
-                                    <span class="text-danger">-<%= val.bill_amount %> </span>
-                                <% } %> 
+                            <% if(val.payment.payment_status=='refund completed'){ %>
+                            <span class="text-success">+<%= val.bill_amount %> </span>
+                            <% }else{ %>
+                            <span class="text-danger">-<%= val.bill_amount %> </span>
+                            <% } %>
                           </td>
                           <td class="p-3 align-middle border-light ps-5">
                             <%  if(val.delivery_status.canceled.state){ %>

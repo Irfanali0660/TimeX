@@ -1,8 +1,6 @@
 <%-include('../user/layout/userhead.ejs') -%>
 
 <div class="page-holder">
-
-
   <div class="container">
     <!-- HERO SECTION-->
     <section class="py-5 bg-light">
@@ -31,18 +29,15 @@
               <thead class="bg-light">
                 <% if(wishlist.wishlistitems.length==0){ %>
                 <h3 class="text-dark text-center">Wishlist is Empty <br><a href="/shop" class="btn btn-dark mt-3">Go to shop</a></h3>
-
                 <%}else{ %>
                 <tr>
                   <th class="border-0 p-3 ps-5" scope="col"> <strong class="text-sm text-uppercase">Product</strong></th>
                   <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Name</strong></th>
                   <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Price</strong></th>
                   <th class="border-0 p-3 text-center" scope="col"> <strong class="text-sm text-uppercase">Action</strong></th>
-
                 </tr>
               </thead>
               <tbody class="border-0">
-
                 <%  wishlist.wishlistitems.forEach((val)=>{ %>
                 <tr id="<%= val._id %>item">
                   <th class="ps-0 py-3 border-light ps-5" scope="row">
@@ -56,16 +51,13 @@
                     <p class="mb-0 small"><i class="bi bi-currency-rupee"></i><span><%= val.price %></span></p>
                   </td>
                   <td class="p-3 align-middle border-light ps-5">
-
                     <div class="d-flex flex-lg-row justify-content-evenly ">
                       <div class="col-sm-5 pl-sm-0"><a class="btn btn-dark btn-sm btn-block h-100 d-flex align-items-center justify-content-center px-0" href="#" onclick="addtocart('<%= val._id %>')">Add to cart</a></div>
                       <div class="col-sm-5 pl-sm-0"><a class="btn btn-sm btn-block h-100 d-flex align-items-center justify-content-center px-0 text-light" href="#" style="background-color: rgb(104, 0, 0);" onclick="deleteitem('<%= val._id %>')">Delete</a></div>
                     </div>
-
                   </td>
                 </tr>
                 <% })} %>
-
               </tbody>
             </table>
           </div>
@@ -74,40 +66,5 @@
     </section>
   </div>
 </div>
-<!-- <script>
-  function deleteitem(id) {
-
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-
-        $.ajax({
-          type: "PUT",
-          url: "/deleteitem",
-          data: {
-            id
-          },
-          dataType: "json",
-          encode: true,
-        }).done(function(data) {
-          Swal.fire(
-            'removed!',
-            'This product has been removed.',
-            'success'
-          )
-          cartCout()
-          $('#' + id + 'item').remove()
-        });
-      }
-    })
-  }
-</script> -->
 
 <%-include('../user/layout/userfooter.ejs') -%>

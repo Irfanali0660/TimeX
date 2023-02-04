@@ -62,7 +62,7 @@ module.exports = {
   //================================ signup ==================================//
 
   signup: (req, res) => {
-    res.render("user/signup");
+    res.render("user/signup",{status:"false"});
   },
 
   //================================ OtpPage ==================================//
@@ -197,10 +197,10 @@ module.exports = {
           if (error) {
             res.render("error/error");
           }
-          res.render("user/Otppage");
+          res.render("user/Otppage",{status:"false"});
         });
       } else {
-        res.redirect("/signup");
+        res.render("user/signup",{status:"true"});
       }
     } catch (error) {
       next(error);
@@ -227,7 +227,7 @@ module.exports = {
           res.redirect("/");
         });
       } else {
-        res.render("user/Otppage");
+        res.render("user/Otppage",{status:"true"});
       }
     } catch (err) {
       next(err);

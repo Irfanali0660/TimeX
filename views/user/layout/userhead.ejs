@@ -6,10 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TIMEX</title>
- 
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css" integrity="sha512-SbiR/eusphKoMVVXysTKG/7VseWii+Y3FdHrt0EpKgpToZeemhqHeZeLWLhJutz/2ut2Vw1uQEj2MbRF+TVBUA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap">
-  
+
   <link rel="stylesheet" href="/css/style.css">
   <!-- gLightbox gallery -->
   <link rel="stylesheet" href="/vendor/glightbox/css/glightbox.min.css">
@@ -32,11 +32,8 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 </head>
-
 <body>
-
   <!-- navbar-->
   <header class="header bg-white">
     <div class="container px-lg-3">
@@ -57,7 +54,6 @@
             </li>
           </ul>
           <ul class="navbar-nav ms-auto">
-
             <li class="nav-item "><a class="nav-link <% if(page=='cart'){ %> active <% } %>" href="/cart"> <i class="bi bi-cart"></i> Cart <span id="CartLength" class=" translate-middle badge rounded-pill text-danger">
                 </span><small class="text-gray fw-normal"></small></a></li>
             <li class="nav-item"><a class="nav-link <% if(page=='wishlist'){ %> active <% } %>" href="/wishlist"><i class="fas fa-heart fa-x text-danger"></i><small class="text-gray fw-normal"></small>Wishlist<span id="wishlist" class=" translate-middle badge rounded-pill text-danger">
@@ -65,7 +61,6 @@
             <li class="nav-item dropdown"><a class="nav-link dropdown-toggle <% if(page=='Account'){ %> active <% } %>" id="pagesDropdown" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="bi bi-person"></i> Account</a>
               <div class="dropdown-menu mt-3 shadow-sm" aria-labelledby="pagesDropdown">
                 <% if(user){ %>
-
                 <a class="dropdown-item border-0 transition-link" href="/account"><%= user.userName %></a>
                 <a class="dropdown-item border-0 transition-link" href="/userlogout">LogOut</a>
                 <% }else{ %>

@@ -86,7 +86,7 @@
           </td>
           <td class="text-light">
             <% if(order.delivery_status.returned.state){ %>
-              <p><b class="text-warning">RETURNED</b><small>(<%= order.delivery_status.returned.date.getDate() %>/<%= order.delivery_status.returned.date.getMonth()+1 %>/<%= order.delivery_status.returned.date.getFullYear() %>)</small> </p>
+            <p><b class="text-warning">RETURNED</b><small>(<%= order.delivery_status.returned.date.getDate() %>/<%= order.delivery_status.returned.date.getMonth()+1 %>/<%= order.delivery_status.returned.date.getFullYear() %>)</small> </p>
             <% }else if(order.delivery_status.delivered.state){ %>
             <p><b class="text-success">DELIVERED</b><small>(<%= order.delivery_status.delivered.date.getDate() %>/<%= order.delivery_status.delivered.date.getMonth()+1 %>/<%= order.delivery_status.delivered.date.getFullYear() %>)</small> </p>
             <% }else if(order.delivery_status.canceled.state){  %>
@@ -134,12 +134,11 @@ function getMonthName(monthNumber) {
       data: {
         labels: xValues,
         datasets: [{
-            label: 'Orders',
-            data: [0, <%=salesCount %>],
-            borderColor: "rgb(153, 255, 153)", 
-            fill: false
-          }
-        ]
+          label: 'Orders',
+          data: [0, <%=salesCount %>],
+          borderColor: "rgb(153, 255, 153)",
+          fill: false
+        }]
       },
       options: {
         legend: {

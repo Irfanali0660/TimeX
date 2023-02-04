@@ -45,16 +45,12 @@
             <p><b class="text-success">DELIVERED</b><small>(<%= order.delivery_status.delivered.date.getDate() %>/<%= order.delivery_status.delivered.date.getMonth()+1 %>/<%= order.delivery_status.delivered.date.getFullYear() %>)</small> </p>
             <% }else if(order.delivery_status.canceled.state){  %>
             <p> <b class="text-danger">CANCELED</b><small>(<%= order.delivery_status.canceled.date.getDate() %>/<%= order.delivery_status.canceled.date.getMonth()+1 %>/<%= order.delivery_status.canceled.date.getFullYear() %>)</small> </p>
-
             <% }else if(order.delivery_status.out_for_delivery.state){ %>
             <p> <b>OUT_FOR_DELIVERY</b><small>(<%= order.delivery_status.out_for_delivery.date.getDate() %>/<%= order.delivery_status.out_for_delivery.date.getMonth()+1 %>/<%= order.delivery_status.out_for_delivery.date.getFullYear() %>)</small> </p>
-
             <% }else if(order.delivery_status.shipped.state){  %>
             <p> <b class="text-info">SHIPPED</b><small>(<%= order.delivery_status.shipped.date.getDate() %>/<%= order.delivery_status.shipped.date.getMonth()+1 %>/<%= order.delivery_status.shipped.date.getFullYear() %>)</small> </p>
-
             <% }else if(order.delivery_status.ordered.state){  %>
             <p> <b>ORDERED</b><small>(<%= order.delivery_status.ordered.date.getDate() %>/<%= order.delivery_status.ordered.date.getMonth()+1 %>/<%= order.delivery_status.ordered.date.getFullYear() %>)</small> </p>
-
             <% } %>
           </td>
           <td>

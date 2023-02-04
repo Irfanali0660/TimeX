@@ -66,7 +66,9 @@ router.get("/count", userSession, count);
 router.get("/about", about);
 router.get("/walletHistory", userSession, walletHistory);
 
+
 router.post("/login", login);
+
 
 router.post("/otp", otp);
 router.post("/verifyotp", verifyotp);
@@ -91,9 +93,9 @@ router.post("/verifypayment", ajaxSession, verifypayment);
 router.post("/walletCheck", ajaxSession, walletCheck);
 router.post("/returnOrder/:id", ajaxSession, returnOrder);
 router.post("/checkquantity", ajaxSession, checkquantity);
-
 router.post("/addwishlist", ajaxSession, addwishlist);
-router.put("/deleteitem", ajaxSession, deleteitem);
 router.post("/userdetails", ajaxSession, userdetails);
+
+router.put("/deleteitem", ajaxSession, deleteitem);
 
 module.exports = router;

@@ -7,7 +7,6 @@
     color: black !important;
   }
 </style>
-
 <div class="page-content">
   <div class="bg-dash-dark-2 py-4 d-flex">
     <div class="container-fluid">
@@ -123,9 +122,7 @@
             <div class="col-xl-10">
               <p>Thank you for your purchase</p>
             </div>
-
           </div>
-
         </div>
       </div>
     </div>
@@ -136,11 +133,8 @@
     function printDiv(divName) {
       var printContents = document.getElementById(divName).innerHTML;
       var originalContents = document.body.innerHTML;
-
       document.body.innerHTML = printContents;
-
       window.print();
-
       document.body.innerHTML = originalContents;
     }
   </script>
