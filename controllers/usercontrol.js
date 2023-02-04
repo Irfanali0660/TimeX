@@ -13,6 +13,7 @@ const orderModel = require("../model/orderModel");
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
 const reviewModel = require("../model/reviewModel");
+
 const ITEMS_PAGE = 12;
 
 let instance = new Razorpay({
@@ -34,6 +35,7 @@ otp = otp * 1000000;
 otp = parseInt(otp);
 
 module.exports = {
+ 
   //================================ User Home ==================================//
 
   home: async (req, res, next) => {

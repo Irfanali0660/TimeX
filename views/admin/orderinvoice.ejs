@@ -93,9 +93,9 @@
                   <td>
                     <%= product.qnty %>
                   </td>
-                  <td>$<%= product.price %>
+                  <td><i class="bi bi-currency-rupee"></i><%= product.price %>
                   </td>
-                  <td>$ <%= product.qnty*product.price %>
+                  <td><i class="bi bi-currency-rupee"></i><%= product.qnty*product.price %>
                   </td>
                 </tr>
                 <% }); %>
@@ -105,15 +105,15 @@
           <div class="row w-100">
             <div class=" text-end">
               <ul class="list-unstyled">
-                <li class="text-muted ms-3"><span class="text-black me-4">SubTotal</span>$<%= invoice.bill_amount  %>
+                <li class="text-muted ms-3"><span class="text-black me-4">SubTotal</span><i class="bi bi-currency-rupee"></i><%= invoice.bill_amount  %>
                 </li>
-                <li class="text-muted ms-3 mt-2"><span class="text-black me-4">Discount</span>$<%=
+                <li class="text-muted ms-3 mt-2"><span class="text-black me-4">Discount</span><span><i class="bi bi-currency-rupee"></i></span><%=
                                         (Math.round((invoice.bill_amount*invoice.coupon.discount)/100))
                                         %>
                 </li>
               </ul>
               <p class="text-danger"><span class="text-black me-3"> Total
-                  Amount</span><span style="font-size: 25px;">$<%=
+                  Amount</span><span style="font-size: 25px;"><span><i class="bi bi-currency-rupee"></i></span><%=
                                             (Math.round(invoice.bill_amount-(invoice.bill_amount*invoice.coupon.discount)/100))
                                             %></span></p>
             </div>

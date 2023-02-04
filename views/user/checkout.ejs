@@ -1,6 +1,5 @@
 <%-include('../user/layout/userhead.ejs') -%>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-
 <div class="page-holder">
   <div class="container">
     <!-- HERO SECTION-->
@@ -23,7 +22,6 @@
       </div>
     </section>
 
-
     <section class="py-4">
       <!-- BILLING ADDRESS-->
       <h2 class="h5 text-uppercase mb-4">Billing details</h2>
@@ -45,7 +43,7 @@
               </div>
               <div class="col-lg-6">
                 <label class="form-label text-sm text-uppercase" for="phone">Pin Number </label>
-                <input class="form-control form-control-lg" type="tel" name="pin" id="pin" required>
+                <input class="form-control form-control-lg" type="number" name="pin" id="pin" required>
               </div>
               <div class="col-lg-6">
                 <label class="form-label text-sm text-uppercase" for="city">Town/City </label>
@@ -142,9 +140,7 @@
             <div class="card-body">
               <h5 class="text-uppercase mb-4">Your order</h5>
               <ul class="list-unstyled mb-0">
-
                 <% let Total=0; orderData.products.forEach((val)=>{ %>
-
                 <li class="d-flex align-items-center justify-content-between"><strong class="small fw-normal ">
                     <%= val.name %>
                   </strong><span class="text-muted small"><i class="bi bi-currency-rupee"></i>
@@ -172,96 +168,17 @@
                   </div>
                 </li>
               </ul>
-
             </div>
           </div>
-
         </div>
-
       </div>
     </section>
   </div>
 
 
-  <!-- <script>
-    const total = Number($('#total').html())
-    const percentage = Number($('#discount').html())
-    const finalAmount = total - ((total * percentage) / 100)
-    $("#total").html(Math.round(finalAmount))
-
-    function couponcheck() {
-      $.ajax({
-        type: "POST",
-        url: "/couponcheck",
-        data: {
-          key: $('#value').val(),
-          id: $('#orderid').val()
-        },
-        dataType: "json",
-        encode: true,
-      }).done(function(data) {
-        console.log(data.coupon);
-        if (data == "LOGIN FIRST") {
-          console.log("SWEET");
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Login first!',
-            footer: '<a href="/login">Go to login</a>'
-          })
-        } else if (data.success == true) {
-          resHTML = '<div class="alert alert-success alert-dismissible"> ' +
-            '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>' +
-            '<strong>Success  </strong> ' + data.message +
-            '</div>';
-          $("#response").html(resHTML)
-          const total = Number($('#total').html())
-          const percentage = data.coupon.percentage
-          const finalAmount = total - ((total * percentage) / 100)
-          $("#discount").html(data.coupon.percentage)
-          $("#total").html(Math.round(finalAmount))
-          // billamount(Math.round(finalAmount));
-        } else {
-          resHTML = '<div class="alert alert-danger alert-dismissible"> ' +
-            '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>' +
-            '<strong>Error!</strong>' + data.message +
-            '</div>';
-          $("#response").html(resHTML)
-        }
-      });
-    }
-  </script>
-
-  <script>
-    function walletCheck() {
-
-      $.ajax({
-        type: "post",
-        url: "/walletCheck",
-        data: {
-          finalAmount: $('#total').html()
-        },
-        dataType: "json",
-        encode: true,
-      }).done(function(data) {
-        console.log(data);
-        if (data != "success") {
-          console.log("ONE");
-          resHTML = '<div class="alert alert-danger alert-dismissible"> ' +
-            '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>' +
-            '<strong>Error!</strong> Not enough cash in your wallet Only ' + data.wallet +
-            ' in your Wallet Choose another method</div>';
-          $("#wallet").html(resHTML)
-        }
-      })
-
-    }
-  </script>
-
   <script>
     function addnewaddress() {
       document.getElementById("form").reset();
-      // document.getElementById("form").setAttribute('action','/placeorder')
       document.getElementById("alternateAddress").setAttribute('class', 'collapse')
       $(".addchange").attr('class', 'addchange text-primary text-lg-end')
       $(".addchange").html('select');
@@ -384,7 +301,7 @@
         "currency": "INR",
         "name": 'TIMEX',
         "description": "The Transaction is under test mode, enabled by Timex",
-        "image": "/",
+        "image": "//svg img/logo.ico",
         "order_id": order.field.id,
         "handler": function(response) {
           order.payment = {}
@@ -459,5 +376,5 @@
         }
       })
     }
-  </script> -->
+  </script>
   <%-include('../user/layout/userfooter.ejs') -%>

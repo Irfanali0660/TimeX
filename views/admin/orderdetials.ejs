@@ -88,7 +88,7 @@
                       Sub-total
                     </td>
                     <td>
-                      $<%= singleorder.bill_amount %>
+                      <i class="bi bi-currency-rupee"></i><%= singleorder.bill_amount %>
                     </td>
                   </tr>
                   <tr>
@@ -111,7 +111,7 @@
                     <td>
                       Discount amount
                     </td>
-                    <td>
+                    <td><i class="bi bi-currency-rupee"></i>
                       <%= (Math.round((singleorder.bill_amount*singleorder.coupon.discount)/100))
                                                     %>
                     </td>
@@ -121,7 +121,7 @@
                       Total
                     </td>
                     <td>
-                      <b class="text-danger fw-bold">$<%=
+                      <b class="text-danger fw-bold"><i class="bi bi-currency-rupee"></i><%=
                                                         (Math.round(singleorder.bill_amount-(singleorder.bill_amount*singleorder.coupon.discount)/100))
                                                         %>
                       </b>
@@ -190,7 +190,7 @@
               <h5 class="text-warning text-center">ORDER RETURNED</h5>
               <% if(singleorder.payment.payment_status!=="refund completed"){ %>
               <div class="card bg-light mt-2 text-black p-3" id="Refund">
-                <h5 class=" text-center mb-3">Refund Cash= <span class="text-danger fw-bold"><%= (Math.round(singleorder.bill_amount-(singleorder.bill_amount*singleorder.coupon.discount)/100)) %></span></h5>
+                <h5 class=" text-center mb-3">Refund Cash= <span class="text-danger fw-bold"><i class="bi bi-currency-rupee"></i><%= (Math.round(singleorder.bill_amount-(singleorder.bill_amount*singleorder.coupon.discount)/100)) %></span></h5>
                 <button type="button" class="bg-dark text-light" onclick="refundcash('<%= singleorder._id%>')">Refund</button>
               </div>
               <% } %>
@@ -220,12 +220,12 @@
                 <p>Name: &nbsp;<small class=" fw-bold">
                     <%= product.name %>
                   </small></p>
-                <p>Price : &nbsp;<%= product.price %>
+                <p>Price : &nbsp;<i class="bi bi-currency-rupee"></i><%= product.price %>
                 </p>
                 <p>Quantity:&nbsp;<%= product.qnty %>
                 </p>
-                <p>Amount:&nbsp;<span class="fw-bold">
-                    <%= product.qnty*product.price %>
+                <p>Amount:&nbsp;<span class="fw-bold"><i class="bi bi-currency-rupee"></i>
+                  <%=product.qnty*product.price %>
                   </span>
                 </p>
               </div>
