@@ -115,7 +115,9 @@
       </tbody>
     </table>
   </div>
+ 
   <%-include('../admin/layout/adminfooter.ejs') -%>
+
   <script>
     <%
 function getMonthName(monthNumber) {
@@ -127,6 +129,7 @@ function getMonthName(monthNumber) {
 
     <% let dates = salesChart.map((val)=>{ return val._id.slice(-2)}) %>
     <% let salesCount = salesChart.map((val)=>{ return val.count}) %>
+    
     // < % let cancelCount = salesCancel.map((val)=>{ return val.count}) %>
     var xValues = [0, <%= dates%>];
     new Chart("myChart", {

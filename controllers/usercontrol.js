@@ -625,7 +625,7 @@ module.exports = {
   checkout: async (req, res, next) => {
     try {
       let orderData = await orderModel.findOne({ _id: req.params.id });
-      let cartbill = await userModel.findOne({ _id: res.locals.userdata._id });
+      let cartbill = await userModel.findOne({ _id: res.locals.userdata._id ,});
       res.render("user/checkout", {
         page: "none",
         cartbill,
