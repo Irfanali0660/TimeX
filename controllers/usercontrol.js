@@ -66,7 +66,7 @@ module.exports = {
   //================================ OtpPage ==================================//
 
   otpget: (req, res) => {
-    res.render("user/otppage");
+    res.render("user/Otppage");
   },
 
   //================================ Shop ==================================//
@@ -196,7 +196,7 @@ module.exports = {
             console.log(error);
             res.render("error/error");
           }
-          res.render("user/otppage",{status:"false"});
+          res.render("user/Otppage",{status:"false"});
         });
       } else {
         res.render("user/signup",{status:"true"});
@@ -227,7 +227,7 @@ module.exports = {
           res.redirect("/");
         });
       } else {
-        res.render("user/otppage",{status:"true"});
+        res.render("user/Otppage",{status:"true"});
       }
     } catch (err) {
       console.log(err);
@@ -253,7 +253,7 @@ module.exports = {
         if (error) {
           res.render("error/error");
         }
-        res.render("user/otppage");
+        res.render("user/Otppage");
       });
     } catch (err) {
       next(err);
@@ -1052,7 +1052,7 @@ module.exports = {
         .populate("products.product_id")
         .then((orderDetails) => {
           console.log("HELLO");
-          res.render("user/viewOrder", {
+          res.render("user/ViewOrder", {
             page: "Account",
             orderDetails,
             user: req.session.user,
