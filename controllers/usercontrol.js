@@ -66,7 +66,7 @@ module.exports = {
   //================================ OtpPage ==================================//
 
   otpget: (req, res) => {
-    res.render("user/Otppage");
+    res.render("user/otppage");
   },
 
   //================================ Shop ==================================//
@@ -195,7 +195,7 @@ module.exports = {
           if (error) {
             res.render("error/error");
           }
-          res.render("user/Otppage",{status:"false"});
+          res.render("user/otppage",{status:"false"});
         });
       } else {
         res.render("user/signup",{status:"true"});
@@ -225,7 +225,7 @@ module.exports = {
           res.redirect("/");
         });
       } else {
-        res.render("user/Otppage",{status:"true"});
+        res.render("user/otppage",{status:"true"});
       }
     } catch (err) {
       next(err);
@@ -250,7 +250,7 @@ module.exports = {
         if (error) {
           res.render("error/error");
         }
-        res.render("user/Otppage");
+        res.render("user/otppage");
       });
     } catch (err) {
       next(err);
@@ -1048,7 +1048,7 @@ module.exports = {
         .findOne({ _id: req.params.id, userid: res.locals.userdata._id })
         .populate("products.product_id")
         .then((orderDetails) => {
-          res.render("user/ViewOrder", {
+          res.render("user/viewOrder", {
             page: "Account",
             orderDetails,
             user: req.session.user,
