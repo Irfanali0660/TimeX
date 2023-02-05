@@ -193,8 +193,7 @@ module.exports = {
         };
         transporter.sendMail(mailOptions, (error, info) => {
           if (error) {
-            console.log(error);
-            res.render("error/error");
+            return console.log(error);
           }
           res.render("user/Otppage",{status:"false"});
         });
