@@ -193,6 +193,7 @@ module.exports = {
         };
         transporter.sendMail(mailOptions, (error, info) => {
           if (error) {
+            console.log(error);
             res.render("error/error");
           }
           res.render("user/otppage",{status:"false"});
@@ -201,6 +202,7 @@ module.exports = {
         res.render("user/signup",{status:"true"});
       }
     } catch (error) {
+      console.log(error);
       next(error);
     }
   },
@@ -228,6 +230,7 @@ module.exports = {
         res.render("user/otppage",{status:"true"});
       }
     } catch (err) {
+      console.log(err);
       next(err);
     }
   },
@@ -1055,6 +1058,7 @@ module.exports = {
           });
         });
     } catch (error) {
+      console.log(error);
       next(error);
     }
   },
