@@ -1051,6 +1051,7 @@ module.exports = {
         .findOne({ _id: req.params.id, userid: res.locals.userdata._id })
         .populate("products.product_id")
         .then((orderDetails) => {
+          console.log("HELLO");
           res.render("user/viewOrder", {
             page: "Account",
             orderDetails,
