@@ -953,7 +953,10 @@ module.exports = {
                   { _id: res.locals.userdata._id },
                   { $set: { cart: [] } }
                 );
-                let total = order.bill_amount * 100;
+                let total = Math.round(
+                  order.bill_amount -
+                    (order.bill_amount * order.coupon.discount) / 100
+                )*100
                 instance.orders
                   .create({
                     amount: total,
