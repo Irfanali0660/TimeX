@@ -16,7 +16,8 @@ module.exports = {
 
 //===============DashBord=================//
 
-  dashbord: async (req, res) => {
+  dashbord: async (req, res,next) => {
+   try {
     const startOfMonth = new Date();
     startOfMonth.setDate(1);
     startOfMonth.setHours(0, 0, 0, 0);
@@ -86,26 +87,33 @@ module.exports = {
           paymentpaid,
         });
       });
+   } catch (error) {
+    next(error)
+   }
   },
 
   //  ======================AdminLogin====================== //
 
-  login: async (req, res) => {
-    if (req.session.adminLogin) {
-      res.redirect("/dashbord");
-    }
-    const { email, password } = req.body;
-    const ademail = await adminModel.findOne({ email });
-    if (!ademail) {
-      return res.render("admin/adminlogin", { notAdmin: "true" });
-    }
-    const adpass = await adminModel.findOne({ password });
-    if (!adpass) {
-      return res.render("admin/adminlogin", { notAdmin: "true" });
-    }
-    req.session.adminLogin = true;
-    req.session.adminemail = req.body.email;
+  login: async (req, res,next) => {
+try {
+  if (req.session.adminLogin) {
     res.redirect("/dashbord");
+  }
+  const { email, password } = req.body;
+  const ademail = await adminModel.findOne({ email });
+  if (!ademail) {
+    return res.render("admin/adminlogin", { notAdmin: "true" });
+  }
+  const adpass = await adminModel.findOne({ password });
+  if (!adpass) {
+    return res.render("admin/adminlogin", { notAdmin: "true" });
+  }
+  req.session.adminLogin = true;
+  req.session.adminemail = req.body.email;
+  res.redirect("/dashbord");
+} catch (error) {
+  next(error)
+}
   },
 
 // =======================productspage===========================  //
@@ -222,8 +230,9 @@ module.exports = {
 
 // ==================edit Products Page=========================== //
 
-  editproducts: async (req, res) => {
-    const id = req.params.id;
+  editproducts: async (req, res,next) => {
+    try {
+      const id = req.params.id;
     let products = await ProductModel.findOne({ _id: id }).populate("brand");
     let category = await categoryModel.find();
     res.render("admin/admin_productEdit", {
@@ -234,16 +243,23 @@ module.exports = {
       category,
       userstatus: "false",
     });
+    } catch (error) {
+      next(error)
+    }
   },
 
   // ==========================Delete single Image=============================== //
 
-  deleteimage: async (req, res) => {
+  deleteimage: async (req, res,next) => {
+  try {
     const val = req.params.val;
     const id = req.params.id;
     fs.unlink(path.join(__dirname, "../public/productimages/", val), () => {});
     await productModel.updateOne({ _id: id }, { $pull: { image: val } });
     res.redirect("/editproduct/" + id);
+  } catch (error) {
+    next(error)
+  }
   },
 
   // ============================edit products============================ //
@@ -355,22 +371,30 @@ module.exports = {
  //====================Category Page=====================//
 
   category: async (req, res) => {
+  try {
     let Categories = await categoryModel.find();
     res.render("admin/admin_category", {
       page: "category",
       admin: res.locals.admindata.name,
       Categories,
     });
+  } catch (error) {
+    next(error)
+  }
   },
 
   //======================Add Category page=======================//
 
   addcategory: (req, res) => {
+  try {
     res.render("admin/admin_addCategory", {
       page: "category",
       admin: res.locals.admindata.name,
       ustatus: "no",
     });
+  } catch (error) {
+    next(error)
+  }
   },
 
   //====================Add categorys======================//
@@ -408,6 +432,7 @@ module.exports = {
   // =====================Update Category Page========================= //
 
   updatecategory: async (req, res) => {
+   try {
     id = req.params.id;
     let Categories = await categoryModel.findOne({ _id: id });
     res.render("admin/admin_updateCategory", {
@@ -416,6 +441,9 @@ module.exports = {
       ustatus: "false",
       Categories,
     });
+   } catch (error) {
+    next(error)
+   }
   },
 
 //   ======================Update categorys=========================== //
@@ -483,11 +511,15 @@ module.exports = {
   // ==========================Add Banner page============================== //
 
   addbanner: (req, res) => {
+   try {
     res.render("admin/addBanner", {
       page: "banner",
       admin: res.locals.admindata.name,
       ustatus: "no",
     });
+   } catch (error) {
+    next(error)
+   }
   },
 
   //=========================Add Banner==============================//
