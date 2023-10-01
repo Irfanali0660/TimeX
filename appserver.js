@@ -52,6 +52,6 @@ app.use(function (err, req, res, next) {
 
 // module.exports = app;
 
-app.listen(7000, () => {
-  console.log("TIMEZONE server started on PORT 7000");
+app.listen(10000, () => {
+  console.log("TIMEX server started on PORT 10000");
 });
